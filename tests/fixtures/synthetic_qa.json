@@ -1,0 +1,188 @@
+[
+  {
+    "_id": "syn_q001",
+    "question": "Which river flows through the birthplace of the author of 'The Metamorphosis'?",
+    "answer": "Vltava River",
+    "type": "bridge",
+    "level": "easy",
+    "supporting_facts": [
+      ["Franz Kafka", 0],
+      ["Prague", 1]
+    ],
+    "context": [
+      [
+        "Franz Kafka",
+        [
+          "Franz Kafka was a German-speaking Bohemian novelist and short-story writer, widely regarded as one of the major figures of 20th-century literature.",
+          "His works include the novella 'The Metamorphosis' published in 1915.",
+          "Kafka was born into a middle-class Ashkenazi Jewish family in Prague, the capital of the Kingdom of Bohemia."
+        ]
+      ],
+      [
+        "Prague",
+        [
+          "Prague is the capital and largest city of the Czech Republic.",
+          "The city is situated on the Vltava River in central Bohemia.",
+          "It has been a political, cultural, and economic hub of central Europe for over a millennium."
+        ]
+      ],
+      [
+        "The Metamorphosis",
+        [
+          "The Metamorphosis is a novella written by Franz Kafka first published in 1915.",
+          "One of Kafka's best-known works, it tells the story of salesman Gregor Samsa.",
+          "The story has been widely discussed among literary critics."
+        ]
+      ],
+      [
+        "Danube",
+        [
+          "The Danube is the second-longest river in Europe, after the Volga in Russia.",
+          "It flows through central and southeastern Europe to the Black Sea.",
+          "The Danube passes through four capital cities: Vienna, Bratislava, Budapest, and Belgrade."
+        ]
+      ],
+      [
+        "Vltava",
+        [
+          "The Vltava is the longest river within the Czech Republic.",
+          "It runs northward from its source in Šumava through Český Krumlov, České Budějovice, and Prague.",
+          "It merges into the Elbe at Mělník."
+        ]
+      ],
+      [
+        "Bohemia",
+        [
+          "Bohemia is the westernmost and largest historical region of the Czech lands.",
+          "In a broader sense, it often refers to the entire Czech territory.",
+          "Bohemia was a kingdom in the Holy Roman Empire and subsequently a province in the Habsburg Empire."
+        ]
+      ],
+      [
+        "Gregor Samsa",
+        [
+          "Gregor Samsa is a fictional character and the protagonist of Franz Kafka's 1915 novella The Metamorphosis.",
+          "Gregor wakes up one morning to find himself transformed into an insect-like creature.",
+          "He struggles to adapt to his new condition while his family reacts with horror."
+        ]
+      ],
+      [
+        "Elbe",
+        [
+          "The Elbe is one of the major rivers of Central Europe.",
+          "It rises in the Giant Mountains of the northern Czech Republic before traversing Bohemia and Germany.",
+          "It flows into the North Sea at Cuxhaven."
+        ]
+      ],
+      [
+        "Czech Republic",
+        [
+          "The Czech Republic, also known as Czechia, is a landlocked country in Central Europe.",
+          "Historically known as Bohemia, it is bordered by Austria, Germany, Poland, and Slovakia.",
+          "Its capital and largest city is Prague."
+        ]
+      ],
+      [
+        "Rhine",
+        [
+          "The Rhine is one of the major European rivers.",
+          "It begins in the Swiss canton of Graubünden in the southeastern Swiss Alps.",
+          "The Rhine flows through Germany and the Netherlands before emptying into the North Sea."
+        ]
+      ]
+    ]
+  },
+  {
+    "_id": "syn_q002",
+    "question": "What is the capital of the country where the physicist who proposed the uncertainty principle was born?",
+    "answer": "Berlin",
+    "type": "bridge",
+    "level": "medium",
+    "supporting_facts": [
+      ["Werner Heisenberg", 0],
+      ["Germany", 1]
+    ],
+    "context": [
+      [
+        "Werner Heisenberg",
+        [
+          "Werner Karl Heisenberg was a German theoretical physicist and one of the key pioneers of quantum mechanics.",
+          "He is best known for the uncertainty principle, introduced in 1927.",
+          "Heisenberg was awarded the 1932 Nobel Prize in Physics."
+        ]
+      ],
+      [
+        "Germany",
+        [
+          "Germany is a country in Central Europe.",
+          "Berlin is the capital and largest city of Germany by both area and population.",
+          "It is the second-most populous country in Europe after Russia."
+        ]
+      ],
+      [
+        "Uncertainty principle",
+        [
+          "In quantum mechanics, the uncertainty principle is any of a variety of mathematical inequalities.",
+          "It asserts a fundamental limit to the precision with which certain pairs of physical properties can be known.",
+          "It was published by Werner Heisenberg in 1927."
+        ]
+      ],
+      [
+        "Munich",
+        [
+          "Munich is the capital and most populous city of the German state of Bavaria.",
+          "It is the third-largest city in Germany, after Berlin and Hamburg.",
+          "Heisenberg studied physics at the University of Munich under Arnold Sommerfeld."
+        ]
+      ],
+      [
+        "Berlin",
+        [
+          "Berlin is the capital and largest city of Germany by both area and population.",
+          "Its 3.85 million inhabitants make it the European Union's most populous city according to population within city limits.",
+          "The city is also one of Germany's 16 federal states."
+        ]
+      ],
+      [
+        "Niels Bohr",
+        [
+          "Niels Henrik David Bohr was a Danish physicist who made foundational contributions to understanding atomic structure.",
+          "He developed the Bohr model of the atom and received the Nobel Prize in Physics in 1922.",
+          "Bohr was born and died in Copenhagen, Denmark."
+        ]
+      ],
+      [
+        "Copenhagen",
+        [
+          "Copenhagen is the capital and most populous city of Denmark.",
+          "The city had a population of 660,842 in 2024.",
+          "It forms the core of the wider urban area of Copenhagen."
+        ]
+      ],
+      [
+        "Quantum mechanics",
+        [
+          "Quantum mechanics is a fundamental theory in physics that will describe the physical properties of nature at atomic scales.",
+          "It is the foundation of all quantum physics including quantum chemistry and quantum field theory.",
+          "It developed in the early 20th century."
+        ]
+      ],
+      [
+        "Max Planck",
+        [
+          "Max Karl Ernst Ludwig Planck was a German theoretical physicist whose discovery of energy quanta won him the Nobel Prize in Physics in 1918.",
+          "As a theoretical physicist, Planck made many contributions to physics.",
+          "He was born in Kiel, Duchy of Holstein."
+        ]
+      ],
+      [
+        "Vienna",
+        [
+          "Vienna is the national capital, largest city, and one of nine states of Austria.",
+          "It is located in the eastern part of Austria and is close to the borders of the Czech Republic, Slovakia, and Hungary.",
+          "It was the home of Erwin Schrödinger."
+        ]
+      ]
+    ]
+  }
+]

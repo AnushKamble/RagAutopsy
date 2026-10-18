@@ -1,0 +1,970 @@
+{
+  "target_split": "test",
+  "regime": "regime_a",
+  "validity_summary": {
+    "total_attempted": 5,
+    "total_valid": 3,
+    "total_invalid": 2,
+    "overall_validity_rate": 0.6,
+    "by_fault": {
+      "F0": {
+        "attempted": 1,
+        "valid": 1,
+        "invalid": 0,
+        "effectiveness_rate": 1.0,
+        "invalid_reasons": {}
+      },
+      "F1": {
+        "attempted": 1,
+        "valid": 1,
+        "invalid": 0,
+        "effectiveness_rate": 1.0,
+        "invalid_reasons": {}
+      },
+      "F2": {
+        "attempted": 1,
+        "valid": 1,
+        "invalid": 0,
+        "effectiveness_rate": 1.0,
+        "invalid_reasons": {}
+      },
+      "F3": {
+        "attempted": 1,
+        "valid": 0,
+        "invalid": 1,
+        "effectiveness_rate": 0.0,
+        "invalid_reasons": {
+          "Precondition failed: No gold passage was retrieved in top-k.": 1
+        }
+      },
+      "F4": {
+        "attempted": 1,
+        "valid": 0,
+        "invalid": 1,
+        "effectiveness_rate": 0.0,
+        "invalid_reasons": {
+          "Precondition failed: Original gold evidence was not retrieved, so contradiction cannot coexist.": 1
+        }
+      }
+    }
+  },
+  "diagnostic_results": {
+    "baseline_majority_cause": {
+      "metrics": {
+        "total_trials": 3,
+        "covered_trials": 3,
+        "coverage": 1.0,
+        "overall_accuracy": 0.3333,
+        "conditional_accuracy": 0.3333,
+        "macro_f1": 0.1,
+        "balanced_accuracy": 0.2,
+        "target_labels": [
+          "F0",
+          "F1",
+          "F2",
+          "F3",
+          "F4"
+        ],
+        "per_class": {
+          "F0": {
+            "precision": 0.3333,
+            "recall": 1.0,
+            "f1": 0.5,
+            "support": 1
+          },
+          "F1": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 1
+          },
+          "F2": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 1
+          },
+          "F3": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 0
+          },
+          "F4": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 0
+          }
+        },
+        "raw_confusion_matrix": [
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "normalized_confusion_matrix": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "confusion_matrix_labels": [
+          "F0",
+          "F1",
+          "F2",
+          "F3",
+          "F4",
+          "UNMAPPED_OR_UNKNOWN"
+        ]
+      },
+      "bootstrap": {
+        "n_bootstraps": 20,
+        "alpha": 0.05,
+        "macro_f1": {
+          "mean": 0.1,
+          "ci_lower": 0.1,
+          "ci_upper": 0.1
+        },
+        "balanced_accuracy": {
+          "mean": 0.2,
+          "ci_lower": 0.2,
+          "ci_upper": 0.2
+        },
+        "overall_accuracy": {
+          "mean": 0.3333,
+          "ci_lower": 0.3333,
+          "ci_upper": 0.3333
+        }
+      }
+    },
+    "baseline_random": {
+      "metrics": {
+        "total_trials": 3,
+        "covered_trials": 3,
+        "coverage": 1.0,
+        "overall_accuracy": 0.6667,
+        "conditional_accuracy": 0.6667,
+        "macro_f1": 0.3333,
+        "balanced_accuracy": 0.4,
+        "target_labels": [
+          "F0",
+          "F1",
+          "F2",
+          "F3",
+          "F4"
+        ],
+        "per_class": {
+          "F0": {
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.6667,
+            "support": 1
+          },
+          "F1": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 1
+          },
+          "F2": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 1
+          },
+          "F3": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 0
+          },
+          "F4": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 0
+          }
+        },
+        "raw_confusion_matrix": [
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "normalized_confusion_matrix": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "confusion_matrix_labels": [
+          "F0",
+          "F1",
+          "F2",
+          "F3",
+          "F4",
+          "UNMAPPED_OR_UNKNOWN"
+        ]
+      },
+      "bootstrap": {
+        "n_bootstraps": 20,
+        "alpha": 0.05,
+        "macro_f1": {
+          "mean": 0.3333,
+          "ci_lower": 0.3333,
+          "ci_upper": 0.3333
+        },
+        "balanced_accuracy": {
+          "mean": 0.4,
+          "ci_lower": 0.4,
+          "ci_upper": 0.4
+        },
+        "overall_accuracy": {
+          "mean": 0.6667,
+          "ci_lower": 0.6667,
+          "ci_upper": 0.6667
+        }
+      }
+    },
+    "d1_retrieval_rules": {
+      "metrics": {
+        "total_trials": 3,
+        "covered_trials": 3,
+        "coverage": 1.0,
+        "overall_accuracy": 0.6667,
+        "conditional_accuracy": 0.6667,
+        "macro_f1": 0.3333,
+        "balanced_accuracy": 0.4,
+        "target_labels": [
+          "F0",
+          "F1",
+          "F2",
+          "F3",
+          "F4"
+        ],
+        "per_class": {
+          "F0": {
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.6667,
+            "support": 1
+          },
+          "F1": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 1
+          },
+          "F2": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 1
+          },
+          "F3": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 0
+          },
+          "F4": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 0
+          }
+        },
+        "raw_confusion_matrix": [
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "normalized_confusion_matrix": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "confusion_matrix_labels": [
+          "F0",
+          "F1",
+          "F2",
+          "F3",
+          "F4",
+          "UNMAPPED_OR_UNKNOWN"
+        ]
+      },
+      "bootstrap": {
+        "n_bootstraps": 20,
+        "alpha": 0.05,
+        "macro_f1": {
+          "mean": 0.3333,
+          "ci_lower": 0.3333,
+          "ci_upper": 0.3333
+        },
+        "balanced_accuracy": {
+          "mean": 0.4,
+          "ci_lower": 0.4,
+          "ci_upper": 0.4
+        },
+        "overall_accuracy": {
+          "mean": 0.6667,
+          "ci_lower": 0.6667,
+          "ci_upper": 0.6667
+        }
+      }
+    },
+    "d2_lexical_support": {
+      "metrics": {
+        "total_trials": 3,
+        "covered_trials": 3,
+        "coverage": 1.0,
+        "overall_accuracy": 0.3333,
+        "conditional_accuracy": 0.3333,
+        "macro_f1": 0.1,
+        "balanced_accuracy": 0.2,
+        "target_labels": [
+          "F0",
+          "F1",
+          "F2",
+          "F3",
+          "F4"
+        ],
+        "per_class": {
+          "F0": {
+            "precision": 0.3333,
+            "recall": 1.0,
+            "f1": 0.5,
+            "support": 1
+          },
+          "F1": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 1
+          },
+          "F2": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 1
+          },
+          "F3": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 0
+          },
+          "F4": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 0
+          }
+        },
+        "raw_confusion_matrix": [
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "normalized_confusion_matrix": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "confusion_matrix_labels": [
+          "F0",
+          "F1",
+          "F2",
+          "F3",
+          "F4",
+          "UNMAPPED_OR_UNKNOWN"
+        ]
+      },
+      "bootstrap": {
+        "n_bootstraps": 20,
+        "alpha": 0.05,
+        "macro_f1": {
+          "mean": 0.1,
+          "ci_lower": 0.1,
+          "ci_upper": 0.1
+        },
+        "balanced_accuracy": {
+          "mean": 0.2,
+          "ci_lower": 0.2,
+          "ci_upper": 0.2
+        },
+        "overall_accuracy": {
+          "mean": 0.3333,
+          "ci_lower": 0.3333,
+          "ci_upper": 0.3333
+        }
+      }
+    },
+    "d4_combined_policy": {
+      "metrics": {
+        "total_trials": 3,
+        "covered_trials": 3,
+        "coverage": 1.0,
+        "overall_accuracy": 0.6667,
+        "conditional_accuracy": 0.6667,
+        "macro_f1": 0.3333,
+        "balanced_accuracy": 0.4,
+        "target_labels": [
+          "F0",
+          "F1",
+          "F2",
+          "F3",
+          "F4"
+        ],
+        "per_class": {
+          "F0": {
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.6667,
+            "support": 1
+          },
+          "F1": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 1
+          },
+          "F2": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 1
+          },
+          "F3": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 0
+          },
+          "F4": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 0
+          }
+        },
+        "raw_confusion_matrix": [
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "normalized_confusion_matrix": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "confusion_matrix_labels": [
+          "F0",
+          "F1",
+          "F2",
+          "F3",
+          "F4",
+          "UNMAPPED_OR_UNKNOWN"
+        ]
+      },
+      "bootstrap": {
+        "n_bootstraps": 20,
+        "alpha": 0.05,
+        "macro_f1": {
+          "mean": 0.3333,
+          "ci_lower": 0.3333,
+          "ci_upper": 0.3333
+        },
+        "balanced_accuracy": {
+          "mean": 0.4,
+          "ci_lower": 0.4,
+          "ci_upper": 0.4
+        },
+        "overall_accuracy": {
+          "mean": 0.6667,
+          "ci_lower": 0.6667,
+          "ci_upper": 0.6667
+        }
+      }
+    }
+  },
+  "trial_rows": [
+    {
+      "trial_id": "trial_000001",
+      "question_id": "syn_q001",
+      "true_cause": "F0",
+      "predicted_cause": "F0",
+      "abstained": false,
+      "confidence": 0.85,
+      "rationale": "Both retrieval scores and lexical context grounding indicate clean execution.",
+      "answer": "The Rhine flows through Germany and the Netherlands before emptying into the North Sea."
+    },
+    {
+      "trial_id": "trial_000002",
+      "question_id": "syn_q001",
+      "true_cause": "F1",
+      "predicted_cause": "F0",
+      "abstained": false,
+      "confidence": 0.85,
+      "rationale": "Both retrieval scores and lexical context grounding indicate clean execution.",
+      "answer": "It flows through central and southeastern Europe to the Black Sea."
+    },
+    {
+      "trial_id": "trial_000003",
+      "question_id": "syn_q001",
+      "true_cause": "F2",
+      "predicted_cause": "F2",
+      "abstained": false,
+      "confidence": 0.75,
+      "rationale": "Combined policy affirms retrieval diagnosis: Crowded candidate pool with flat score gap (0.0 < 1.0).",
+      "answer": "---\n\n[Passage 2]:\nDistractor Overview 2 regarding Which river flows th\nThis document contains background discussion on which river flows through the birthplace of the author of the metamorphosis which river flows through the birthplace of the author of the metamorphosis which river flows through the birthplace of the author of the metamorphosis."
+    }
+  ]
+}

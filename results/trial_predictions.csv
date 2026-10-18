@@ -1,0 +1,8 @@
+trial_id,question_id,true_cause,predicted_cause,abstained,confidence,rationale,answer
+trial_000001,syn_q001,F0,F0,False,0.85,Both retrieval scores and lexical context grounding indicate clean execution.,The Rhine flows through Germany and the Netherlands before emptying into the North Sea.
+trial_000002,syn_q001,F1,F0,False,0.85,Both retrieval scores and lexical context grounding indicate clean execution.,It flows through central and southeastern Europe to the Black Sea.
+trial_000003,syn_q001,F2,F2,False,0.75,Combined policy affirms retrieval diagnosis: Crowded candidate pool with flat score gap (0.0 < 1.0).,"---
+
+[Passage 2]:
+Distractor Overview 2 regarding Which river flows th
+This document contains background discussion on which river flows through the birthplace of the author of the metamorphosis which river flows through the birthplace of the author of the metamorphosis which river flows through the birthplace of the author of the metamorphosis."
