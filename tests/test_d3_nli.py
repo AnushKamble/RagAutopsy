@@ -52,9 +52,10 @@ def test_d3_diagnose_f5_unsupported_generation(tmp_path: Path):
     p1 = RetrievedPassage(passage_id="p1", rank=1, score=10.0, text="Bananas grow on tropical herbaceous plants.")
 
     trace = DiagnosticTrace(
-        trial_id="trace_f5_001",
+        trial_id="trial_nli_unsupported_001",
         question_id="q1",
         question="Where do bananas grow?",
+
         retrieved_top_k=[p1],
         source_passage_ids=["p1"],
         pre_assembly_passage_ids=["p1"],

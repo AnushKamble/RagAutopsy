@@ -159,13 +159,14 @@ def test_clean_pipeline_instrumentation_completeness(synthetic_fixture_path: Pat
     )
 
     trace, eval_rec = pipeline.run(
-        trial_id="trial_clean_verify_001",
+        trial_id="trial_verify_001",
         question_id=rec.question_id,
         question=rec.question,
         gold_answers=[rec.gold_answer],
         gold_evidence_ids=rec.gold_evidence_passage_ids,
         injected_fault="F0",
     )
+
 
     # 1. Ranks and scores instrumented
     assert len(trace.retrieved_top_k) == 3

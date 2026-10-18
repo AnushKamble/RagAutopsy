@@ -81,7 +81,7 @@ def run_live_demo(
         candidate_pool_size=20,
     )
     trace_f0, eval_f0 = pipe_f0.run(
-        trial_id="demo_trial_01_f0",
+        trial_id="trial_demo_step1",
         question_id=rec.question_id,
         question=rec.question,
         gold_answers=[rec.gold_answer],
@@ -129,7 +129,7 @@ def run_live_demo(
     ans_f3 = gen.generate(rec.question, ctx_f3)
 
     trace_f3 = DiagnosticTrace(
-        trial_id="demo_trial_02_f3",
+        trial_id="trial_demo_step2",
         question_id=rec.question_id,
         question=rec.question,
         retrieved_top_k=retrieved_f3,
@@ -144,7 +144,7 @@ def run_live_demo(
         generator_config=gen.get_config(),
     )
     eval_f3 = EvaluatorRecord(
-        trial_id="demo_trial_02_f3",
+        trial_id="trial_demo_step2",
         question_id=rec.question_id,
         split="dev",
         injected_fault="F3",
@@ -195,7 +195,7 @@ def run_live_demo(
         candidate_pool_size=20,
     )
     trace_f2_a, eval_f2_a = pipe_f2_a.run(
-        trial_id="demo_trial_03_f2_regime_a",
+        trial_id="trial_demo_step3",
         question_id=rec.question_id,
         question=rec.question,
         gold_answers=[rec.gold_answer],
@@ -204,6 +204,7 @@ def run_live_demo(
         injection_applied=True,
         trial_valid=True,
     )
+
     diag_f2_a = policy.diagnose(trace_f2_a)
 
     # Case 3B: Regime B (Blind Top-k — candidate scores hidden)

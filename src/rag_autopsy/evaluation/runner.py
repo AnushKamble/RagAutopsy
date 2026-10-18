@@ -1,9 +1,16 @@
-"""End-to-end experiment execution harness across fault injections and diagnostics."""
-
+import random
 import time
 from typing import Any, Dict, List, Optional
-from rag_autopsy.core.schemas import DiagnosticTrace, EvaluatorRecord
+from rag_autopsy.core.schemas import (
+    DiagnosticTrace,
+    EvaluatedTrial,
+    EvaluatorRecord,
+    EvaluatorStore,
+    explicit_evaluation_join,
+    generate_stable_trial_id,
+)
 from rag_autopsy.data.schema import QARecord
+
 from rag_autopsy.data.splits import SplitManifest
 from rag_autopsy.diagnostics.baselines import MajorityCauseBaseline, RandomBaseline
 from rag_autopsy.diagnostics.d1_retrieval import D1RetrievalDiagnostic
@@ -66,10 +73,9 @@ def run_experiment_harness(
     eval_records: List[EvaluatorRecord] = []
 
     # 3. Generate trials across all questions in the split
-    trial_idx = 0
     for rec in records:
         # F0: Clean control
-        trial_idx += 1
+        id_0 = generate_stable_trial_id(seed=seed, question_id=rec.question_id, intervention_key="F0")
         pipe_f0 = RAGPipeline(
             retriever=BM25Retriever(base_corpus),
             context_builder=builder,
@@ -78,7 +84,7 @@ def run_experiment_harness(
             candidate_pool_size=candidate_pool_size,
         )
         tr_0, ev_0 = pipe_f0.run(
-            trial_id=f"trial_{trial_idx:06d}",
+            trial_id=id_0,
             question_id=rec.question_id,
             question=rec.question,
             split=target_split,
@@ -93,7 +99,7 @@ def run_experiment_harness(
         eval_records.append(ev_0)
 
         # F1: Evidence Unavailable
-        trial_idx += 1
+        id_1 = generate_stable_trial_id(seed=seed, question_id=rec.question_id, intervention_key="F1")
         res_f1 = f1_injector.inject(rec, base_corpus)
         trial_corpus_f1 = res_f1.modified_corpus or base_corpus  # type: ignore[attr-defined]
         pipe_f1 = RAGPipeline(
@@ -104,7 +110,7 @@ def run_experiment_harness(
             candidate_pool_size=candidate_pool_size,
         )
         tr_1, ev_1 = pipe_f1.run(
-            trial_id=f"trial_{trial_idx:06d}",
+            trial_id=id_1,
             question_id=rec.question_id,
             question=rec.question,
             split=target_split,
@@ -121,7 +127,7 @@ def run_experiment_harness(
         eval_records.append(ev_1)
 
         # F2: Evidence Ranked Out
-        trial_idx += 1
+        id_2 = generate_stable_trial_id(seed=seed, question_id=rec.question_id, intervention_key="F2")
         res_f2 = f2_injector.inject(rec, base_corpus)
         trial_corpus_f2 = res_f2.modified_corpus or base_corpus  # type: ignore[attr-defined]
         pipe_f2 = RAGPipeline(
@@ -132,7 +138,7 @@ def run_experiment_harness(
             candidate_pool_size=candidate_pool_size,
         )
         tr_2, ev_2 = pipe_f2.run(
-            trial_id=f"trial_{trial_idx:06d}",
+            trial_id=id_2,
             question_id=rec.question_id,
             question=rec.question,
             split=target_split,
@@ -149,7 +155,7 @@ def run_experiment_harness(
         eval_records.append(ev_2)
 
         # F3: Context Assembly Loss
-        trial_idx += 1
+        id_3 = generate_stable_trial_id(seed=seed, question_id=rec.question_id, intervention_key="F3")
         pipe_f3_base = RAGPipeline(
             retriever=BM25Retriever(base_corpus),
             context_builder=builder,
@@ -157,7 +163,6 @@ def run_experiment_harness(
             top_k=top_k,
             candidate_pool_size=candidate_pool_size,
         )
-        # First retrieve
         retrieved_f3, pool_scores_f3 = pipe_f3_base.retriever.retrieve(
             query=rec.question, top_k=top_k, candidate_pool_size=candidate_pool_size
         )
@@ -167,7 +172,7 @@ def run_experiment_harness(
         ctx_f3, _, post_f3 = builder.build_context(surviving_f3)
         ans_f3 = gen.generate(rec.question, ctx_f3)
         tr_3 = DiagnosticTrace(
-            trial_id=f"trial_{trial_idx:06d}",
+            trial_id=id_3,
             question_id=rec.question_id,
             question=rec.question,
             retrieved_top_k=retrieved_f3,
@@ -182,7 +187,7 @@ def run_experiment_harness(
             generator_config=gen.get_config(),
         )
         ev_3 = EvaluatorRecord(
-            trial_id=f"trial_{trial_idx:06d}",
+            trial_id=id_3,
             question_id=rec.question_id,
             split=target_split,
             injected_fault="F3",
@@ -198,7 +203,7 @@ def run_experiment_harness(
         eval_records.append(ev_3)
 
         # F4: Contradictory Evidence
-        trial_idx += 1
+        id_4 = generate_stable_trial_id(seed=seed, question_id=rec.question_id, intervention_key="F4")
         pipe_f4_base = RAGPipeline(
             retriever=BM25Retriever(base_corpus),
             context_builder=builder,
@@ -213,7 +218,7 @@ def run_experiment_harness(
         ctx_f4, pre_f4, post_f4 = builder.build_context(modified_f4)
         ans_f4 = gen.generate(rec.question, ctx_f4)
         tr_4 = DiagnosticTrace(
-            trial_id=f"trial_{trial_idx:06d}",
+            trial_id=id_4,
             question_id=rec.question_id,
             question=rec.question,
             retrieved_top_k=modified_f4,
@@ -228,7 +233,7 @@ def run_experiment_harness(
             generator_config=gen.get_config(),
         )
         ev_4 = EvaluatorRecord(
-            trial_id=f"trial_{trial_idx:06d}",
+            trial_id=id_4,
             question_id=rec.question_id,
             split=target_split,
             injected_fault="F4",
@@ -245,7 +250,7 @@ def run_experiment_harness(
 
         # F5: Unsupported Generation / Hallucination (Optional / Extended)
         if include_f5:
-            trial_idx += 1
+            id_5 = generate_stable_trial_id(seed=seed, question_id=rec.question_id, intervention_key="F5")
             pipe_f5_base = RAGPipeline(
                 retriever=BM25Retriever(base_corpus),
                 context_builder=builder,
@@ -259,7 +264,7 @@ def run_experiment_harness(
             ctx_f5, pre_f5, post_f5 = builder.build_context(retrieved_f5)
             ans_f5, res_f5 = f5_injector.apply_to_generation(rec, retrieved_f5, ctx_f5)
             tr_5 = DiagnosticTrace(
-                trial_id=f"trial_{trial_idx:06d}",
+                trial_id=id_5,
                 question_id=rec.question_id,
                 question=rec.question,
                 retrieved_top_k=retrieved_f5,
@@ -274,7 +279,7 @@ def run_experiment_harness(
                 generator_config=gen.get_config(),
             )
             ev_5 = EvaluatorRecord(
-                trial_id=f"trial_{trial_idx:06d}",
+                trial_id=id_5,
                 question_id=rec.question_id,
                 split=target_split,
                 injected_fault="F5",
@@ -289,6 +294,18 @@ def run_experiment_harness(
             traces.append(tr_5)
             eval_records.append(ev_5)
 
+    # 3b. Decouple presentation order so diagnostics cannot exploit sort order or modulo indices
+    rng = random.Random(seed)
+    paired = list(zip(traces, eval_records))
+    rng.shuffle(paired)
+    traces = [t for t, _ in paired]
+    eval_records = [e for _, e in paired]
+
+    # Store evaluator records in the privileged EvaluatorStore
+    evaluator_store = EvaluatorStore()
+    for ev in eval_records:
+        evaluator_store.add(ev)
+
     # 4. Adjudicate validity
     valid_evals, invalid_evals, validity_summary = adjudicate_trials(eval_records)
     valid_trial_ids = set(e.trial_id for e in valid_evals)
@@ -301,6 +318,7 @@ def run_experiment_harness(
     candidate_causes = ["F0", "F1", "F2", "F3", "F4"]
     if include_f5:
         candidate_causes.append("F5")
+
 
     majority_baseline = MajorityCauseBaseline()
     majority_baseline.fit([e.injected_fault for e in valid_evals])
@@ -385,4 +403,8 @@ def run_experiment_harness(
         "validity_summary": validity_summary.model_dump(),
         "diagnostic_results": results_by_diagnostic,
         "trial_rows": per_trial_rows,
+        "traces": traces,
+        "evaluator_store": evaluator_store,
+        "evaluator_records": eval_records,
     }
+

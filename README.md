@@ -110,7 +110,7 @@ uv pip install -e ".[dev]"
 
 ### Reproduce Benchmarks, Dashboards & Visualizations
 ```bash
-# 1. Run all 76 automated unit, integration, and leakage tests (~10 seconds)
+# 1. Run all 96 automated unit, integration, and leakage tests (~15 seconds)
 pytest -v
 
 # 2. Run the 60-second interactive live walkthrough demo
@@ -145,9 +145,11 @@ rag-autopsy audit-natural --data .data/processed/hotpot_subset_100.json
 ## Documentation
 - [`docs/project_charter.md`](docs/project_charter.md) — Research motivation, questions, and positioning.
 - [`docs/data_contract.md`](docs/data_contract.md) — HotpotQA terms, schemas, and partitioning invariants.
+- [`docs/trace_schema.md`](docs/trace_schema.md) — Data contracts, trace schemas, and boundary isolation audit.
 - [`docs/evaluation_protocol.md`](docs/evaluation_protocol.md) — Frozen pre-registered evaluation protocol.
 - [`docs/annotation_guide.md`](docs/annotation_guide.md) — Human reviewer rubric for auditing natural failures.
 - [`docs/decisions.md`](docs/decisions.md) — Architecture Decision Records (ADRs).
 - [`docs/limitations.md`](docs/limitations.md) — Detailed threats to validity and scope bounds.
 - [`PROJECT_STATUS.md`](PROJECT_STATUS.md) — Live milestone verification tracking.
+
 

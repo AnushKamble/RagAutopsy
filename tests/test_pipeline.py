@@ -100,7 +100,7 @@ def test_end_to_end_rag_pipeline(synthetic_fixture_path: Path, tmp_path: Path) -
 
     rec = records[0]
     trace, eval_rec = pipeline.run(
-        trial_id="clean_trial_001",
+        trial_id="trial_pipe_001",
         question_id=rec.question_id,
         question=rec.question,
         split="dev",
@@ -110,7 +110,8 @@ def test_end_to_end_rag_pipeline(synthetic_fixture_path: Path, tmp_path: Path) -
     )
 
     # Verify DiagnosticTrace structure
-    assert trace.trial_id == "clean_trial_001"
+    assert trace.trial_id == "trial_pipe_001"
+
     assert trace.question_id == rec.question_id
     assert len(trace.retrieved_top_k) == 3
     assert len(trace.candidate_pool_scores) == 10

@@ -33,7 +33,7 @@ def test_d4_learned_fit_and_diagnose():
     p1 = RetrievedPassage(passage_id="p1", rank=1, score=10.0, text="Clean passage.")
 
     t_f0 = DiagnosticTrace(
-        trial_id="tr_f0",
+        trial_id="trial_learn_001",
         question_id="q1",
         question="clean question",
         retrieved_top_k=[p1],
@@ -46,7 +46,7 @@ def test_d4_learned_fit_and_diagnose():
     )
 
     t_f3 = DiagnosticTrace(
-        trial_id="tr_f3",
+        trial_id="trial_learn_002",
         question_id="q2",
         question="dropped question",
         retrieved_top_k=[p1],
@@ -57,6 +57,7 @@ def test_d4_learned_fit_and_diagnose():
         answer="I do not know.",
         latency_ms=5.0,
     )
+
 
     policy = D4LearnedClassifierPolicy(classifier_type="decision_tree")
     policy.fit([t_f0, t_f3], ["F0", "F3"])
