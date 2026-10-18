@@ -17,6 +17,7 @@ class D4CombinedAttributionPolicy(BaseDiagnostic):
         regime: str = "regime_a",
         abstention_enabled: bool = True,
         confidence_threshold: float = 0.65,
+        enable_nli: bool = False,
     ):
         super().__init__(name=name)
         self.regime = regime
@@ -24,6 +25,11 @@ class D4CombinedAttributionPolicy(BaseDiagnostic):
         self.confidence_threshold = confidence_threshold
         self.d1 = D1RetrievalDiagnostic(regime=regime, abstain_on_ambiguity=abstention_enabled)
         self.d2 = D2LexicalSupportDiagnostic()
+        if enable_nli:
+            from rag_autopsy.diagnostics.d3_nli import D3NLISupportDiagnostic
+            self.d3 = D3NLISupportDiagnostic()
+        else:
+            self.d3 = None
 
     def _predict(self, trace: DiagnosticTrace) -> Diagnosis:
         start = time.perf_counter()
@@ -71,7 +77,22 @@ class D4CombinedAttributionPolicy(BaseDiagnostic):
                 runtime_ms=round(elapsed_ms, 3),
             )
 
-        # Rule 4: Grounding confirmation
+        # Rule 4: Check for F5 Unsupported Generation if NLI model is enabled
+        if self.d3:
+            diag_d3 = self.d3.diagnose(trace)
+            if diag_d3.predicted_cause == "F5" and diag_d1.predicted_cause == "F0":
+                elapsed_ms = (time.perf_counter() - start) * 1000.0
+                return Diagnosis(
+                    trial_id=trace.trial_id,
+                    diagnostic_name=self.name,
+                    predicted_cause="F5",
+                    confidence=diag_d3.confidence,
+                    abstained=False,
+                    evidence_rationale=f"Combined policy affirms F5 unsupported generation: {diag_d3.evidence_rationale}",
+                    runtime_ms=round(elapsed_ms, 3),
+                )
+
+        # Rule 5: Grounding confirmation
         if diag_d1.predicted_cause == "F0" and diag_d2.predicted_cause == "F0":
             elapsed_ms = (time.perf_counter() - start) * 1000.0
             return Diagnosis(

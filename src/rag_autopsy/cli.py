@@ -106,6 +106,9 @@ def evaluate(
     regime: str = typer.Option("regime_a", "--regime", "-r", help="Observability regime ('regime_a' | 'regime_b')."),
     output_dir: str = typer.Option("results", "--output", "-o", help="Directory to save output reports."),
     bootstraps: int = typer.Option(100, "--bootstraps", "-b", help="Number of question-level bootstrap iterations."),
+    include_f5: bool = typer.Option(False, "--include-f5", help="Include F5 Unsupported Generation in benchmark."),
+    include_d3: bool = typer.Option(False, "--include-d3", help="Include D3 NLI Support Diagnostic in benchmark."),
+    include_d4_learned: bool = typer.Option(False, "--include-d4-learned", help="Include D4 Learned Decision Tree Policy in benchmark."),
 ) -> None:
     """Execute full evaluation harness and output metrics summary and confusion matrix."""
     setup_logging(level="INFO")
@@ -151,6 +154,9 @@ def evaluate(
         target_split=split,
         regime=regime,
         n_bootstraps=bootstraps,
+        include_f5=include_f5,
+        include_d3=include_d3,
+        include_d4_learned=include_d4_learned,
     )
 
     # Print Results Table
@@ -310,9 +316,65 @@ def demo(
         raise typer.Exit(code=1)
 
 
+@app.command()
+def report(
+    summary_path: str = typer.Option(
+        "results/test_regime_a_extended/evaluation_summary.json",
+        "--summary",
+        "-s",
+        help="Path to evaluation summary JSON.",
+    ),
+    predictions_csv: str = typer.Option(
+        "results/test_regime_a_extended/trial_predictions.csv",
+        "--predictions",
+        "-p",
+        help="Path to trial predictions CSV.",
+    ),
+    output_path: str = typer.Option(
+        "results/report.html",
+        "--output",
+        "-o",
+        help="Path to destination HTML report file.",
+    ),
+) -> None:
+    """Generate standalone interactive HTML report from evaluation results."""
+    import csv
+    import json
+    from rag_autopsy.reports.html_report import generate_interactive_html_report
+
+    s_path = Path(summary_path)
+    if not s_path.is_file():
+        if Path("results/test_regime_a/evaluation_summary.json").is_file():
+            s_path = Path("results/test_regime_a/evaluation_summary.json")
+        else:
+            console.print(f"[bold red]Evaluation summary not found at: {summary_path}[/bold red]")
+            raise typer.Exit(code=1)
+
+    with open(s_path, "r", encoding="utf-8") as f:
+        summary_data = json.load(f)
+
+    trials = []
+    p_path = Path(predictions_csv)
+    if not p_path.is_file() and Path("results/test_regime_a/trial_predictions.csv").is_file():
+        p_path = Path("results/test_regime_a/trial_predictions.csv")
+
+    if p_path.is_file():
+        with open(p_path, "r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            trials = list(reader)
+
+    out_file = generate_interactive_html_report(
+        summary_data=summary_data,
+        trial_records=trials,
+        output_path=output_path,
+    )
+    console.print(f"[bold green]Successfully generated interactive HTML report: {out_file}[/bold green]")
+
+
 def main() -> None:
     app()
 
 
 if __name__ == "__main__":
     main()
+

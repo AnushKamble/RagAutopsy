@@ -16,6 +16,9 @@ from rag_autopsy.faults.f1_unavailable import F1EvidenceUnavailableInjector
 from rag_autopsy.faults.f2_ranked_out import F2EvidenceRankedOutInjector
 from rag_autopsy.faults.f3_assembly_loss import F3ContextAssemblyLossInjector
 from rag_autopsy.faults.f4_contradiction import F4ContradictoryEvidenceInjector
+from rag_autopsy.faults.f5_unsupported import F5UnsupportedGenerationInjector
+from rag_autopsy.diagnostics.d3_nli import D3NLISupportDiagnostic
+from rag_autopsy.diagnostics.d4_learned import D4LearnedClassifierPolicy
 from rag_autopsy.pipeline.context_builder import ContextBuilder
 from rag_autopsy.pipeline.corpus import Corpus
 from rag_autopsy.pipeline.generator import BaseGenerator, MockExtractiveGenerator
@@ -33,6 +36,9 @@ def run_experiment_harness(
     n_bootstraps: int = 100,
     seed: int = 42,
     generator: Optional[BaseGenerator] = None,
+    include_f5: bool = False,
+    include_d3: bool = False,
+    include_d4_learned: bool = False,
 ) -> Dict[str, Any]:
     """Execute end-to-end fault-injection experiment and diagnostic attribution benchmark."""
     # 1. Filter QA records for target partition
@@ -54,6 +60,7 @@ def run_experiment_harness(
     f2_injector = F2EvidenceRankedOutInjector(distractor_count=5, cutoff_k=top_k)
     f3_injector = F3ContextAssemblyLossInjector()
     f4_injector = F4ContradictoryEvidenceInjector()
+    f5_injector = F5UnsupportedGenerationInjector()
 
     traces: List[DiagnosticTrace] = []
     eval_records: List[EvaluatorRecord] = []
@@ -236,6 +243,52 @@ def run_experiment_harness(
         traces.append(tr_4)
         eval_records.append(ev_4)
 
+        # F5: Unsupported Generation / Hallucination (Optional / Extended)
+        if include_f5:
+            trial_idx += 1
+            pipe_f5_base = RAGPipeline(
+                retriever=BM25Retriever(base_corpus),
+                context_builder=builder,
+                generator=gen,
+                top_k=top_k,
+                candidate_pool_size=candidate_pool_size,
+            )
+            retrieved_f5, pool_scores_f5 = pipe_f5_base.retriever.retrieve(
+                query=rec.question, top_k=top_k, candidate_pool_size=candidate_pool_size
+            )
+            ctx_f5, pre_f5, post_f5 = builder.build_context(retrieved_f5)
+            ans_f5, res_f5 = f5_injector.apply_to_generation(rec, retrieved_f5, ctx_f5)
+            tr_5 = DiagnosticTrace(
+                trial_id=f"trial_{trial_idx:06d}",
+                question_id=rec.question_id,
+                question=rec.question,
+                retrieved_top_k=retrieved_f5,
+                candidate_pool_scores=pool_scores_f5,
+                source_passage_ids=[p.passage_id for p in retrieved_f5],
+                pre_assembly_passage_ids=pre_f5,
+                post_assembly_passage_ids=post_f5,
+                generator_context=ctx_f5,
+                answer=ans_f5,
+                latency_ms=10.0,
+                generator_model=gen.get_model_name(),
+                generator_config=gen.get_config(),
+            )
+            ev_5 = EvaluatorRecord(
+                trial_id=f"trial_{trial_idx:06d}",
+                question_id=rec.question_id,
+                split=target_split,
+                injected_fault="F5",
+                fault_parameters=res_f5.fault_parameters,
+                gold_answers=[rec.gold_answer],
+                gold_evidence_ids=rec.gold_evidence_passage_ids,
+                injection_applied=res_f5.injection_applied,
+                trace_condition_achieved=res_f5.trace_condition_achieved,
+                trial_valid=res_f5.trial_valid,
+                invalid_reason=res_f5.invalid_reason,
+            )
+            traces.append(tr_5)
+            eval_records.append(ev_5)
+
     # 4. Adjudicate validity
     valid_evals, invalid_evals, validity_summary = adjudicate_trials(eval_records)
     valid_trial_ids = set(e.trial_id for e in valid_evals)
@@ -246,15 +299,28 @@ def run_experiment_harness(
 
     # 5. Initialize diagnostics under test
     candidate_causes = ["F0", "F1", "F2", "F3", "F4"]
+    if include_f5:
+        candidate_causes.append("F5")
+
     majority_baseline = MajorityCauseBaseline()
     majority_baseline.fit([e.injected_fault for e in valid_evals])
 
     random_baseline = RandomBaseline(candidate_causes=candidate_causes, seed=seed)
     d1 = D1RetrievalDiagnostic(regime=regime)
     d2 = D2LexicalSupportDiagnostic()
-    d4 = D4CombinedAttributionPolicy(regime=regime)
+    d4 = D4CombinedAttributionPolicy(regime=regime, enable_nli=include_d3)
 
     diagnostics = [majority_baseline, random_baseline, d1, d2, d4]
+
+    if include_d3:
+        d3 = D3NLISupportDiagnostic()
+        diagnostics.append(d3)
+
+    if include_d4_learned:
+        y_all = [valid_eval_map[t.trial_id].injected_fault for t in valid_traces]
+        d4_learned = D4LearnedClassifierPolicy(classifier_type="decision_tree", random_state=seed)
+        d4_learned.fit(valid_traces, y_all)
+        diagnostics.append(d4_learned)
 
     # 6. Run predictions and collect metrics
     results_by_diagnostic: Dict[str, Any] = {}

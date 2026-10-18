@@ -43,6 +43,16 @@ def test_cli_evaluate(tmp_path) -> None:
     assert (tmp_path / "trial_predictions.csv").is_file()
 
 
+def test_cli_evaluate_with_f5_and_d3(tmp_path) -> None:
+    result = runner.invoke(
+        app,
+        ["evaluate", "--split", "test", "--bootstraps", "5", "--output", str(tmp_path), "--include-f5", "--include-d3"],
+    )
+    assert result.exit_code == 0
+    assert "Diagnostic Attribution Benchmark" in result.stdout
+    assert (tmp_path / "evaluation_summary.json").is_file()
+
+
 def test_cli_generate_plots(tmp_path) -> None:
     result = runner.invoke(app, ["generate-plots", "--output-dir", str(tmp_path)])
     assert result.exit_code == 0
@@ -59,5 +69,27 @@ def test_cli_demo() -> None:
     assert "Step 2: Fault Injection F3" in result.stdout
     assert "Step 3: Identifiability Demonstration" in result.stdout
     assert "Demonstration completed successfully" in result.stdout
+
+
+def test_cli_report(tmp_path) -> None:
+    # First evaluate to generate summary
+    runner.invoke(app, ["evaluate", "--split", "test", "--bootstraps", "5", "--output", str(tmp_path)])
+    out_html = tmp_path / "report.html"
+    result = runner.invoke(
+        app,
+        [
+            "report",
+            "--summary",
+            str(tmp_path / "evaluation_summary.json"),
+            "--predictions",
+            str(tmp_path / "trial_predictions.csv"),
+            "--output",
+            str(out_html),
+        ],
+    )
+    assert result.exit_code == 0
+    assert "Successfully generated interactive HTML report" in result.stdout
+    assert out_html.is_file()
+
 
 
