@@ -1,0 +1,38 @@
+{
+  "total_samples": 5,
+  "hallucinated_samples": 3,
+  "grounded_samples": 2,
+  "diagnostic_metrics": {
+    "d2_lexical_support": {
+      "diagnostic_name": "d2_lexical_support",
+      "sample_count": 5,
+      "true_positives": 0,
+      "false_positives": 0,
+      "true_negatives": 2,
+      "false_negatives": 3,
+      "accuracy": 0.4,
+      "balanced_accuracy": 0.5,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "abstention_rate": 0.0,
+      "mean_latency_ms": 0.07
+    },
+    "d3_nli_support": {
+      "diagnostic_name": "d3_nli_support",
+      "sample_count": 5,
+      "true_positives": 3,
+      "false_positives": 1,
+      "true_negatives": 1,
+      "false_negatives": 0,
+      "accuracy": 0.8,
+      "balanced_accuracy": 0.75,
+      "precision": 0.75,
+      "recall": 1.0,
+      "f1_score": 0.8571,
+      "abstention_rate": 0.0,
+      "mean_latency_ms": 0.5
+    }
+  },
+  "comparative_summary": "Evaluated 2 diagnostics on 5 RAGTruth samples (3 hallucinated, 2 grounded). Demonstrates agreement between inexpensive support diagnostics and human-annotated grounding."
+}

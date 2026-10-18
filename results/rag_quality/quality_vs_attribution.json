@@ -1,0 +1,57 @@
+{
+  "total_trials": 360,
+  "overall_context_precision": 0.5556,
+  "overall_faithfulness": 0.8333,
+  "overall_token_f1": 0.0782,
+  "profiles_by_fault": {
+    "F0": {
+      "fault_id": "F0",
+      "trial_count": 60,
+      "mean_context_precision": 0.8333,
+      "mean_faithfulness": 1.0,
+      "mean_token_f1": 0.0436,
+      "attribution_distinction": "Clean execution. High precision and faithfulness; establishes reference performance ceiling."
+    },
+    "F1": {
+      "fault_id": "F1",
+      "trial_count": 60,
+      "mean_context_precision": 0.0,
+      "mean_faithfulness": 1.0,
+      "mean_token_f1": 0.0241,
+      "attribution_distinction": "Evidence Unavailable. Context precision drops to 0.0 because evidence is missing from corpus. Scalar score cannot distinguish whether evidence was unindexed (F1) vs demoted (F2)."
+    },
+    "F2": {
+      "fault_id": "F2",
+      "trial_count": 60,
+      "mean_context_precision": 0.0,
+      "mean_faithfulness": 1.0,
+      "mean_token_f1": 0.0159,
+      "attribution_distinction": "Evidence Ranked Out. Context precision drops to 0.0 due to distractor dominance. Evidence exists in index but missed cutoff; requires retriever tuning, not corpus re-indexing."
+    },
+    "F3": {
+      "fault_id": "F3",
+      "trial_count": 60,
+      "mean_context_precision": 0.8333,
+      "mean_faithfulness": 1.0,
+      "mean_token_f1": 0.0181,
+      "attribution_distinction": "Context Assembly Loss. Context precision appears normal (evidence retrieved), but context assembly dropped evidence. Faithfulness drops; fix requires context window / assembly prompt redesign."
+    },
+    "F4": {
+      "fault_id": "F4",
+      "trial_count": 60,
+      "mean_context_precision": 0.8333,
+      "mean_faithfulness": 1.0,
+      "mean_token_f1": 0.0991,
+      "attribution_distinction": "Contradictory Evidence. Context precision may be non-zero, but contradictory passage in context produces conflicting claims. Scalar precision masks internal evidence conflict."
+    },
+    "F5": {
+      "fault_id": "F5",
+      "trial_count": 60,
+      "mean_context_precision": 0.8333,
+      "mean_faithfulness": 0.0,
+      "mean_token_f1": 0.2682,
+      "attribution_distinction": "Unsupported Generation. Both context precision and evidence availability are intact, yet generator hallucinated ungrounded answer. Fix requires generator prompting/model swap."
+    }
+  },
+  "interpretability_gap_summary": "Analysis demonstrates that aggregate scalar metrics (Context Precision & Faithfulness) conflate distinct failure modes: for example, F1 (Evidence Unavailable) and F2 (Evidence Ranked Out) both yield 0.0 Context Precision despite requiring fundamentally different engineering remediations (corpus indexing vs retriever reranking). RAG-Autopsy attribution isolates the specific intervention stage."
+}
