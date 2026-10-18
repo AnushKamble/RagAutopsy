@@ -34,6 +34,28 @@ def test_f1_injector(synthetic_fixture_path: Path) -> None:
         assert trial_corpus.get_passage(gid) is None
 
 
+def test_f1_precondition_rejection(synthetic_fixture_path: Path) -> None:
+    raw_items = load_raw_hotpot_json(synthetic_fixture_path)
+    records = parse_hotpot_records(raw_items)
+    corpus = Corpus.from_qa_records(records)
+
+    injector = F1EvidenceUnavailableInjector()
+
+    # Case 1: QARecord has empty gold_evidence_passage_ids
+    empty_gold_rec = records[0].model_copy(update={"gold_evidence_passage_ids": []})
+    res_empty = injector.inject(empty_gold_rec, corpus)
+    assert res_empty.trial_valid is False
+    assert res_empty.injection_applied is False
+    assert "no gold evidence passage IDs" in str(res_empty.invalid_reason)
+
+    # Case 2: Gold passage IDs are not in the corpus
+    nonexistent_rec = records[0].model_copy(update={"gold_evidence_passage_ids": ["nonexistent_passage_id"]})
+    res_nonexistent = injector.inject(nonexistent_rec, corpus)
+    assert res_nonexistent.trial_valid is False
+    assert res_nonexistent.injection_applied is False
+    assert "already absent from base corpus" in str(res_nonexistent.invalid_reason)
+
+
 def test_f2_injector(synthetic_fixture_path: Path) -> None:
     raw_items = load_raw_hotpot_json(synthetic_fixture_path)
     records = parse_hotpot_records(raw_items)

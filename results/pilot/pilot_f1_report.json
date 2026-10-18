@@ -1,0 +1,160 @@
+{
+  "pilot_name": "F1_Evidence_Unavailable_Pilot",
+  "initial_corpus_size": 20,
+  "final_corpus_size": 20,
+  "base_corpus_unmutated": true,
+  "trials_attempted": 3,
+  "trials_valid": 2,
+  "trials_invalid": 1,
+  "invalid_reasons": [
+    "Precondition failed: Gold passages already absent from base corpus."
+  ],
+  "trials": [
+    {
+      "question_id": "syn_q001",
+      "question": "Which river flows through the birthplace of the author of 'The Metamorphosis'?",
+      "gold_evidence_ids": [
+        "syn_q001__p0_franz_kafka",
+        "syn_q001__p1_prague"
+      ],
+      "clean_trace": {
+        "trial_id": "trial_e86334a0efb27471",
+        "retrieved_ids": [
+          "syn_q001__p3_danube",
+          "syn_q001__p9_rhine",
+          "syn_q001__p2_the_metamorphosis"
+        ],
+        "top_score": 8.8207,
+        "candidate_pool_scores": [
+          8.8207,
+          8.3431,
+          6.8881,
+          6.7592,
+          6.6183
+        ],
+        "answer": "It flows through central and southeastern Europe to the Black Sea."
+      },
+      "f1_trace": {
+        "trial_id": "trial_7def50180d252d36",
+        "retrieved_ids": [
+          "syn_q001__p3_danube",
+          "syn_q001__p9_rhine",
+          "syn_q001__p2_the_metamorphosis"
+        ],
+        "top_score": 8.6305,
+        "candidate_pool_scores": [
+          8.6305,
+          7.855,
+          7.0751,
+          6.6034,
+          6.4048
+        ],
+        "answer": "It flows through central and southeastern Europe to the Black Sea."
+      },
+      "injection_result": {
+        "injected_fault": "F1",
+        "injection_applied": true,
+        "trace_condition_achieved": true,
+        "trial_valid": true,
+        "invalid_reason": null
+      }
+    },
+    {
+      "question_id": "syn_q002",
+      "question": "What is the capital of the country where the physicist who proposed the uncertainty principle was born?",
+      "gold_evidence_ids": [
+        "syn_q002__p0_werner_heisenberg",
+        "syn_q002__p1_germany"
+      ],
+      "clean_trace": {
+        "trial_id": "trial_37340db14bdc8d71",
+        "retrieved_ids": [
+          "syn_q002__p0_werner_heisenberg",
+          "syn_q002__p2_uncertainty_principle",
+          "syn_q002__p5_niels_bohr"
+        ],
+        "top_score": 11.5449,
+        "candidate_pool_scores": [
+          11.5449,
+          10.724,
+          10.538,
+          8.0944,
+          7.4435
+        ],
+        "answer": "---\n\n[Passage 2]:\nUncertainty principle\nIn quantum mechanics, the uncertainty principle is any of a variety of mathematical inequalities."
+      },
+      "f1_trace": {
+        "trial_id": "trial_0d970b515fe3c917",
+        "retrieved_ids": [
+          "syn_q002__p2_uncertainty_principle",
+          "syn_q002__p5_niels_bohr",
+          "syn_q002__p8_max_planck"
+        ],
+        "top_score": 11.9852,
+        "candidate_pool_scores": [
+          11.9852,
+          10.6029,
+          7.7553,
+          7.0406,
+          6.7135
+        ],
+        "answer": "---\n\n[Passage 3]:\nMax Planck\nMax Karl Ernst Ludwig Planck was a German theoretical physicist whose discovery of energy quanta won him the Nobel Prize in Physics in 1918."
+      },
+      "injection_result": {
+        "injected_fault": "F1",
+        "injection_applied": true,
+        "trace_condition_achieved": true,
+        "trial_valid": true,
+        "invalid_reason": null
+      }
+    },
+    {
+      "question_id": "syn_q001",
+      "question": "Which river flows through the birthplace of the author of 'The Metamorphosis'?",
+      "gold_evidence_ids": [
+        "nonexistent_id"
+      ],
+      "clean_trace": {
+        "trial_id": "trial_ec7c4821627c7801",
+        "retrieved_ids": [
+          "syn_q001__p3_danube",
+          "syn_q001__p9_rhine",
+          "syn_q001__p2_the_metamorphosis"
+        ],
+        "top_score": 8.8207,
+        "candidate_pool_scores": [
+          8.8207,
+          8.3431,
+          6.8881,
+          6.7592,
+          6.6183
+        ],
+        "answer": "It flows through central and southeastern Europe to the Black Sea."
+      },
+      "f1_trace": {
+        "trial_id": "trial_177e3844f7c40b52",
+        "retrieved_ids": [
+          "syn_q001__p3_danube",
+          "syn_q001__p9_rhine",
+          "syn_q001__p2_the_metamorphosis"
+        ],
+        "top_score": 8.8207,
+        "candidate_pool_scores": [
+          8.8207,
+          8.3431,
+          6.8881,
+          6.7592,
+          6.6183
+        ],
+        "answer": "It flows through central and southeastern Europe to the Black Sea."
+      },
+      "injection_result": {
+        "injected_fault": "F1",
+        "injection_applied": false,
+        "trace_condition_achieved": false,
+        "trial_valid": false,
+        "invalid_reason": "Precondition failed: Gold passages already absent from base corpus."
+      }
+    }
+  ]
+}
