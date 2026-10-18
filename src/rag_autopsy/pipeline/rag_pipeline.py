@@ -69,11 +69,19 @@ class RAGPipeline:
             question=question,
             retrieved_top_k=retrieved_passages,
             candidate_pool_scores=candidate_pool_scores,
+            source_passage_ids=[p.passage_id for p in retrieved_passages],
             pre_assembly_passage_ids=pre_ids,
             post_assembly_passage_ids=post_ids,
             generator_context=assembled_context,
             answer=answer,
             latency_ms=round(elapsed_ms, 2),
+            generator_model=self.generator.get_model_name() if self.generator else None,
+            generator_config=self.generator.get_config() if self.generator else {},
+            metadata={
+                "top_k": self.top_k,
+                "candidate_pool_size": self.candidate_pool_size,
+                "max_context_chars": self.context_builder.max_context_chars,
+            },
         )
 
         # 5. Evaluate answer correctness if gold answers are supplied

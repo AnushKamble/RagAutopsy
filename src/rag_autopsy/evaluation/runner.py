@@ -165,11 +165,14 @@ def run_experiment_harness(
             question=rec.question,
             retrieved_top_k=retrieved_f3,
             candidate_pool_scores=pool_scores_f3,
+            source_passage_ids=[p.passage_id for p in retrieved_f3],
             pre_assembly_passage_ids=[p.passage_id for p in retrieved_f3],
             post_assembly_passage_ids=post_f3,
             generator_context=ctx_f3,
             answer=ans_f3,
             latency_ms=10.0,
+            generator_model=gen.get_model_name(),
+            generator_config=gen.get_config(),
         )
         ev_3 = EvaluatorRecord(
             trial_id=f"trial_{trial_idx:06d}",
@@ -208,11 +211,14 @@ def run_experiment_harness(
             question=rec.question,
             retrieved_top_k=modified_f4,
             candidate_pool_scores=pool_scores_f4,
+            source_passage_ids=[p.passage_id for p in modified_f4],
             pre_assembly_passage_ids=pre_f4,
             post_assembly_passage_ids=post_f4,
             generator_context=ctx_f4,
             answer=ans_f4,
             latency_ms=10.0,
+            generator_model=gen.get_model_name(),
+            generator_config=gen.get_config(),
         )
         ev_4 = EvaluatorRecord(
             trial_id=f"trial_{trial_idx:06d}",

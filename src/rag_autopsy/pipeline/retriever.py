@@ -67,6 +67,7 @@ class BM25Retriever:
                     rank=rank_idx,
                     score=round(float(score), 4),
                     text=passage.text,
+                    title=getattr(passage, "title", None),
                 )
             )
 

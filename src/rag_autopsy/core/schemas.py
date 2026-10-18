@@ -3,7 +3,7 @@
 Strictly separates diagnostic-visible data from privileged evaluator metadata.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 from pydantic import BaseModel, Field, model_validator
 
 
@@ -26,6 +26,7 @@ class RetrievedPassage(BaseModel):
     rank: int
     score: float
     text: str
+    title: Optional[str] = Field(default=None, description="Source article/passage title.")
 
 
 class DiagnosticTrace(BaseModel):
@@ -45,6 +46,10 @@ class DiagnosticTrace(BaseModel):
         default=None,
         description="Retriever scores for top-K (e.g. K=20) candidates to detect score cliffs without leaking text."
     )
+    source_passage_ids: List[str] = Field(
+        default_factory=list,
+        description="Explicit source passage IDs retrieved from corpus."
+    )
 
     # Context assembly trace
     pre_assembly_passage_ids: List[str]
@@ -54,6 +59,8 @@ class DiagnosticTrace(BaseModel):
     # Generation trace
     answer: str
     latency_ms: float
+    generator_model: Optional[str] = Field(default=None, description="Identifier of generator model used.")
+    generator_config: Dict[str, Any] = Field(default_factory=dict, description="Configuration parameters of generator.")
     metadata: Dict[str, Any] = Field(default_factory=dict)
 
     @model_validator(mode="after")
@@ -76,6 +83,35 @@ class DiagnosticTrace(BaseModel):
                         f"Leakage violation: forbidden key '{key}' found in DiagnosticTrace.metadata!"
                     )
         return self
+
+
+def verify_trace_reconstructibility(trace: DiagnosticTrace) -> Tuple[bool, Optional[str]]:
+    """Validate that the trace contains complete information to reconstruct what the generator saw.
+    
+    Verifies that:
+    1. Every post-assembly passage ID corresponds to an observable retrieved passage in retrieved_top_k.
+    2. The text of every surviving passage is contained within generator_context.
+    3. The generator context is non-empty whenever post_assembly_passage_ids is non-empty.
+    
+    Returns:
+        Tuple of (is_valid: bool, error_message: Optional[str]).
+    """
+    retrieved_map = {p.passage_id: p for p in trace.retrieved_top_k}
+
+    if trace.post_assembly_passage_ids and not trace.generator_context.strip():
+        return False, "Non-empty post-assembly passage IDs but generator context is blank."
+
+    for pid in trace.post_assembly_passage_ids:
+        if pid not in retrieved_map:
+            return False, f"Post-assembly passage ID '{pid}' was not present in retrieved_top_k."
+        p = retrieved_map[pid]
+        # Verify text of the passage is present in generator_context
+        # Check either full text or a substantial normalized snippet
+        snippet = p.text[:min(100, len(p.text))].strip()
+        if snippet and snippet not in trace.generator_context:
+            return False, f"Text of passage '{pid}' is missing from generator_context."
+
+    return True, None
 
 
 class EvaluatorRecord(BaseModel):

@@ -1,0 +1,901 @@
+{
+  "summary": {
+    "split": "test",
+    "sample_size": 20,
+    "answer_correctness": {
+      "exact_match_rate": 0.0,
+      "mean_token_f1": 0.0369
+    },
+    "support_and_grounding": {
+      "context_support_rate": 0.6,
+      "any_gold_evidence_recall": 0.9,
+      "all_gold_evidence_recall": 0.4
+    },
+    "instrumentation_and_trace_health": {
+      "trace_reconstructibility_rate": 1.0,
+      "mean_latency_ms": 1.3
+    }
+  },
+  "trials": [
+    {
+      "trial_id": "clean_pilot_001",
+      "question_id": "5ae67dba55429908198fa5f0",
+      "question": "The Memphis Hustle are based in a suburb of a city with a population of what in 2010?",
+      "gold_answer": "48,982",
+      "gold_evidence_passage_ids": [
+        "5ae67dba55429908198fa5f0__p7_southaven_mississippi",
+        "5ae67dba55429908198fa5f0__p8_memphis_hustle"
+      ],
+      "retrieved_passage_ids": [
+        "5ae67dba55429908198fa5f0__p1_lakeland_tennessee",
+        "5ae67dba55429908198fa5f0__p7_southaven_mississippi",
+        "5ae67dba55429908198fa5f0__p9_olive_branch_mississippi"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          35.1045,
+          "Lakeland, Tennessee"
+        ],
+        [
+          2,
+          34.7168,
+          "Southaven, Mississippi"
+        ],
+        [
+          3,
+          32.9282,
+          "Olive Branch, Mississippi"
+        ]
+      ],
+      "assembled_context_char_length": 1386,
+      "generated_answer": "It is a suburb of Memphis, Tennessee, and a principal city in the Memphis metropolitan area.",
+      "exact_match": false,
+      "token_f1": 0.0,
+      "any_gold_retrieved": true,
+      "all_gold_retrieved": false,
+      "gold_retrieved_count": 1,
+      "total_gold_count": 2,
+      "answer_in_context": true,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 1.65
+    },
+    {
+      "trial_id": "clean_pilot_002",
+      "question_id": "5a88658955429938390d3f47",
+      "question": "Rostker v. Goldberg held that the practice of what way of filling armed forces vacancies was consitutional?",
+      "gold_answer": "Conscription",
+      "gold_evidence_passage_ids": [
+        "5a88658955429938390d3f47__p1_rostker_v_goldberg",
+        "5a88658955429938390d3f47__p6_conscription_in_the_united_states"
+      ],
+      "retrieved_passage_ids": [
+        "5a88658955429938390d3f47__p1_rostker_v_goldberg",
+        "5a88658955429938390d3f47__p5_fernando_tapias_stahelin",
+        "5a88658955429938390d3f47__p7_armed_forces_covenant"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          35.7771,
+          "Rostker v. Goldberg"
+        ],
+        [
+          2,
+          22.5669,
+          "Fernando Tapias Stahelin"
+        ],
+        [
+          3,
+          20.8967,
+          "Armed Forces Covenant"
+        ]
+      ],
+      "assembled_context_char_length": 2160,
+      "generated_answer": "Rostker, Director of the Selective Service System.)  In a 6-3 decision, the Supreme Court held that this gender distinction was not a violation of the equal protection component of the due process clause, and that the Act would stand as passed.",
+      "exact_match": false,
+      "token_f1": 0.0,
+      "any_gold_retrieved": true,
+      "all_gold_retrieved": false,
+      "gold_retrieved_count": 1,
+      "total_gold_count": 2,
+      "answer_in_context": false,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 1.2
+    },
+    {
+      "trial_id": "clean_pilot_003",
+      "question_id": "5a85b2d95542997b5ce40028",
+      "question": "Who was known by his stage name Aladin and helped organizations improve their performance as a consultant?",
+      "gold_answer": "Eenasul Fateh",
+      "gold_evidence_passage_ids": [
+        "5a85b2d95542997b5ce40028__p3_eenasul_fateh",
+        "5a85b2d95542997b5ce40028__p7_management_consulting"
+      ],
+      "retrieved_passage_ids": [
+        "5a85b2d95542997b5ce40028__p3_eenasul_fateh",
+        "5a85b2d95542997b5ce40028__p7_management_consulting",
+        "5a85b2d95542997b5ce40028__p1_method_man"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          28.129,
+          "Eenasul Fateh"
+        ],
+        [
+          2,
+          21.009,
+          "Management consulting"
+        ],
+        [
+          3,
+          19.1001,
+          "Method Man"
+        ]
+      ],
+      "assembled_context_char_length": 1244,
+      "generated_answer": "---\n\n[Passage 3]:\nMethod Man\nClifford Smith (born April 1, 1971), better known by his stage name Method Man, is an American rapper, record producer, and actor.",
+      "exact_match": false,
+      "token_f1": 0.0,
+      "any_gold_retrieved": true,
+      "all_gold_retrieved": true,
+      "gold_retrieved_count": 2,
+      "total_gold_count": 2,
+      "answer_in_context": true,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 1.14
+    },
+    {
+      "trial_id": "clean_pilot_004",
+      "question_id": "5a79311755429970f5fffe67",
+      "question": "A Japanese manga series based on a 16 year old high school student Ichitaka Seto, is written and illustrated by someone born in what year?",
+      "gold_answer": "1962",
+      "gold_evidence_passage_ids": [
+        "5a79311755429970f5fffe67__p1_masakazu_katsura",
+        "5a79311755429970f5fffe67__p9_iquots"
+      ],
+      "retrieved_passage_ids": [
+        "5a79311755429970f5fffe67__p9_iquots",
+        "5a79311755429970f5fffe67__p8_the_kindaichi_case_files",
+        "5a79311755429970f5fffe67__p3_havent_you_heard_im_sakamoto"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          51.595,
+          "I&quot;s"
+        ],
+        [
+          2,
+          37.9298,
+          "The Kindaichi Case Files"
+        ],
+        [
+          3,
+          34.407,
+          "Haven't You Heard? I'm Sakamoto"
+        ]
+      ],
+      "assembled_context_char_length": 1785,
+      "generated_answer": "---\n\n[Passage 2]:\nThe Kindaichi Case Files\nThe Kindaichi Case Files (Japanese: \u91d1\u7530\u4e00\u5c11\u5e74\u306e\u4e8b\u4ef6\u7c3f , Hepburn: Kindaichi Sh\u014dnen no Jikenbo ) is a Japanese mystery manga series based on the crime solving adventures of a high school student, Hajime Kindaichi, the supposed grandson of the famous (fictional) private detective Kosuke Kindaichi.",
+      "exact_match": false,
+      "token_f1": 0.0,
+      "any_gold_retrieved": true,
+      "all_gold_retrieved": false,
+      "gold_retrieved_count": 1,
+      "total_gold_count": 2,
+      "answer_in_context": false,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 1.5
+    },
+    {
+      "trial_id": "clean_pilot_005",
+      "question_id": "5a74c85055429916b0164218",
+      "question": "Born on 6 March 1937, this man was also a citizen of the United Kingdom.",
+      "gold_answer": "Alistair Grant",
+      "gold_evidence_passage_ids": [
+        "5a74c85055429916b0164218__p1_british_people",
+        "5a74c85055429916b0164218__p2_alistair_grant"
+      ],
+      "retrieved_passage_ids": [
+        "5a74c85055429916b0164218__p3_william_bonfield",
+        "5a74c85055429916b0164218__p9_arild_nyquist",
+        "5a74c85055429916b0164218__p8_australian_referendum_1937"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          19.3708,
+          "William Bonfield"
+        ],
+        [
+          2,
+          18.889,
+          "Arild Nyquist"
+        ],
+        [
+          3,
+          17.6203,
+          "Australian referendum, 1937"
+        ]
+      ],
+      "assembled_context_char_length": 651,
+      "generated_answer": "---\n\n[Passage 2]:\nArild Nyquist\nArild Nyquist (6 March 1937 \u2013 21 December 2004) was a Norwegian novelist, poet, writer of children's books and musician.",
+      "exact_match": false,
+      "token_f1": 0.0,
+      "any_gold_retrieved": false,
+      "all_gold_retrieved": false,
+      "gold_retrieved_count": 0,
+      "total_gold_count": 2,
+      "answer_in_context": false,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 1.12
+    },
+    {
+      "trial_id": "clean_pilot_006",
+      "question_id": "5a74106b55429979e288289e",
+      "question": "Where is the company that Sachin Warrier worked for as a software engineer headquartered?",
+      "gold_answer": "Mumbai",
+      "gold_evidence_passage_ids": [
+        "5a74106b55429979e288289e__p4_sachin_warrier",
+        "5a74106b55429979e288289e__p6_tata_consultancy_services"
+      ],
+      "retrieved_passage_ids": [
+        "5a74106b55429979e288289e__p2_william_connolley",
+        "5a74106b55429979e288289e__p4_sachin_warrier",
+        "5a74106b55429979e288289e__p8_alec_muffett"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          25.2198,
+          "William Connolley"
+        ],
+        [
+          2,
+          25.1057,
+          "Sachin Warrier"
+        ],
+        [
+          3,
+          21.9976,
+          "Alec Muffett"
+        ]
+      ],
+      "assembled_context_char_length": 1314,
+      "generated_answer": "He worked as a Software Engineer for Facebook.",
+      "exact_match": false,
+      "token_f1": 0.0,
+      "any_gold_retrieved": true,
+      "all_gold_retrieved": false,
+      "gold_retrieved_count": 1,
+      "total_gold_count": 2,
+      "answer_in_context": false,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 1.22
+    },
+    {
+      "trial_id": "clean_pilot_007",
+      "question_id": "5a77cb335542997042120b3a",
+      "question": "What American professional Hawaiian surfer born 18 October 1992 won the Rip Curl Pro Portugal?",
+      "gold_answer": "John John Florence",
+      "gold_evidence_passage_ids": [
+        "5a77cb335542997042120b3a__p2_john_john_florence",
+        "5a77cb335542997042120b3a__p9_meo_rip_curl_pro_portugal"
+      ],
+      "retrieved_passage_ids": [
+        "5a77cb335542997042120b3a__p9_meo_rip_curl_pro_portugal",
+        "5a77cb335542997042120b3a__p2_john_john_florence",
+        "5a77cb335542997042120b3a__p6_andy_irons"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          38.4236,
+          "MEO Rip Curl Pro Portugal"
+        ],
+        [
+          2,
+          36.7557,
+          "John John Florence"
+        ],
+        [
+          3,
+          26.6524,
+          "Andy Irons"
+        ]
+      ],
+      "assembled_context_char_length": 1650,
+      "generated_answer": "---\n\n[Passage 2]:\nJohn John Florence\nJohn \"John\" Alexander Florence (born 18 October 1992) is an American professional surfer.",
+      "exact_match": false,
+      "token_f1": 0.3,
+      "any_gold_retrieved": true,
+      "all_gold_retrieved": true,
+      "gold_retrieved_count": 2,
+      "total_gold_count": 2,
+      "answer_in_context": true,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 1.11
+    },
+    {
+      "trial_id": "clean_pilot_008",
+      "question_id": "5a84c4135542994c784dda31",
+      "question": "Are Yingkou and Fuding the same level of city?",
+      "gold_answer": "no",
+      "gold_evidence_passage_ids": [
+        "5a84c4135542994c784dda31__p1_yingkou",
+        "5a84c4135542994c784dda31__p2_fuding"
+      ],
+      "retrieved_passage_ids": [
+        "5a84c4135542994c784dda31__p1_yingkou",
+        "5a84c4135542994c784dda31__p8_yingkou_east_railway_station",
+        "5a84c4135542994c784dda31__p9_bayuquan_railway_station"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          20.719,
+          "Yingkou"
+        ],
+        [
+          2,
+          19.3558,
+          "Yingkou East Railway Station"
+        ],
+        [
+          3,
+          16.4581,
+          "Bayuquan Railway Station"
+        ]
+      ],
+      "assembled_context_char_length": 794,
+      "generated_answer": "It is located in Dashiqiao, in the Yingkou prefecture level city, in the Liaoning province of China.",
+      "exact_match": false,
+      "token_f1": 0.0,
+      "any_gold_retrieved": true,
+      "all_gold_retrieved": false,
+      "gold_retrieved_count": 1,
+      "total_gold_count": 2,
+      "answer_in_context": false,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 0.8
+    },
+    {
+      "trial_id": "clean_pilot_009",
+      "question_id": "5a85eed75542996432c5713b",
+      "question": "Where did the descendants of the group of black Indians associated with the Seminole people settle?",
+      "gold_answer": "Coahuila, Mexico",
+      "gold_evidence_passage_ids": [
+        "5a85eed75542996432c5713b__p0_mascogos",
+        "5a85eed75542996432c5713b__p9_black_seminoles"
+      ],
+      "retrieved_passage_ids": [
+        "5a85eed75542996432c5713b__p9_black_seminoles",
+        "5a85eed75542996432c5713b__p8_seminole_nation_of_oklahoma",
+        "5a85eed75542996432c5713b__p0_mascogos"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          41.4873,
+          "Black Seminoles"
+        ],
+        [
+          2,
+          27.2443,
+          "Seminole Nation of Oklahoma"
+        ],
+        [
+          3,
+          25.9617,
+          "Mascogos"
+        ]
+      ],
+      "assembled_context_char_length": 1772,
+      "generated_answer": "Its members are descendants of the 3,000 Seminoles who were forcibly removed from Florida to Indian Territory, along with 800 Black Seminoles, after the Second Seminole War.",
+      "exact_match": false,
+      "token_f1": 0.0,
+      "any_gold_retrieved": true,
+      "all_gold_retrieved": true,
+      "gold_retrieved_count": 2,
+      "total_gold_count": 2,
+      "answer_in_context": true,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 1.05
+    },
+    {
+      "trial_id": "clean_pilot_010",
+      "question_id": "5abbf698554299114383a0b5",
+      "question": "Which British first-generation jet-powered medium bomber was used in the South West Pacific theatre of World War II?",
+      "gold_answer": "English Electric Canberra",
+      "gold_evidence_passage_ids": [
+        "5abbf698554299114383a0b5__p0_no_2_squadron_raaf",
+        "5abbf698554299114383a0b5__p2_english_electric_canberra"
+      ],
+      "retrieved_passage_ids": [
+        "5abbf698554299114383a0b5__p1_south_west_pacific_theatre_of_world_war_ii",
+        "5abbf698554299114383a0b5__p2_english_electric_canberra",
+        "5abbf698554299114383a0b5__p6_tupolev_tu_12"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          36.8019,
+          "South West Pacific theatre of World War II"
+        ],
+        [
+          2,
+          36.5671,
+          "English Electric Canberra"
+        ],
+        [
+          3,
+          36.1052,
+          "Tupolev Tu-12"
+        ]
+      ],
+      "assembled_context_char_length": 1605,
+      "generated_answer": "---\n\n[Passage 3]:\nTupolev Tu-12\nThe Tupolev Tu-12 (development designation Tu-77) was an experimental Soviet jet-powered medium bomber developed from the successful piston-engined Tupolev Tu-2 bomber after the end of World War II.",
+      "exact_match": false,
+      "token_f1": 0.0,
+      "any_gold_retrieved": true,
+      "all_gold_retrieved": false,
+      "gold_retrieved_count": 1,
+      "total_gold_count": 2,
+      "answer_in_context": true,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 1.23
+    },
+    {
+      "trial_id": "clean_pilot_011",
+      "question_id": "5ae7e1fc55429952e35ea9cc",
+      "question": "What color clothing do people of the Netherlands wear during Oranjegekte or to celebrate the national holiday Koningsdag?",
+      "gold_answer": "orange",
+      "gold_evidence_passage_ids": [
+        "5ae7e1fc55429952e35ea9cc__p3_koningsdag",
+        "5ae7e1fc55429952e35ea9cc__p7_oranjegekte"
+      ],
+      "retrieved_passage_ids": [
+        "5ae7e1fc55429952e35ea9cc__p7_oranjegekte",
+        "5ae7e1fc55429952e35ea9cc__p3_koningsdag",
+        "5ae7e1fc55429952e35ea9cc__p0_queens_day_disambiguation"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          38.2445,
+          "Oranjegekte"
+        ],
+        [
+          2,
+          28.7592,
+          "Koningsdag"
+        ],
+        [
+          3,
+          28.1545,
+          "Queen's Day (disambiguation)"
+        ]
+      ],
+      "assembled_context_char_length": 1116,
+      "generated_answer": "---\n\n[Passage 2]:\nKoningsdag\nKoningsdag (] ) or King's Day is a national holiday in the Kingdom of the Netherlands.",
+      "exact_match": false,
+      "token_f1": 0.0,
+      "any_gold_retrieved": true,
+      "all_gold_retrieved": true,
+      "gold_retrieved_count": 2,
+      "total_gold_count": 2,
+      "answer_in_context": true,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 1.14
+    },
+    {
+      "trial_id": "clean_pilot_012",
+      "question_id": "5a8574945542997b5ce3fffb",
+      "question": "Which film was Oscar nominated, LaLee's Kin: The Legacy of Cotton or Gimme Shelter, the 1970 Rolling Stones documentary?",
+      "gold_answer": "LaLee's Kin: The Legacy of Cotton",
+      "gold_evidence_passage_ids": [
+        "5a8574945542997b5ce3fffb__p5_lalees_kin_the_legacy_of_cotton",
+        "5a8574945542997b5ce3fffb__p7_gimme_shelter_1970_film"
+      ],
+      "retrieved_passage_ids": [
+        "5a8574945542997b5ce3fffb__p5_lalees_kin_the_legacy_of_cotton",
+        "5a8574945542997b5ce3fffb__p7_gimme_shelter_1970_film",
+        "5a8574945542997b5ce3fffb__p6_altamont_diary"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          53.9027,
+          "LaLee's Kin: The Legacy of Cotton"
+        ],
+        [
+          2,
+          38.0286,
+          "Gimme Shelter (1970 film)"
+        ],
+        [
+          3,
+          29.5477,
+          "Altamont Diary"
+        ]
+      ],
+      "assembled_context_char_length": 1154,
+      "generated_answer": "---\n\n[Passage 2]:\nGimme Shelter (1970 film)\nGimme Shelter is a 1970 documentary film directed by Albert and David Maysles and Charlotte Zwerin chronicling the last weeks of The Rolling Stones' 1969 US tour which culminated in the disastrous Altamont Free Concert.",
+      "exact_match": false,
+      "token_f1": 0.0476,
+      "any_gold_retrieved": true,
+      "all_gold_retrieved": true,
+      "gold_retrieved_count": 2,
+      "total_gold_count": 2,
+      "answer_in_context": true,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 1.17
+    },
+    {
+      "trial_id": "clean_pilot_013",
+      "question_id": "5ac547525542993e66e822a3",
+      "question": "In 2017, what was 3/4th of the organization that also has a Center for Veterinary Medicine as well as part of the U.S. Department of Health and Human Services, spent on?",
+      "gold_answer": "Prescription Drug User Fee Act",
+      "gold_evidence_passage_ids": [
+        "5ac547525542993e66e822a3__p3_melarsomine",
+        "5ac547525542993e66e822a3__p6_food_and_drug_administration"
+      ],
+      "retrieved_passage_ids": [
+        "5ac547525542993e66e822a3__p4_center_for_pan_asian_community_services_inc",
+        "5ac547525542993e66e822a3__p7_oyewale_tomori",
+        "5ac547525542993e66e822a3__p9_western_university_of_health_sciences"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          45.3032,
+          "Center for Pan Asian Community Services, Inc."
+        ],
+        [
+          2,
+          44.7307,
+          "Oyewale Tomori"
+        ],
+        [
+          3,
+          41.6103,
+          "Western University of Health Sciences"
+        ]
+      ],
+      "assembled_context_char_length": 2479,
+      "generated_answer": "He received a Doctor of Veterinary Medicine(DVM) from Ahmadu Bello University, Zaria as well as a Doctorate degree, Ph.D in virology from the University of Ibadan, Oyo State, Nigeria where he was appointed professor of virology in 1981, the same year he received the United State of America Department of Health and Human Services Public Health Service Certificate for contributions to Lassa Fever Research.",
+      "exact_match": false,
+      "token_f1": 0.0,
+      "any_gold_retrieved": false,
+      "all_gold_retrieved": false,
+      "gold_retrieved_count": 0,
+      "total_gold_count": 2,
+      "answer_in_context": false,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 1.81
+    },
+    {
+      "trial_id": "clean_pilot_014",
+      "question_id": "5a7a455c5542994f819ef1a7",
+      "question": "Who died first, George Archainbaud or Ralph Murphy?",
+      "gold_answer": "George Archainbaud",
+      "gold_evidence_passage_ids": [
+        "5a7a455c5542994f819ef1a7__p5_george_archainbaud",
+        "5a7a455c5542994f819ef1a7__p6_ralph_murphy"
+      ],
+      "retrieved_passage_ids": [
+        "5a7a455c5542994f819ef1a7__p6_ralph_murphy",
+        "5a7a455c5542994f819ef1a7__p5_george_archainbaud",
+        "5a7a455c5542994f819ef1a7__p7_alias_french_gertie"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          17.3432,
+          "Ralph Murphy"
+        ],
+        [
+          2,
+          10.5939,
+          "George Archainbaud"
+        ],
+        [
+          3,
+          10.1884,
+          "Alias French Gertie"
+        ]
+      ],
+      "assembled_context_char_length": 839,
+      "generated_answer": "---\n\n[Passage 2]:\nGeorge Archainbaud\nGeorge Archainbaud (May 7, 1890 \u2013 February 20, 1959) was a French-born American film and television director.",
+      "exact_match": false,
+      "token_f1": 0.1818,
+      "any_gold_retrieved": true,
+      "all_gold_retrieved": true,
+      "gold_retrieved_count": 2,
+      "total_gold_count": 2,
+      "answer_in_context": true,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 0.76
+    },
+    {
+      "trial_id": "clean_pilot_015",
+      "question_id": "5ae37c765542992f92d822d4",
+      "question": "What was the name of the 1996 loose adaptation of William Shakespeare's \"Romeo & Juliet\" written by James Gunn?",
+      "gold_answer": "Tromeo and Juliet",
+      "gold_evidence_passage_ids": [
+        "5ae37c765542992f92d822d4__p5_tromeo_and_juliet",
+        "5ae37c765542992f92d822d4__p7_james_gunn"
+      ],
+      "retrieved_passage_ids": [
+        "5ae37c765542992f92d822d4__p5_tromeo_and_juliet",
+        "5ae37c765542992f92d822d4__p2_romeo_juliet",
+        "5ae37c765542992f92d822d4__p9_the_tragedy_of_romeo_and_juliet_film"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          50.1702,
+          "Tromeo and Juliet"
+        ],
+        [
+          2,
+          38.0427,
+          "Romeo + Juliet"
+        ],
+        [
+          3,
+          35.7558,
+          "The Tragedy of Romeo and Juliet (film)"
+        ]
+      ],
+      "assembled_context_char_length": 1274,
+      "generated_answer": "---\n\n[Passage 2]:\nRomeo + Juliet\nWilliam Shakespeare's Romeo + Juliet (shortened to Romeo + Juliet) is a 1996 American romantic drama film directed, co-produced, and co-written by Baz Luhrmann, co-produced by Gabriella Martinelli, and co-written by Craig Pearce, being an adaptation and modernization of William Shakespeare's tragedy \"Romeo and Juliet\".",
+      "exact_match": false,
+      "token_f1": 0.0833,
+      "any_gold_retrieved": true,
+      "all_gold_retrieved": false,
+      "gold_retrieved_count": 1,
+      "total_gold_count": 2,
+      "answer_in_context": true,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 1.22
+    },
+    {
+      "trial_id": "clean_pilot_016",
+      "question_id": "5a790d8f554299029c4b5eec",
+      "question": "Which English musician is known for both the songs \"See Yourself\" and \"Withing You Without You\"?",
+      "gold_answer": "George Harrison",
+      "gold_evidence_passage_ids": [
+        "5a790d8f554299029c4b5eec__p2_see_yourself",
+        "5a790d8f554299029c4b5eec__p9_within_you_without_you"
+      ],
+      "retrieved_passage_ids": [
+        "5a790d8f554299029c4b5eec__p1_sharon_gannon",
+        "5a790d8f554299029c4b5eec__p2_see_yourself",
+        "5a790d8f554299029c4b5eec__p0_love_songs_a_compilation_old_and_new"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          31.4416,
+          "Sharon Gannon"
+        ],
+        [
+          2,
+          30.1814,
+          "See Yourself"
+        ],
+        [
+          3,
+          21.0928,
+          "Love Songs: A Compilation... Old and New"
+        ]
+      ],
+      "assembled_context_char_length": 2641,
+      "generated_answer": "How you see yourself will determine who you are.\"\n\n---\n\n[Passage 2]:\nSee Yourself\n\"See Yourself\" is a song by English musician George Harrison, released on his 1976 album \"Thirty Three & 1/3\".",
+      "exact_match": false,
+      "token_f1": 0.125,
+      "any_gold_retrieved": true,
+      "all_gold_retrieved": false,
+      "gold_retrieved_count": 1,
+      "total_gold_count": 2,
+      "answer_in_context": true,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 3.7
+    },
+    {
+      "trial_id": "clean_pilot_017",
+      "question_id": "5ae005b555429942ec259bec",
+      "question": "In what year was the novel that Louren\u00e7o Mutarelli based \"Nina\" on based first published?",
+      "gold_answer": "1866",
+      "gold_evidence_passage_ids": [
+        "5ae005b555429942ec259bec__p1_crime_and_punishment",
+        "5ae005b555429942ec259bec__p8_louren\u00e7o_mutarelli"
+      ],
+      "retrieved_passage_ids": [
+        "5ae005b555429942ec259bec__p8_louren\u00e7o_mutarelli",
+        "5ae005b555429942ec259bec__p5_4_am_novel",
+        "5ae005b555429942ec259bec__p2_quando_eu_era_vivo"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          32.2509,
+          "Louren\u00e7o Mutarelli"
+        ],
+        [
+          2,
+          24.4829,
+          "4 a.m. (novel)"
+        ],
+        [
+          3,
+          23.3888,
+          "Quando Eu Era Vivo"
+        ]
+      ],
+      "assembled_context_char_length": 822,
+      "generated_answer": "---\n\n[Passage 3]:\nQuando Eu Era Vivo\nQuando Eu Era Vivo (English: When I Was Alive ) is a 2014 Brazilian drama-thriller film directed by Marco Dutra, based on the novel \"A Arte de Produzir Efeito Sem Causa\" by Louren\u00e7o Mutarelli.",
+      "exact_match": false,
+      "token_f1": 0.0,
+      "any_gold_retrieved": true,
+      "all_gold_retrieved": false,
+      "gold_retrieved_count": 1,
+      "total_gold_count": 2,
+      "answer_in_context": false,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 1.22
+    },
+    {
+      "trial_id": "clean_pilot_018",
+      "question_id": "5abfb3425542990832d3a1c0",
+      "question": "Andrew Jaspan was the co-founder of what not-for-profit media outlet?",
+      "gold_answer": "The Conversation",
+      "gold_evidence_passage_ids": [
+        "5abfb3425542990832d3a1c0__p2_andrew_jaspan",
+        "5abfb3425542990832d3a1c0__p4_the_conversation_website"
+      ],
+      "retrieved_passage_ids": [
+        "5abfb3425542990832d3a1c0__p2_andrew_jaspan",
+        "5abfb3425542990832d3a1c0__p4_the_conversation_website",
+        "5abfb3425542990832d3a1c0__p7_14ymedio"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          35.1653,
+          "Andrew Jaspan"
+        ],
+        [
+          2,
+          15.566,
+          "The Conversation (website)"
+        ],
+        [
+          3,
+          14.493,
+          "14ymedio"
+        ]
+      ],
+      "assembled_context_char_length": 1577,
+      "generated_answer": "The project started with a group of 12 reporters, whose objective was to produce a digital media outlet with different types of news.",
+      "exact_match": false,
+      "token_f1": 0.0,
+      "any_gold_retrieved": true,
+      "all_gold_retrieved": true,
+      "gold_retrieved_count": 2,
+      "total_gold_count": 2,
+      "answer_in_context": true,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 0.91
+    },
+    {
+      "trial_id": "clean_pilot_019",
+      "question_id": "5ab29c24554299449642c932",
+      "question": "Are Giuseppe Verdi and Ambroise Thomas both Opera composers ?",
+      "gold_answer": "yes",
+      "gold_evidence_passage_ids": [
+        "5ab29c24554299449642c932__p3_giuseppe_verdi",
+        "5ab29c24554299449642c932__p5_ambroise_thomas"
+      ],
+      "retrieved_passage_ids": [
+        "5ab29c24554299449642c932__p4_teatro_giuseppe_verdi",
+        "5ab29c24554299449642c932__p6_armand_castelmary",
+        "5ab29c24554299449642c932__p3_giuseppe_verdi"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          18.9051,
+          "Teatro Giuseppe Verdi"
+        ],
+        [
+          2,
+          18.0047,
+          "Armand Castelmary"
+        ],
+        [
+          3,
+          17.6425,
+          "Giuseppe Verdi"
+        ]
+      ],
+      "assembled_context_char_length": 1220,
+      "generated_answer": "He created roles in three major premieres at the Paris Opera \u2013 Don Diego in \"L'Africaine\" by Meyerbeer (1865), the Monk in Verdi's \"Don Carlos\" (1867), and Horatio in Ambroise Thomas's \"Hamlet\" (1868).",
+      "exact_match": false,
+      "token_f1": 0.0,
+      "any_gold_retrieved": true,
+      "all_gold_retrieved": false,
+      "gold_retrieved_count": 1,
+      "total_gold_count": 2,
+      "answer_in_context": false,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 0.78
+    },
+    {
+      "trial_id": "clean_pilot_020",
+      "question_id": "5ae2b770554299495565db0f",
+      "question": "In what month is the annual documentary film festival, that is presented by the fortnightly published British journal of literary essays, held?",
+      "gold_answer": "March and April",
+      "gold_evidence_passage_ids": [
+        "5ae2b770554299495565db0f__p0_london_international_documentary_festival",
+        "5ae2b770554299495565db0f__p4_london_review_of_books"
+      ],
+      "retrieved_passage_ids": [
+        "5ae2b770554299495565db0f__p4_london_review_of_books",
+        "5ae2b770554299495565db0f__p0_london_international_documentary_festival",
+        "5ae2b770554299495565db0f__p9_new_haven_documentary_film_festival"
+      ],
+      "retrieved_top_k_ranks_scores": [
+        [
+          1,
+          43.1776,
+          "London Review of Books"
+        ],
+        [
+          2,
+          37.5192,
+          "London International Documentary Festival"
+        ],
+        [
+          3,
+          34.9143,
+          "New Haven Documentary Film Festival"
+        ]
+      ],
+      "assembled_context_char_length": 1374,
+      "generated_answer": "---\n\n[Passage 3]:\nNew Haven Documentary Film Festival\nNew Haven Documentary Film Festival (also known as NHdocs) is an annual documentary film festival held in New Haven, Connecticut, over a weekend in the month of June.",
+      "exact_match": false,
+      "token_f1": 0.0,
+      "any_gold_retrieved": true,
+      "all_gold_retrieved": true,
+      "gold_retrieved_count": 2,
+      "total_gold_count": 2,
+      "answer_in_context": true,
+      "trace_reconstructible": true,
+      "reconstruction_error": null,
+      "latency_ms": 1.34
+    }
+  ]
+}
