@@ -46,6 +46,9 @@ def run_experiment_harness(
     include_f5: bool = False,
     include_d3: bool = False,
     include_d4_learned: bool = False,
+    low_score_threshold: float = 2.0,
+    score_gap_threshold: float = 1.0,
+    min_overlap_ratio: float = 0.3,
 ) -> Dict[str, Any]:
     """Execute end-to-end fault-injection experiment and diagnostic attribution benchmark."""
     # 1. Filter QA records for target partition
@@ -324,9 +327,19 @@ def run_experiment_harness(
     majority_baseline.fit([e.injected_fault for e in valid_evals])
 
     random_baseline = RandomBaseline(candidate_causes=candidate_causes, seed=seed)
-    d1 = D1RetrievalDiagnostic(regime=regime)
-    d2 = D2LexicalSupportDiagnostic()
-    d4 = D4CombinedAttributionPolicy(regime=regime, enable_nli=include_d3)
+    d1 = D1RetrievalDiagnostic(
+        regime=regime,
+        low_score_threshold=low_score_threshold,
+        score_gap_threshold=score_gap_threshold,
+    )
+    d2 = D2LexicalSupportDiagnostic(min_overlap_ratio=min_overlap_ratio)
+    d4 = D4CombinedAttributionPolicy(
+        regime=regime,
+        low_score_threshold=low_score_threshold,
+        score_gap_threshold=score_gap_threshold,
+        min_overlap_ratio=min_overlap_ratio,
+        enable_nli=include_d3,
+    )
 
     diagnostics = [majority_baseline, random_baseline, d1, d2, d4]
 
@@ -347,16 +360,30 @@ def run_experiment_harness(
     y_true = [valid_eval_map[t.trial_id].injected_fault for t in valid_traces]
     q_ids = [t.question_id for t in valid_traces]
 
+    predictions_by_diag: Dict[str, Dict[str, List[Any]]] = {}
+
     for diag in diagnostics:
         predictions: List[str] = []
         abstained_flags: List[bool] = []
         confidences: List[float] = []
+        rationales: List[str] = []
 
+        t0 = time.perf_counter()
         for trace in valid_traces:
             d_out = diag.diagnose(trace)
             predictions.append(d_out.predicted_cause)
             abstained_flags.append(d_out.abstained)
             confidences.append(d_out.confidence)
+            rationales.append(getattr(d_out, "evidence_rationale", "") or "")
+        elapsed_ms = (time.perf_counter() - t0) * 1000.0
+        avg_ms = elapsed_ms / len(valid_traces) if valid_traces else 0.0
+
+        predictions_by_diag[diag.name] = {
+            "predictions": predictions,
+            "abstained": abstained_flags,
+            "confidences": confidences,
+            "rationales": rationales,
+        }
 
         # Attribution metrics
         metrics = compute_attribution_metrics(
@@ -375,27 +402,58 @@ def run_experiment_harness(
             seed=seed,
         )
 
+        # Identify representative misclassifications
+        representative_errors = []
+        for trace, yt, yp, conf, rat in zip(valid_traces, y_true, predictions, confidences, rationales):
+            if yt != yp:
+                representative_errors.append({
+                    "trial_id": trace.trial_id,
+                    "question_id": trace.question_id,
+                    "question_snippet": trace.question[:80],
+                    "true_cause": yt,
+                    "predicted_cause": yp,
+                    "confidence": round(float(conf), 3),
+                    "rationale": rat,
+                })
+
         results_by_diagnostic[diag.name] = {
             "metrics": metrics,
             "bootstrap": bootstrap_summary.model_dump(),
+            "runtime": {
+                "total_ms": round(elapsed_ms, 2),
+                "avg_per_trial_ms": round(avg_ms, 4),
+            },
+            "representative_errors": representative_errors[:5],
         }
 
-    # Build per-trial export rows using D4 predictions
-    for trace in valid_traces:
+    # Build per-trial export rows using D4 predictions and all diagnostic predictions
+    for idx, trace in enumerate(valid_traces):
         ev = valid_eval_map[trace.trial_id]
-        pred_d4 = d4.diagnose(trace)
-        per_trial_rows.append(
-            {
-                "trial_id": trace.trial_id,
-                "question_id": trace.question_id,
-                "true_cause": ev.injected_fault,
-                "predicted_cause": pred_d4.predicted_cause,
-                "abstained": pred_d4.abstained,
-                "confidence": pred_d4.confidence,
-                "rationale": pred_d4.evidence_rationale,
-                "answer": trace.answer,
-            }
-        )
+        pred_d4_cause = predictions_by_diag[d4.name]["predictions"][idx]
+        pred_d4_abst = predictions_by_diag[d4.name]["abstained"][idx]
+        pred_d4_conf = predictions_by_diag[d4.name]["confidences"][idx]
+        pred_d4_rat = predictions_by_diag[d4.name]["rationales"][idx]
+
+        row = {
+            "trial_id": trace.trial_id,
+            "question_id": trace.question_id,
+            "true_cause": ev.injected_fault,
+            "predicted_cause": pred_d4_cause,
+            "abstained": pred_d4_abst,
+            "confidence": pred_d4_conf,
+            "rationale": pred_d4_rat,
+            "pred_majority": predictions_by_diag[majority_baseline.name]["predictions"][idx],
+            "pred_random": predictions_by_diag[random_baseline.name]["predictions"][idx],
+            "pred_d1": predictions_by_diag[d1.name]["predictions"][idx],
+            "pred_d2": predictions_by_diag[d2.name]["predictions"][idx],
+            "answer": trace.answer,
+        }
+        if include_d3 and d3.name in predictions_by_diag:
+            row["pred_d3"] = predictions_by_diag[d3.name]["predictions"][idx]
+        if include_d4_learned and d4_learned.name in predictions_by_diag:
+            row["pred_d4_learned"] = predictions_by_diag[d4_learned.name]["predictions"][idx]
+
+        per_trial_rows.append(row)
 
     return {
         "target_split": target_split,

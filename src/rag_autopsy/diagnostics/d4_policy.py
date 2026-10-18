@@ -17,14 +17,22 @@ class D4CombinedAttributionPolicy(BaseDiagnostic):
         regime: str = "regime_a",
         abstention_enabled: bool = True,
         confidence_threshold: float = 0.65,
+        low_score_threshold: float = 2.0,
+        score_gap_threshold: float = 1.0,
+        min_overlap_ratio: float = 0.3,
         enable_nli: bool = False,
     ):
         super().__init__(name=name)
         self.regime = regime
         self.abstention_enabled = abstention_enabled
         self.confidence_threshold = confidence_threshold
-        self.d1 = D1RetrievalDiagnostic(regime=regime, abstain_on_ambiguity=abstention_enabled)
-        self.d2 = D2LexicalSupportDiagnostic()
+        self.d1 = D1RetrievalDiagnostic(
+            regime=regime,
+            low_score_threshold=low_score_threshold,
+            score_gap_threshold=score_gap_threshold,
+            abstain_on_ambiguity=abstention_enabled,
+        )
+        self.d2 = D2LexicalSupportDiagnostic(min_overlap_ratio=min_overlap_ratio)
         if enable_nli:
             from rag_autopsy.diagnostics.d3_nli import D3NLISupportDiagnostic
             self.d3 = D3NLISupportDiagnostic()

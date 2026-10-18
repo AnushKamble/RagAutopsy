@@ -1,6 +1,6 @@
-low_score_threshold: 1.5
-score_gap_threshold: 0.5
-min_overlap_ratio: 0.2
+low_score_threshold: 2.0
+score_gap_threshold: 1.0
+min_overlap_ratio: 0.3
 confidence_threshold: 0.65
 calibration_macro_f1: 0.7279
-calibration_balanced_accuracy: 0.8
+calibration_balanced_accuracy: 0.8000

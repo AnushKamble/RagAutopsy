@@ -159,25 +159,60 @@ def evaluate(
         include_d4_learned=include_d4_learned,
     )
 
+    # Print Validity Summary Table
+    val = results["validity_summary"]
+    val_table = Table(title=f"Fault Injection Validity Accounting ({split.upper()})")
+    val_table.add_column("Fault", style="bold yellow")
+    val_table.add_column("Attempted", justify="right")
+    val_table.add_column("Valid", justify="right", style="green")
+    val_table.add_column("Invalid", justify="right", style="red")
+    val_table.add_column("Effectiveness", justify="right", style="cyan")
+    val_table.add_column("Invalid Reasons", style="magenta")
+
+    for fault_key, fstats in val["by_fault"].items():
+        reasons_str = ", ".join(f"{k}: {v}" for k, v in fstats["invalid_reasons"].items()) if fstats["invalid_reasons"] else "None"
+        val_table.add_row(
+            fault_key,
+            str(fstats["attempted"]),
+            str(fstats["valid"]),
+            str(fstats["invalid"]),
+            f"{fstats['effectiveness_rate']*100:.1f}%",
+            reasons_str,
+        )
+    val_table.add_section()
+    val_table.add_row(
+        "Total",
+        str(val["total_attempted"]),
+        str(val["total_valid"]),
+        str(val["total_invalid"]),
+        f"{val['overall_validity_rate']*100:.1f}%",
+        "-",
+    )
+    console.print(val_table)
+
     # Print Results Table
-    table = Table(title=f"Diagnostic Attribution Benchmark ({regime}, {split})")
+    table = Table(title=f"Diagnostic Attribution Benchmark ({regime.upper()}, {split.upper()})")
     table.add_column("Diagnostic Method", style="bold yellow")
     table.add_column("Macro-F1 (95% CI)", style="cyan")
     table.add_column("Balanced Acc (95% CI)", style="green")
     table.add_column("Coverage", style="magenta")
     table.add_column("Accuracy (Covered)", style="white")
+    table.add_column("Runtime (Total / Avg)", style="yellow")
 
     for diag_name, data in results["diagnostic_results"].items():
         m = data["metrics"]
         b = data["bootstrap"]
+        rt = data.get("runtime", {})
         f1_str = f"{m['macro_f1']:.3f} [{b['macro_f1']['ci_lower']:.3f}, {b['macro_f1']['ci_upper']:.3f}]"
         bal_str = f"{m['balanced_accuracy']:.3f} [{b['balanced_accuracy']['ci_lower']:.3f}, {b['balanced_accuracy']['ci_upper']:.3f}]"
+        rt_str = f"{rt.get('total_ms', 0):.1f}ms ({rt.get('avg_per_trial_ms', 0):.2f}ms/t)" if rt else "N/A"
         table.add_row(
             diag_name,
             f1_str,
             bal_str,
             f"{m['coverage']*100:.1f}%",
             f"{m['conditional_accuracy']*100:.1f}%",
+            rt_str,
         )
 
     console.print(table)
