@@ -110,7 +110,7 @@ uv pip install -e ".[dev]"
 
 ### Reproduce Benchmarks, Dashboards & Visualizations
 ```bash
-# 1. Run all 110 automated unit, integration, and leakage tests (~25 seconds)
+# 1. Run all 116 automated unit, integration, and leakage tests (~27 seconds)
 pytest -v
 
 # 2. Run the 60-second interactive live walkthrough demo

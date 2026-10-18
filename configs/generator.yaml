@@ -1,0 +1,8 @@
+# Generator configuration for RAG-Autopsy
+backend: "mock" # "mock" | "hf_local" | "api"
+model_name: "extractive_baseline"
+max_tokens: 64
+temperature: 0.0
+cache_dir: ".cache/generator"
+prompt_template: "Answer the question truthfully using the supplied passages only. If the context does not support an answer, output 'I do not have sufficient evidence.'\n\nContext:\n{context}\n\nQuestion: {question}\nAnswer:"
+cache_enabled: true

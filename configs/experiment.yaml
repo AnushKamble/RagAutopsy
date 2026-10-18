@@ -1,0 +1,43 @@
+# Full experiment configuration for RAG-Autopsy
+experiment_name: "held_out_attribution_benchmark"
+output_dir: "results"
+random_seed: 42
+bootstrap_resamples: 1000
+
+dataset:
+  name: "hotpotqa"
+  split: "dev"
+  setting: "distractor"
+  data_dir: ".data"
+  raw_file: ".data/raw/hotpot_dev_distractor_v1.json"
+  sample_size: 100
+  seed: 42
+  train_ratio: 0.6
+  calibration_ratio: 0.2
+  test_ratio: 0.2
+
+retriever:
+  backend: "bm25"
+  top_k: 3
+  candidate_pool_size: 20
+  k1: 1.5
+  b: 0.75
+
+generator:
+  backend: "mock"
+  model_name: "extractive_baseline"
+  max_tokens: 64
+  temperature: 0.0
+  cache_dir: ".cache/generator"
+
+diagnostics:
+  enabled_diagnostics:
+    - "d1_retrieval"
+    - "d2_lexical"
+    - "d3_nli"
+    - "d4_combined"
+    - "d4_learned"
+  abstention_enabled: true
+  regime: "regime_a"
+  d1_score_gap_threshold: 0.5
+  d2_overlap_threshold: 0.2

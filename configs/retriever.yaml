@@ -1,0 +1,9 @@
+# Retriever configuration for RAG-Autopsy
+backend: "bm25"
+top_k: 3
+candidate_pool_size: 20
+k1: 1.5
+b: 0.75
+tokenizer: "simple_whitespace_punctuation"
+index_type: "in_memory_inverted_index"
+score_normalization: "min_max_pooled"
