@@ -110,7 +110,7 @@ uv pip install -e ".[dev]"
 
 ### Reproduce Benchmarks, Dashboards & Visualizations
 ```bash
-# 1. Run all 96 automated unit, integration, and leakage tests (~15 seconds)
+# 1. Run all 110 automated unit, integration, and leakage tests (~25 seconds)
 pytest -v
 
 # 2. Run the 60-second interactive live walkthrough demo
@@ -132,6 +132,18 @@ rag-autopsy evaluate --data .data/processed/hotpot_subset_100.json --split test 
 
 # 7. Run natural failure audit
 rag-autopsy audit-natural --data .data/processed/hotpot_subset_100.json
+
+# 8. Run 5-axis systematic ablation study suite (Spec Section 12)
+rag-autopsy ablate
+
+# 9. Run fault severity sweeps (distractor counts & context budget)
+rag-autopsy severity
+
+# 10. Run RAGTruth grounding & hallucination benchmark (D2 vs D3 on human annotations)
+rag-autopsy ragtruth
+
+# 11. Run RAG quality baseline comparison (Ragas Context Precision & Faithfulness vs Attribution)
+rag-autopsy quality-compare
 ```
 
 ### Generated Visualizations & Reports
@@ -139,6 +151,10 @@ rag-autopsy audit-natural --data .data/processed/hotpot_subset_100.json
 - `results/plots/regime_a_d4_confusion_matrix.png`: Normalized attribution confusion matrix for D4 Combined Policy in Regime A.
 - `results/plots/regime_comparison_d4.png`: Side-by-side Regime A vs Regime B comparison illustrating identifiability collapse on F2.
 - `results/plots/regime_a_macro_f1_bootstrap.png`: Macro-F1 benchmark comparison with 95% clustered bootstrap error bars.
+- `results/ablations/ablation_study_report.json`: Multi-axis ablation results across diagnostics, abstention, compound faults, and severity.
+- `results/severity/severity_report.json`: Sensitivity curves across distractor density ($D \in [1..20]$) and context length limits ($C \in [500..3000]$).
+- `results/ragtruth/ragtruth_benchmark_report.json`: Support diagnostic benchmarking against human hallucination annotations.
+- `results/rag_quality/quality_vs_attribution.json`: Scalar quality metric profile contrasting precision/faithfulness against stage attribution.
 
 ---
 

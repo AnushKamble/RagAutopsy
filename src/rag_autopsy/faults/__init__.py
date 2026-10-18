@@ -6,6 +6,7 @@ from rag_autopsy.faults.f2_ranked_out import F2EvidenceRankedOutInjector
 from rag_autopsy.faults.f3_assembly_loss import F3ContextAssemblyLossInjector
 from rag_autopsy.faults.f4_contradiction import F4ContradictoryEvidenceInjector
 from rag_autopsy.faults.f5_unsupported import F5UnsupportedGenerationInjector
+from rag_autopsy.faults.combined import CombinedFaultInjector
 
 __all__ = [
     "BaseFaultInjector",
@@ -15,4 +16,5 @@ __all__ = [
     "F3ContextAssemblyLossInjector",
     "F4ContradictoryEvidenceInjector",
     "F5UnsupportedGenerationInjector",
+    "CombinedFaultInjector",
 ]

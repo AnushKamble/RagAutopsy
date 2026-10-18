@@ -371,6 +371,293 @@ def report(
     console.print(f"[bold green]Successfully generated interactive HTML report: {out_file}[/bold green]")
 
 
+def _resolve_records(data_path: Optional[str]):
+    if data_path:
+        fpath = Path(data_path)
+    else:
+        fpath = Path(__file__).resolve().parent.parent.parent / "tests" / "fixtures" / "synthetic_qa.json"
+    if not fpath.is_file():
+        raise FileNotFoundError(f"Data file not found: {fpath}")
+    try:
+        return load_qa_records(fpath)
+    except Exception:
+        raw = load_raw_hotpot_json(fpath)
+        return parse_hotpot_records(raw)
+
+
+@app.command(name="ablate")
+def ablate(
+    data_path: Optional[str] = typer.Option(
+        None, "--data", "-d", help="Path to QA records JSON file."
+    ),
+    target_split: str = typer.Option(
+        "dev", "--split", "-s", help="Split partition to evaluate ('dev' or 'test')."
+    ),
+    output_dir: str = typer.Option(
+        "results/ablations", "--output-dir", "-o", help="Directory to save ablation report."
+    ),
+    seed: int = typer.Option(42, "--seed", help="Random seed for reproducibility."),
+) -> None:
+    """Run systematic 5-axis ablation study suite (spec Section 12)."""
+    import json
+    from rag_autopsy.evaluation.ablations import run_ablation_study_suite
+
+    console.print(Panel("[bold cyan]Running RAG-Autopsy Systematic Ablation Suite[/bold cyan]"))
+
+    records = _resolve_records(data_path)
+    console.print(f"Loaded [green]{len(records)}[/green] QA records.")
+
+    manifest = create_question_splits(records, dev_ratio=0.6, calibration_ratio=0.2, test_ratio=0.2, seed=seed)
+    report = run_ablation_study_suite(records, manifest, target_split=target_split, seed=seed)
+
+    # Display Diagnostic Ablation
+    table1 = Table(title="Ablation 1: Diagnostic Families & Combinations")
+    table1.add_column("Diagnostic", style="bold yellow")
+    table1.add_column("Macro-F1", style="green")
+    table1.add_column("Balanced Accuracy", style="cyan")
+    table1.add_column("Coverage", style="white")
+
+    for e in report.diagnostic_ablation:
+        table1.add_row(e.diagnostic_name, f"{e.macro_f1:.4f}", f"{e.balanced_accuracy:.4f}", f"{e.coverage:.2%}")
+    console.print(table1)
+
+    # Display Abstention Ablation
+    table2 = Table(title="Ablation 2: Abstention Policy Tradeoff")
+    table2.add_column("Policy Mode", style="bold yellow")
+    table2.add_column("Macro-F1", style="green")
+    table2.add_column("Diagnosed Accuracy", style="cyan")
+    table2.add_column("Coverage", style="white")
+    table2.add_column("Abstained", style="red")
+
+    for e in report.abstention_ablation:
+        table2.add_row(e.policy_mode, f"{e.macro_f1:.4f}", f"{e.accuracy_on_diagnosed:.4f}", f"{e.coverage:.2%}", str(e.abstained_count))
+    console.print(table2)
+
+    # Display Single vs Combined Faults
+    table3 = Table(title="Ablation 3: Single vs Compound Fault Attribution")
+    table3.add_column("Failure Regime", style="bold yellow")
+    table3.add_column("Total Trials", style="white")
+    table3.add_column("Macro-F1", style="green")
+    table3.add_column("Accuracy", style="cyan")
+    table3.add_column("Interpretation", style="italic")
+
+    for e in report.combined_faults_ablation:
+        table3.add_row(e.regime_type, str(e.total_trials), f"{e.macro_f1:.4f}", f"{e.accuracy:.4f}", e.notes)
+    console.print(table3)
+
+    out_p = Path(output_dir)
+    out_p.mkdir(parents=True, exist_ok=True)
+    report_file = out_p / "ablation_study_report.json"
+    with open(report_file, "w", encoding="utf-8") as f:
+        json.dump(report.model_dump(), f, indent=2)
+
+    console.print(f"[bold green]Saved ablation study report to: {report_file}[/bold green]")
+
+
+@app.command(name="severity")
+def severity(
+    data_path: Optional[str] = typer.Option(
+        None, "--data", "-d", help="Path to QA records JSON file."
+    ),
+    output_dir: str = typer.Option(
+        "results/severity", "--output-dir", "-o", help="Directory to save severity report."
+    ),
+    seed: int = typer.Option(42, "--seed", help="Random seed."),
+) -> None:
+    """Run fault severity sensitivity analysis across distractors and context budget."""
+    import json
+    from rag_autopsy.evaluation.severity import run_severity_analysis
+    from rag_autopsy.pipeline.corpus import Corpus
+
+    console.print(Panel("[bold cyan]Running RAG-Autopsy Fault Severity Sensitivity Analysis[/bold cyan]"))
+
+    records = _resolve_records(data_path)
+    base_corpus = Corpus.from_qa_records(records)
+
+    report = run_severity_analysis(
+        records=records,
+        base_corpus=base_corpus,
+        distractor_counts=[1, 3, 5, 10, 20],
+        context_budgets=[500, 1000, 2000, 3000],
+        seed=seed,
+    )
+
+    t_dist = Table(title="Distractor Count Severity Sweep (F2 Ranked Out)")
+    t_dist.add_column("Distractor Count", style="bold yellow")
+    t_dist.add_column("Validity Rate", style="cyan")
+    t_dist.add_column("D1 Recall", style="green")
+    t_dist.add_column("D4 Recall", style="magenta")
+    t_dist.add_column("Mean Token F1", style="white")
+
+    for pt in report.distractor_curve:
+        t_dist.add_row(
+            str(pt.distractor_count),
+            f"{pt.validity_rate:.2%}",
+            f"{pt.d1_f2_recall:.4f}",
+            f"{pt.d4_f2_recall:.4f}",
+            f"{pt.mean_token_f1:.4f}",
+        )
+    console.print(t_dist)
+
+    t_ctx = Table(title="Context Budget Severity Sweep (F3 Assembly Loss)")
+    t_ctx.add_column("Max Context Chars", style="bold yellow")
+    t_ctx.add_column("Validity Rate", style="cyan")
+    t_ctx.add_column("Retention Rate", style="green")
+    t_ctx.add_column("D2 Recall", style="magenta")
+    t_ctx.add_column("D4 Recall", style="yellow")
+
+    for pt in report.context_budget_curve:
+        t_ctx.add_row(
+            str(pt.max_context_chars),
+            f"{pt.validity_rate:.2%}",
+            f"{pt.evidence_retention_rate:.2%}",
+            f"{pt.d2_f3_recall:.4f}",
+            f"{pt.d4_f3_recall:.4f}",
+        )
+    console.print(t_ctx)
+
+    out_p = Path(output_dir)
+    out_p.mkdir(parents=True, exist_ok=True)
+    out_file = out_p / "severity_report.json"
+    with open(out_file, "w", encoding="utf-8") as f:
+        json.dump(report.model_dump(), f, indent=2)
+
+    console.print(f"[bold green]Saved severity sensitivity report to: {out_file}[/bold green]")
+
+
+@app.command(name="ragtruth")
+def ragtruth(
+    fixture_path: Optional[str] = typer.Option(
+        None, "--file", "-f", help="Path to RAGTruth JSON samples file."
+    ),
+    output_dir: str = typer.Option(
+        "results/ragtruth", "--output-dir", "-o", help="Directory to save RAGTruth report."
+    ),
+    seed: int = typer.Option(42, "--seed", help="Random seed."),
+) -> None:
+    """Run hallucination/grounding benchmark on RAGTruth human-annotated dataset."""
+    import json
+    from rag_autopsy.data.ragtruth import load_ragtruth_json
+    from rag_autopsy.diagnostics.d2_support import D2LexicalSupportDiagnostic
+    from rag_autopsy.diagnostics.d3_nli import D3NLISupportDiagnostic
+    from rag_autopsy.evaluation.ragtruth_eval import run_ragtruth_benchmark
+
+    console.print(Panel("[bold cyan]Running RAGTruth Grounding & Hallucination Benchmark[/bold cyan]"))
+
+    default_fixture = Path(__file__).resolve().parent.parent.parent / "tests" / "fixtures" / "ragtruth_synthetic.json"
+    p = Path(fixture_path) if fixture_path else default_fixture
+
+    samples = load_ragtruth_json(p)
+    console.print(f"Loaded [green]{len(samples)}[/green] RAGTruth samples from: {p}")
+
+    d2 = D2LexicalSupportDiagnostic()
+    d3 = D3NLISupportDiagnostic()
+
+    report = run_ragtruth_benchmark(samples, [d2, d3], seed=seed)
+
+    table = Table(title="RAGTruth Diagnostic Benchmark (Agreement with Human Annotations)")
+    table.add_column("Diagnostic", style="bold yellow")
+    table.add_column("Accuracy", style="green")
+    table.add_column("Balanced Acc", style="cyan")
+    table.add_column("Precision", style="white")
+    table.add_column("Recall", style="magenta")
+    table.add_column("F1 Score", style="yellow")
+    table.add_column("Mean Latency", style="blue")
+
+    for name, m in report.diagnostic_metrics.items():
+        table.add_row(
+            m.diagnostic_name,
+            f"{m.accuracy:.4f}",
+            f"{m.balanced_accuracy:.4f}",
+            f"{m.precision:.4f}",
+            f"{m.recall:.4f}",
+            f"{m.f1_score:.4f}",
+            f"{m.mean_latency_ms:.2f} ms",
+        )
+    console.print(table)
+    console.print(f"[italic]{report.comparative_summary}[/italic]")
+
+    out_p = Path(output_dir)
+    out_p.mkdir(parents=True, exist_ok=True)
+    out_file = out_p / "ragtruth_benchmark_report.json"
+    with open(out_file, "w", encoding="utf-8") as f:
+        json.dump(report.model_dump(), f, indent=2)
+
+    console.print(f"[bold green]Saved RAGTruth report to: {out_file}[/bold green]")
+
+
+@app.command(name="quality-compare")
+def quality_compare(
+    data_path: Optional[str] = typer.Option(
+        None, "--data", "-d", help="Path to QA records JSON file."
+    ),
+    target_split: str = typer.Option(
+        "dev", "--split", "-s", help="Target split to evaluate."
+    ),
+    output_dir: str = typer.Option(
+        "results/rag_quality", "--output-dir", "-o", help="Directory to save quality report."
+    ),
+    seed: int = typer.Option(42, "--seed", help="Random seed."),
+) -> None:
+    """Compare conventional scalar RAG quality metrics (Ragas) vs RAG-Autopsy fault attribution."""
+    import json
+    from rag_autopsy.evaluation.rag_quality import evaluate_rag_quality_dataset
+
+    console.print(Panel("[bold cyan]Comparing Scalar RAG Quality Metrics vs Fault Attribution[/bold cyan]"))
+
+    records = _resolve_records(data_path)
+    manifest = create_question_splits(records, dev_ratio=0.6, calibration_ratio=0.2, test_ratio=0.2, seed=seed)
+
+    harness = run_experiment_harness(
+        qa_records=records,
+        split_manifest=manifest,
+        target_split=target_split,
+        include_f5=True,
+        include_d3=True,
+        seed=seed,
+    )
+
+    traces = harness["traces"]
+    eval_records = harness["evaluator_records"]
+
+    comp = evaluate_rag_quality_dataset(traces, eval_records)
+
+    console.print(
+        f"Overall Metrics across [bold]{comp.total_trials}[/bold] trials: "
+        f"Context Precision@k=[cyan]{comp.overall_context_precision:.4f}[/cyan], "
+        f"Faithfulness=[green]{comp.overall_faithfulness:.4f}[/green], "
+        f"Token F1=[yellow]{comp.overall_token_f1:.4f}[/yellow]"
+    )
+
+    table = Table(title="RAG Quality Breakdown by Fault Class vs Attribution Isolation")
+    table.add_column("Injected Fault", style="bold yellow")
+    table.add_column("Trials", style="white")
+    table.add_column("Context Prec@k", style="cyan")
+    table.add_column("Faithfulness", style="green")
+    table.add_column("Token F1", style="yellow")
+    table.add_column("Attribution Distinction (Why Scalar Metrics Fail)", style="italic")
+
+    for fid, prof in comp.profiles_by_fault.items():
+        table.add_row(
+            fid,
+            str(prof.trial_count),
+            f"{prof.mean_context_precision:.4f}",
+            f"{prof.mean_faithfulness:.4f}",
+            f"{prof.mean_token_f1:.4f}",
+            prof.attribution_distinction,
+        )
+    console.print(table)
+    console.print(f"[bold cyan]{comp.interpretability_gap_summary}[/bold cyan]")
+
+    out_p = Path(output_dir)
+    out_p.mkdir(parents=True, exist_ok=True)
+    out_file = out_p / "quality_vs_attribution.json"
+    with open(out_file, "w", encoding="utf-8") as f:
+        json.dump(comp.model_dump(), f, indent=2)
+
+    console.print(f"[bold green]Saved comparison to: {out_file}[/bold green]")
+
+
 def main() -> None:
     app()
 

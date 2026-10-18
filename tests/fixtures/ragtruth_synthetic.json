@@ -1,0 +1,52 @@
+[
+  {
+    "sample_id": "rt_syn_001",
+    "prompt": "When was the Apollo 11 mission launched and who was the commander?",
+    "source_passage": "Apollo 11 was launched by a Saturn V rocket from Kennedy Space Center on Merritt Island, Florida, on July 16, 1969. It was the fifth crewed mission of NASA's Apollo program. The spacecraft was commanded by Neil Armstrong, with lunar module pilot Buzz Aldrin and command module pilot Michael Collins.",
+    "response": "Apollo 11 was launched on July 16, 1969, from Kennedy Space Center, and the mission commander was Neil Armstrong.",
+    "has_hallucination": false,
+    "hallucination_spans": [],
+    "hallucination_type": "none",
+    "metadata": {"domain": "history"}
+  },
+  {
+    "sample_id": "rt_syn_002",
+    "prompt": "What is the speed of light in vacuum?",
+    "source_passage": "The speed of light in vacuum, commonly denoted c, is a universal physical constant. Its exact value is defined as 299,792,458 metres per second.",
+    "response": "The speed of light in vacuum is exactly 350,000,000 metres per second, which was measured by Albert Einstein in 1905.",
+    "has_hallucination": true,
+    "hallucination_spans": ["350,000,000 metres per second", "measured by Albert Einstein in 1905"],
+    "hallucination_type": "unsupported_fact",
+    "metadata": {"domain": "physics"}
+  },
+  {
+    "sample_id": "rt_syn_003",
+    "prompt": "Does the company offer remote work options?",
+    "source_passage": "Company policy strictly mandates all full-time employees to work on-site at the main headquarters five days a week. Remote work is prohibited.",
+    "response": "The company happily offers flexible remote work options allowing employees to work from home worldwide.",
+    "has_hallucination": true,
+    "hallucination_spans": ["happily offers flexible remote work options allowing employees to work from home worldwide"],
+    "hallucination_type": "evidential_conflict",
+    "metadata": {"domain": "corporate"}
+  },
+  {
+    "sample_id": "rt_syn_004",
+    "prompt": "What are the primary colors in traditional color theory?",
+    "source_passage": "In traditional color theory, the primary colors are red, yellow, and blue. These colors cannot be created by mixing other colors together.",
+    "response": "According to traditional color theory, the primary colors are red, yellow, and blue.",
+    "has_hallucination": false,
+    "hallucination_spans": [],
+    "hallucination_type": "none",
+    "metadata": {"domain": "art"}
+  },
+  {
+    "sample_id": "rt_syn_005",
+    "prompt": "Who wrote 'Pride and Prejudice'?",
+    "source_passage": "Pride and Prejudice is an 1813 romantic novel of manners written by Jane Austen. The novel follows the character development of Elizabeth Bennet.",
+    "response": "Pride and Prejudice was written by Charles Dickens in 1850.",
+    "has_hallucination": true,
+    "hallucination_spans": ["Charles Dickens in 1850"],
+    "hallucination_type": "unsupported_fact",
+    "metadata": {"domain": "literature"}
+  }
+]

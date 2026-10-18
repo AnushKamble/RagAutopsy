@@ -92,4 +92,33 @@ def test_cli_report(tmp_path) -> None:
     assert out_html.is_file()
 
 
+def test_cli_ablate(tmp_path) -> None:
+    result = runner.invoke(app, ["ablate", "--output-dir", str(tmp_path)])
+    assert result.exit_code == 0
+    assert "Systematic Ablation Suite" in result.stdout
+    assert "Ablation 1: Diagnostic Families" in result.stdout
+    assert (tmp_path / "ablation_study_report.json").is_file()
+
+
+def test_cli_severity(tmp_path) -> None:
+    result = runner.invoke(app, ["severity", "--output-dir", str(tmp_path)])
+    assert result.exit_code == 0
+    assert "Fault Severity Sensitivity Analysis" in result.stdout
+    assert (tmp_path / "severity_report.json").is_file()
+
+
+def test_cli_ragtruth(tmp_path) -> None:
+    result = runner.invoke(app, ["ragtruth", "--output-dir", str(tmp_path)])
+    assert result.exit_code == 0
+    assert "RAGTruth Grounding & Hallucination Benchmark" in result.stdout
+    assert (tmp_path / "ragtruth_benchmark_report.json").is_file()
+
+
+def test_cli_quality_compare(tmp_path) -> None:
+    result = runner.invoke(app, ["quality-compare", "--output-dir", str(tmp_path)])
+    assert result.exit_code == 0
+    assert "Comparing Scalar RAG Quality Metrics vs Fault Attribution" in result.stdout
+    assert (tmp_path / "quality_vs_attribution.json").is_file()
+
+
 
