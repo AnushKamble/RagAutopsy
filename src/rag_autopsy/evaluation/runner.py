@@ -1,6 +1,6 @@
 import random
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 from rag_autopsy.core.schemas import (
     DiagnosticTrace,
     EvaluatedTrial,
@@ -33,35 +33,16 @@ from rag_autopsy.pipeline.rag_pipeline import RAGPipeline
 from rag_autopsy.pipeline.retriever import BM25Retriever
 
 
-def run_experiment_harness(
-    qa_records: List[QARecord],
-    split_manifest: SplitManifest,
-    target_split: str = "test",
-    regime: str = "regime_a",
+def _generate_split_trials(
+    records: List[QARecord],
+    split_name: str,
     top_k: int = 3,
     candidate_pool_size: int = 20,
-    n_bootstraps: int = 100,
     seed: int = 42,
     generator: Optional[BaseGenerator] = None,
     include_f5: bool = False,
-    include_d3: bool = False,
-    include_d4_learned: bool = False,
-    low_score_threshold: float = 2.0,
-    score_gap_threshold: float = 1.0,
-    min_overlap_ratio: float = 0.3,
-) -> Dict[str, Any]:
-    """Execute end-to-end fault-injection experiment and diagnostic attribution benchmark."""
-    # 1. Filter QA records for target partition
-    target_ids = set(
-        split_manifest.test_ids
-        if target_split == "test"
-        else (split_manifest.calibration_ids if target_split == "calibration" else split_manifest.dev_ids)
-    )
-    records = [r for r in qa_records if r.question_id in target_ids]
-    if not records:
-        raise ValueError(f"No records found for target split '{target_split}'.")
-
-    # 2. Build base corpus
+) -> Tuple[List[DiagnosticTrace], List[EvaluatorRecord]]:
+    """Generate diagnostic traces and privileged evaluator records across a partition of QA records."""
     base_corpus = Corpus.from_qa_records(records)
     gen = generator or MockExtractiveGenerator()
     builder = ContextBuilder(max_context_chars=3000)
@@ -75,7 +56,6 @@ def run_experiment_harness(
     traces: List[DiagnosticTrace] = []
     eval_records: List[EvaluatorRecord] = []
 
-    # 3. Generate trials across all questions in the split
     for rec in records:
         # F0: Clean control
         id_0 = generate_stable_trial_id(seed=seed, question_id=rec.question_id, intervention_key="F0")
@@ -90,7 +70,7 @@ def run_experiment_harness(
             trial_id=id_0,
             question_id=rec.question_id,
             question=rec.question,
-            split=target_split,
+            split=split_name,
             gold_answers=[rec.gold_answer],
             gold_evidence_ids=rec.gold_evidence_passage_ids,
             injected_fault="F0",
@@ -116,7 +96,7 @@ def run_experiment_harness(
             trial_id=id_1,
             question_id=rec.question_id,
             question=rec.question,
-            split=target_split,
+            split=split_name,
             gold_answers=[rec.gold_answer],
             gold_evidence_ids=rec.gold_evidence_passage_ids,
             injected_fault="F1",
@@ -144,7 +124,7 @@ def run_experiment_harness(
             trial_id=id_2,
             question_id=rec.question_id,
             question=rec.question,
-            split=target_split,
+            split=split_name,
             gold_answers=[rec.gold_answer],
             gold_evidence_ids=rec.gold_evidence_passage_ids,
             injected_fault="F2",
@@ -192,7 +172,7 @@ def run_experiment_harness(
         ev_3 = EvaluatorRecord(
             trial_id=id_3,
             question_id=rec.question_id,
-            split=target_split,
+            split=split_name,
             injected_fault="F3",
             fault_parameters=res_f3.fault_parameters,
             gold_answers=[rec.gold_answer],
@@ -238,7 +218,7 @@ def run_experiment_harness(
         ev_4 = EvaluatorRecord(
             trial_id=id_4,
             question_id=rec.question_id,
-            split=target_split,
+            split=split_name,
             injected_fault="F4",
             fault_parameters=res_f4.fault_parameters,
             gold_answers=[rec.gold_answer],
@@ -284,7 +264,7 @@ def run_experiment_harness(
             ev_5 = EvaluatorRecord(
                 trial_id=id_5,
                 question_id=rec.question_id,
-                split=target_split,
+                split=split_name,
                 injected_fault="F5",
                 fault_parameters=res_f5.fault_parameters,
                 gold_answers=[rec.gold_answer],
@@ -296,6 +276,48 @@ def run_experiment_harness(
             )
             traces.append(tr_5)
             eval_records.append(ev_5)
+
+    return traces, eval_records
+
+
+def run_experiment_harness(
+    qa_records: List[QARecord],
+    split_manifest: SplitManifest,
+    target_split: str = "test",
+    regime: str = "regime_a",
+    top_k: int = 3,
+    candidate_pool_size: int = 20,
+    n_bootstraps: int = 100,
+    seed: int = 42,
+    generator: Optional[BaseGenerator] = None,
+    include_f5: bool = False,
+    include_d3: bool = False,
+    include_d4_learned: bool = False,
+    low_score_threshold: float = 2.0,
+    score_gap_threshold: float = 1.0,
+    min_overlap_ratio: float = 0.3,
+) -> Dict[str, Any]:
+    """Execute end-to-end fault-injection experiment and diagnostic attribution benchmark."""
+    # 1. Filter QA records for target partition
+    target_ids = set(
+        split_manifest.test_ids
+        if target_split == "test"
+        else (split_manifest.calibration_ids if target_split == "calibration" else split_manifest.dev_ids)
+    )
+    records = [r for r in qa_records if r.question_id in target_ids]
+    if not records:
+        raise ValueError(f"No records found for target split '{target_split}'.")
+
+    # 2. Generate trials for target partition
+    traces, eval_records = _generate_split_trials(
+        records=records,
+        split_name=target_split,
+        top_k=top_k,
+        candidate_pool_size=candidate_pool_size,
+        seed=seed,
+        generator=generator,
+        include_f5=include_f5,
+    )
 
     # 3b. Decouple presentation order so diagnostics cannot exploit sort order or modulo indices
     rng = random.Random(seed)
@@ -323,8 +345,33 @@ def run_experiment_harness(
         candidate_causes.append("F5")
 
 
+    # Baseline & policy fitting: When evaluating on held-out test split,
+    # fit learned policies and baselines strictly on the training partition (dev/calibration)
+    # to guarantee zero train-on-test leakage.
+    train_ids = set(split_manifest.dev_ids if split_manifest.dev_ids else split_manifest.calibration_ids)
+    train_records = [r for r in qa_records if r.question_id in train_ids] if (target_split == "test" and train_ids) else []
+
+    if train_records:
+        train_traces, train_evals = _generate_split_trials(
+            records=train_records,
+            split_name="dev",
+            top_k=top_k,
+            candidate_pool_size=candidate_pool_size,
+            seed=seed,
+            generator=generator,
+            include_f5=include_f5,
+        )
+        valid_train_evals, _, _ = adjudicate_trials(train_evals)
+        valid_train_ids = set(e.trial_id for e in valid_train_evals)
+        valid_train_traces = [t for t in train_traces if t.trial_id in valid_train_ids]
+        valid_train_eval_map = {e.trial_id: e for e in valid_train_evals}
+        train_y = [valid_train_eval_map[t.trial_id].injected_fault for t in valid_train_traces]
+    else:
+        valid_train_traces = valid_traces
+        train_y = [valid_eval_map[t.trial_id].injected_fault for t in valid_traces]
+
     majority_baseline = MajorityCauseBaseline()
-    majority_baseline.fit([e.injected_fault for e in valid_evals])
+    majority_baseline.fit(train_y)
 
     random_baseline = RandomBaseline(candidate_causes=candidate_causes, seed=seed)
     d1 = D1RetrievalDiagnostic(
@@ -348,9 +395,8 @@ def run_experiment_harness(
         diagnostics.append(d3)
 
     if include_d4_learned:
-        y_all = [valid_eval_map[t.trial_id].injected_fault for t in valid_traces]
         d4_learned = D4LearnedClassifierPolicy(classifier_type="decision_tree", random_state=seed)
-        d4_learned.fit(valid_traces, y_all)
+        d4_learned.fit(valid_train_traces, train_y)
         diagnostics.append(d4_learned)
 
     # 6. Run predictions and collect metrics

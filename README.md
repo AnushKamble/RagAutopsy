@@ -51,9 +51,9 @@ Evaluated on the held-out test split ($N=120$ trials, $B=100$ bootstraps) with t
 | **D2 Lexical Support Diagnostic** | 0.385 [0.349, 0.416] | 0.474 [0.433, 0.500] | 100.0% | 46.5% |
 | **D3 NLI Support Diagnostic** | 0.374 [0.328, 0.427] | 0.447 [0.400, 0.483] | 100.0% | 43.9% |
 | **D4 Combined Policy (Heuristic)** | 0.718 [0.663, 0.761] | 0.761 [0.703, 0.807] | 97.4% | 77.5% |
-| **D4 Learned Policy (Decision Tree)** | **0.765 [0.745, 0.778]** | **0.825 [0.808, 0.833]** | **100.0%** | **81.6%** |
+| **D4 Learned Policy (Decision Tree)** | **0.742 [0.694, 0.778]** | **0.798 [0.744, 0.833]** | **100.0%** | **79.0%** |
 
-*Takeaway:* The trained Decision Tree policy outperforms the rule-based heuristic precedence by 4.7 Macro-F1 points by learning optimal joint score-cliff and lexical-overlap boundaries directly from unprivileged traces, without any data leakage.
+*Takeaway:* The trained Decision Tree policy (strictly fit on the training/dev partition with zero test leakage) achieves 0.742 Macro-F1 out-of-fold on the held-out test split, outperforming the rule-based heuristic precedence (0.718 Macro-F1) by 2.4 points while providing 100% coverage directly from unprivileged traces.
 
 ### Natural Failure Audit ($N=100$ Unmodified Clean Questions)
 - **Total Clean Questions Evaluated:** 100
@@ -110,7 +110,7 @@ uv pip install -e ".[dev]"
 
 ### Reproduce Benchmarks, Dashboards & Visualizations
 ```bash
-# 1. Run all 116 automated unit, integration, and leakage tests (~27 seconds)
+# 1. Run all 131 automated unit, integration, and leakage tests (~25 seconds)
 pytest -v
 
 # 2. Run the 60-second interactive live walkthrough demo

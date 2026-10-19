@@ -4,6 +4,7 @@ Intervention: Injects high-scoring query-targeted distractors into the searchabl
 so that gold evidence remains searchable, but drops below top-k (rank > k).
 """
 
+import hashlib
 from typing import List, Set
 from rag_autopsy.data.schema import PassageRecord, QARecord
 from rag_autopsy.faults.base import BaseFaultInjector, InjectionResult
@@ -47,8 +48,9 @@ class F2EvidenceRankedOutInjector(BaseFaultInjector):
         injected_distractors: List[PassageRecord] = []
 
         for i in range(self.distractor_count):
-            d_id = f"{qa_record.question_id}__f2_distractor_{i+1}"
-            d_title = f"Distractor Overview {i+1} regarding {qa_record.question[:20]}"
+            d_hash = hashlib.sha256(f"{qa_record.question_id}_d_{i}".encode("utf-8")).hexdigest()[:8]
+            d_id = f"passage_syn_{d_hash}"
+            d_title = f"Reference Overview {i+1} regarding {qa_record.question[:20]}"
             d_text = f"{d_title}\nThis document contains background discussion on {keyword_repeat}. It mentions various unrelated historical events."
             injected_distractors.append(
                 PassageRecord(

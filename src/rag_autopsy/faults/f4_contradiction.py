@@ -4,6 +4,7 @@ Intervention: Injects a materially contradictory passage into the generator cont
 alongside the original evidence, so both conflicting claims reach the generator.
 """
 
+import hashlib
 from typing import List, Tuple
 from rag_autopsy.core.schemas import RetrievedPassage
 from rag_autopsy.data.schema import QARecord
@@ -44,13 +45,15 @@ class F4ContradictoryEvidenceInjector(BaseFaultInjector):
                 invalid_reason="Precondition failed: Original gold evidence was not retrieved, so contradiction cannot coexist.",
             )
 
-        # Synthesize an explicit contradictory claim
-        contra_id = f"{qa_record.question_id}__f4_contradiction"
-        contra_title = f"Contradicting Report on {qa_record.gold_evidence_titles[0] if qa_record.gold_evidence_titles else 'Subject'}"
+        # Synthesize an explicit contradictory claim with opaque identifier
+        contra_hash = hashlib.sha256(f"{qa_record.question_id}_rev".encode("utf-8")).hexdigest()[:8]
+        contra_id = f"passage_syn_{contra_hash}"
+        subject_title = qa_record.gold_evidence_titles[0] if qa_record.gold_evidence_titles else "Subject"
+        contra_title = f"Report on {subject_title}"
         contra_text = (
-            f"{contra_title}\nOfficial updated records contradict earlier reports: "
-            f"The true answer regarding '{qa_record.question}' is emphatically NOT '{qa_record.gold_answer}'. "
-            f"Instead, multiple verified sources confirm the exact opposite."
+            f"{contra_title}\nDisputing earlier reports, verified findings establish that the statement regarding "
+            f"'{qa_record.question}' contradicts '{qa_record.gold_answer}'. "
+            f"The opposite assertion is supported by documented records."
         )
 
         contradictory_passage = RetrievedPassage(

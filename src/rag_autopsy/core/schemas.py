@@ -42,7 +42,7 @@ FORBIDDEN_LEAKAGE_KEYS = [
 
 # Regex pattern matching any fault identifier token delimited by non-word chars, underscores, or bounds
 FAULT_TOKEN_PATTERN = re.compile(
-    r"(?:^|[\W_])(f[0-5]|fault|clean|control|hallucination|ranked_out|unavailable|assembly_loss)(?:[\W_]|$)",
+    r"(?:^|[\W_])(f[0-5]|fault|clean|control|hallucination|ranked_out|unavailable|assembly_loss|distractor|contradiction)(?:[\W_]|$)",
     re.IGNORECASE,
 )
 
@@ -115,7 +115,25 @@ class DiagnosticTrace(BaseModel):
                 f"Leakage violation: trial_id '{self.trial_id}' encodes fault identifier!"
             )
 
-        # 2. Check metadata dictionary for forbidden keys, string values, or smuggled evaluator objects
+        # 2. Check passage IDs and titles to guarantee no fault token shortcuts leak into traces
+        all_passage_ids = (
+            self.source_passage_ids
+            + self.pre_assembly_passage_ids
+            + self.post_assembly_passage_ids
+            + [p.passage_id for p in self.retrieved_top_k]
+        )
+        for pid in all_passage_ids:
+            if FAULT_TOKEN_PATTERN.search(pid):
+                raise ValueError(
+                    f"Leakage violation: passage_id '{pid}' encodes fault identifier token!"
+                )
+        for p in self.retrieved_top_k:
+            if p.title and FAULT_TOKEN_PATTERN.search(p.title):
+                raise ValueError(
+                    f"Leakage violation: retrieved passage title '{p.title}' encodes fault identifier token!"
+                )
+
+        # 3. Check metadata dictionary for forbidden keys, string values, or smuggled evaluator objects
         for key, val in self.metadata.items():
             lower_key = str(key).lower()
             for forbidden in FORBIDDEN_LEAKAGE_KEYS:

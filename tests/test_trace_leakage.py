@@ -131,6 +131,49 @@ def test_metadata_evaluator_object_smuggling_rejected(
         )
 
 
+def test_leakage_rejection_in_passage_id_and_title() -> None:
+    """Ensure that attempts to include fault tokens in passage IDs or titles raise ValueError."""
+    bad_passage_id = RetrievedPassage(
+        passage_id="q001__f2_distractor_1",
+        rank=1,
+        score=5.0,
+        text="Sample text",
+        title="Valid Title",
+    )
+    with pytest.raises(ValidationError, match="Leakage violation"):
+        DiagnosticTrace(
+            trial_id="trial_3a7b9c1d0e4f826a",
+            question_id="q001",
+            question="What is X?",
+            retrieved_top_k=[bad_passage_id],
+            pre_assembly_passage_ids=["q001__f2_distractor_1"],
+            post_assembly_passage_ids=["q001__f2_distractor_1"],
+            generator_context="Sample text",
+            answer="X is 1",
+            latency_ms=10.0,
+        )
+
+    bad_passage_title = RetrievedPassage(
+        passage_id="passage_syn_12345678",
+        rank=1,
+        score=5.0,
+        text="Sample text",
+        title="Distractor Overview regarding X",
+    )
+    with pytest.raises(ValidationError, match="Leakage violation"):
+        DiagnosticTrace(
+            trial_id="trial_3a7b9c1d0e4f826a",
+            question_id="q001",
+            question="What is X?",
+            retrieved_top_k=[bad_passage_title],
+            pre_assembly_passage_ids=["passage_syn_12345678"],
+            post_assembly_passage_ids=["passage_syn_12345678"],
+            generator_context="Sample text",
+            answer="X is 1",
+            latency_ms=10.0,
+        )
+
+
 @pytest.mark.parametrize(
     "bad_id",
     [

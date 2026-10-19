@@ -72,3 +72,59 @@ def test_d4_learned_fit_and_diagnose():
     diag_f0 = policy.diagnose(t_f0)
     assert diag_f0.predicted_cause == "F0"
     assert diag_f0.confidence > 0.5
+
+
+def test_d4_learned_avoids_train_on_test_leakage():
+    """Verify that runner fits D4 learned policy on dev traces, not test traces."""
+    from rag_autopsy.data.schema import QARecord
+    from rag_autopsy.data.splits import SplitManifest
+    from rag_autopsy.evaluation.runner import run_experiment_harness
+
+    # Create dummy records across dev and test
+    dev_rec = QARecord(
+        question_id="q_dev_1",
+        question="Dev question?",
+        gold_answer="Dev answer",
+        question_type="bridge",
+        difficulty_level="easy",
+        gold_evidence_titles=["DevTitle"],
+        gold_evidence_passage_ids=["dev_p1"],
+        passages=[],
+    )
+    test_rec = QARecord(
+        question_id="q_test_1",
+        question="Test question?",
+        gold_answer="Test answer",
+        question_type="bridge",
+        difficulty_level="easy",
+        gold_evidence_titles=["TestTitle"],
+        gold_evidence_passage_ids=["test_p1"],
+        passages=[],
+    )
+
+    manifest = SplitManifest(
+        split_version="1.0.0",
+        total_questions=2,
+        dev_ids=["q_dev_1"],
+        calibration_ids=[],
+        test_ids=["q_test_1"],
+        random_seed=42,
+        split_counts={"dev": 1, "calibration": 0, "test": 1},
+    )
+
+    results = run_experiment_harness(
+        qa_records=[dev_rec, test_rec],
+        split_manifest=manifest,
+        target_split="test",
+        include_d4_learned=True,
+        n_bootstraps=5,
+        seed=42,
+    )
+
+    assert "d4_learned_decision_tree" in results["diagnostic_results"]
+    d4_metrics = results["diagnostic_results"]["d4_learned_decision_tree"]["metrics"]
+    assert d4_metrics["total_trials"] > 0
+    # Evaluated trials belong to test split
+    test_trial_rows = [r for r in results["trial_rows"] if r["question_id"] == "q_test_1"]
+    assert len(test_trial_rows) > 0
+

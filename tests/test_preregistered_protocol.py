@@ -86,11 +86,11 @@ def test_identifiability_regime_b_abstention() -> None:
         question_id="q002",
         question="Query?",
         retrieved_top_k=[
-            RetrievedPassage(passage_id="p_distractor", rank=1, score=0.8, text="Irrelevant distractor."),
+            RetrievedPassage(passage_id="p_doc_irrelevant", rank=1, score=0.8, text="Irrelevant background passage."),
         ],
         candidate_pool_scores=None,  # Blind top-k: candidate pool not available!
-        pre_assembly_passage_ids=["p_distractor"],
-        post_assembly_passage_ids=["p_distractor"],
+        pre_assembly_passage_ids=["p_doc_irrelevant"],
+        post_assembly_passage_ids=["p_doc_irrelevant"],
         generator_context="Irrelevant distractor.",
         answer="Unfounded answer",
         latency_ms=2.0,

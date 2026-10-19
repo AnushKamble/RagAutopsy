@@ -140,4 +140,5 @@ def test_f4_injector(synthetic_fixture_path: Path) -> None:
     # Both gold and contradiction exist in modified list
     modified_ids = [p.passage_id for p in modified]
     assert gold_id in modified_ids
-    assert any("f4_contradiction" in pid for pid in modified_ids)
+    assert res.fault_parameters["contradictory_passage_id"] in modified_ids
+    assert any(pid.startswith("passage_syn_") for pid in modified_ids)

@@ -68,6 +68,18 @@ class D1RetrievalDiagnostic(BaseDiagnostic):
                     f"Crowded candidate pool with flat score gap "
                     f"({round(pool_scores[0] - pool_scores[min(4, len(pool_scores)-1)], 2)} < {self.score_gap_threshold})."
                 )
+            elif not trace.candidate_pool_scores and self.abstain_on_ambiguity:
+                elapsed_ms = (time.perf_counter() - start) * 1000.0
+                return Diagnosis(
+                    trial_id=trace.trial_id,
+                    diagnostic_name=self.name,
+                    predicted_cause="UNKNOWN",
+                    confidence=0.3,
+                    abstained=True,
+                    abstention_reason="AMBIGUOUS_POOL_DATA: Candidate pool scores missing under Regime A.",
+                    evidence_rationale="Missing candidate pool scores in trace; cannot verify rank margin.",
+                    runtime_ms=round(elapsed_ms, 3),
+                )
             else:
                 pred = "F0"
                 conf = 0.70

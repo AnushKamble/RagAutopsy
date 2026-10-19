@@ -12,12 +12,12 @@ CONTRADICTION_CUES = [
     "contradict",
     "conflict",
     "contrary to",
-    "is not",
-    "emphatically not",
-    "false report",
     "dispute",
-    "updated records",
     "incorrect claim",
+    "refute",
+    "opposed to",
+    "false claim",
+    "denies",
 ]
 
 

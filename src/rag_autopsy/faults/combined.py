@@ -4,6 +4,7 @@ Enables controlled evaluation of co-occurring faults (e.g. F2 Ranked Out + F3 As
 or F3 Assembly Loss + F4 Contradiction) as specified in Spec Section 6 and Section 12.
 """
 
+import hashlib
 from typing import Any, Dict, List, Optional, Tuple
 from rag_autopsy.core.schemas import DiagnosticTrace, EvaluatorRecord, RetrievedPassage
 from rag_autopsy.data.schema import PassageRecord, QARecord
@@ -63,8 +64,9 @@ class CombinedFaultInjector(BaseFaultInjector):
             keyword_repeat = " ".join(q_tokens * 3)
             injected_distractors: List[PassageRecord] = []
             for i in range(self.distractor_count):
-                d_id = f"{qa_record.question_id}__comb_f2_distractor_{i+1}"
-                d_title = f"Distractor Overview {i+1} regarding {qa_record.question[:20]}"
+                d_hash = hashlib.sha256(f"{qa_record.question_id}_cd_{i}".encode("utf-8")).hexdigest()[:8]
+                d_id = f"passage_syn_{d_hash}"
+                d_title = f"Reference Overview {i+1} regarding {qa_record.question[:20]}"
                 d_text = f"{d_title}\nThis document contains background discussion on {keyword_repeat}."
                 injected_distractors.append(
                     PassageRecord(
@@ -114,11 +116,14 @@ class CombinedFaultInjector(BaseFaultInjector):
                     trial_valid=False,
                     invalid_reason="Precondition failed: Original gold evidence was not retrieved, cannot co-occur with contradiction.",
                 )
-            contra_id = f"{qa_record.question_id}__comb_f4_contra"
-            contra_title = f"Contradicting Report on {qa_record.gold_evidence_titles[0] if qa_record.gold_evidence_titles else 'Subject'}"
+            contra_hash = hashlib.sha256(f"{qa_record.question_id}_cc_rev".encode("utf-8")).hexdigest()[:8]
+            contra_id = f"passage_syn_{contra_hash}"
+            subject_title = qa_record.gold_evidence_titles[0] if qa_record.gold_evidence_titles else "Subject"
+            contra_title = f"Report on {subject_title}"
             contra_text = (
-                f"{contra_title}\nOfficial verified records contradict earlier reports: "
-                f"The true answer regarding '{qa_record.question}' is emphatically NOT '{qa_record.gold_answer}'."
+                f"{contra_title}\nDisputing earlier reports, verified findings establish that the statement regarding "
+                f"'{qa_record.question}' contradicts '{qa_record.gold_answer}'. "
+                f"The opposite assertion is supported by documented records."
             )
             contra_passage = RetrievedPassage(
                 passage_id=contra_id,

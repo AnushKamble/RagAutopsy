@@ -24,3 +24,14 @@ Every experimental claim in RAG-Autopsy is strictly bounded by the following doc
 
 ## 4. Dataset and Domain Fit
 - **HotpotQA Distractor Scope:** HotpotQA questions specifically require 2-hop bridge or comparison reasoning across Wikipedia paragraphs. While ideal for evaluating distractor demotion and multi-document assembly, performance on domain-specific corpora (e.g. legal, financial, or biomedical documents with long-range tables) remains an open research question.
+
+---
+
+## 5. Synthetic Injection Artifacts & Template Vulnerabilities
+- **Lexical Contradiction Shortcuts:** Synthetic contradiction injectors generate explicit propositional clashes. In natural text, contradictions are frequently subtle, numerical, or temporal without explicit negation markers (`dispute`, `contradict`). Lexical diagnostics (D2) relying on keyword cues are vulnerable to synthetic shortcuts and must be paired with natural-language entailment models (D3 NLI) in complex domains.
+- **Passage Identifier Isolation:** Operational diagnosers must never access synthetic IDs or metadata prefixes. All distractor and contradiction passage IDs in RAG-Autopsy are hashed to prevent diagnostic shortcut learning.
+
+---
+
+## 6. Context Assembly Filtering Invariant
+- **Structural Omission Precondition:** Diagnostic rules for F3 (Assembly Loss) assume that any passage present in `pre_assembly_passage_ids` but omitted from `post_assembly_passage_ids` represents an unintended loss. In pipelines utilizing intentional deduplication, length compression, or semantic re-ranking, structural drops reflect planned filtering rather than fault conditions.
