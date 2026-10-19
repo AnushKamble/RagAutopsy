@@ -1,0 +1,524 @@
+{
+  "agreement_metrics": {
+    "percent_agreement": 0.43,
+    "cohen_kappa": 0.1155,
+    "total_disagreements": 57,
+    "disagreement_rate": 0.57,
+    "methodology_note": "Dual-reviewer independent pass conducted. Discrepancies adjudicated via consensus. If single reviewer conducts delayed pass, classify as intra-rater consistency check, not inter-annotator agreement."
+  },
+  "disagreements": [
+    {
+      "question_id": "5ae0006755429925eb1afbd3",
+      "question": "Where is the Bubblegum Alley, that is similar to Gum Wall, located in California?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a7a0e1e5542990783324e1a",
+      "question": "Which dog's ancestors include Gordon and Irish Setters: the Manchester Terrier or the Scotch Collie?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a738d27554299623ed4abf3",
+      "question": "Who was born first, Erika Jayne or Marco Da Silva",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ae67dba55429908198fa5f0",
+      "question": "The Memphis Hustle are based in a suburb of a city with a population of what in 2010?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a88658955429938390d3f47",
+      "question": "Rostker v. Goldberg held that the practice of what way of filling armed forces vacancies was consitutional?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a8704f8554299211dda2ba4",
+      "question": "What is the name of the Isles who were led by Aonghus M\u00f3r and covered a total land area of over 8300 km2?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ae63dad55429929b0807afe",
+      "question": "When was the British author who wrote the novel on which \"Here We Go Round the Mulberry Bush\" was based born?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a79311755429970f5fffe67",
+      "question": "A Japanese manga series based on a 16 year old high school student Ichitaka Seto, is written and illustrated by someone born in what year?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ac0d83a554299294b219038",
+      "question": "Randall Cunningham II was a multi-sport athlete at the high school located in what Nevada city?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a77c1505542997042120b1b",
+      "question": "Which song was behind the third single on the album  \"A Lot About Livin' (And a Little 'bout Love)\" for two weeks on the country charts?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ab56e32554299637185c594",
+      "question": "Are Random House Tower and 888 7th Avenue both used for real estate?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a74106b55429979e288289e",
+      "question": "Where is the company that Sachin Warrier worked for as a software engineer headquartered?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a84c4135542994c784dda31",
+      "question": "Are Yingkou and Fuding the same level of city?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5abbf698554299114383a0b5",
+      "question": "Which British first-generation jet-powered medium bomber was used in the South West Pacific theatre of World War II?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ac23ff0554299636651994d",
+      "question": "When was Poison's album \"Shut Up, Make Love\" released?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ae73acb5542991e8301cc07",
+      "question": "D1NZ is a series based on what oversteering technique?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a887bc0554299206df2b2b6",
+      "question": "The Argentine PGA Championship record holder has won how many tournaments worldwide?",
+      "reviewer_1_cause": "F4_CONTRADICTION",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a713ea95542994082a3e6e4",
+      "question": "Alvaro Mexia had a diplomatic mission with which tribe of indigenous people?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a7d54165542995f4f402256",
+      "question": "A medieval fortress in Dirleton, East Lothian, Scotland borders on the south side of what coastal area?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a8db19d5542994ba4e3dd00",
+      "question": "Are Local H and For Against both from the United States?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ae0bae555429906c02dab08",
+      "question": "Which travel parody series featured American actor, comedian, and radio host best known as the host of \"The Joe Schmo Show\"?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ae4627d5542991a06ce9a4d",
+      "question": "The author of Sexual Politics attended which British University?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a8d5fc6554299585d9e37c6",
+      "question": "What's the name of the fantasy film starring Sarah Bolger, featuring a New England family who discover magical creatures around their estate?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ae738f75542991bbc9761c4",
+      "question": "What year was the brother of this first round draft pick by the Washington Redskins drafted?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ae4a3265542995ad6573de5",
+      "question": "Hayden is a singer-songwriter from Canada, but where does Buck-Tick hail from?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a8e3ea95542995a26add48d",
+      "question": "The director of the romantic comedy \"Big Stone Gap\" is based in what New York city?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a8e068b5542995085b37384",
+      "question": "Are Ferocactus and Silene both types of plant?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a75e05c55429976ec32bc5f",
+      "question": "Brown State Fishing Lake is in a country that has a population of how many inhabitants ?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ab7f0015542992aa3b8c88b",
+      "question": "Who did the Star and Dagger bass player marry?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5abf63f15542997ec76fd3ea",
+      "question": "Alexander Kerensky was defeated and destroyed by the Bolsheviks in the course of a civil war that ended when ?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a906a685542990a9849362e",
+      "question": "Where was the world cup hosted that Algeria qualified for the first time into the round of 16?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a8ee6915542990e94052bad",
+      "question": "What season was the character introduced that becomes the main antagonist in the  following season, from the animated television series created by Bryan Konietzko and Michael Dante DiMartino as a sequel to \"\", which aired from 2005 to 2008?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5adbfbd555429947ff173893",
+      "question": "What British singer-songwriter hosted the 16th Annual Young Hollywood Awards?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a85ea095542994775f606a8",
+      "question": "What science fantasy young adult series, told in first person, has a set of companion books narrating the stories of enslaved worlds and alien species?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a8979f4554299669944a52e",
+      "question": "What is the middle name of the actress who plays Bobbi Bacha in Suburban Madness?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ae37c765542992f92d822d4",
+      "question": "What was the name of the 1996 loose adaptation of William Shakespeare's \"Romeo & Juliet\" written by James Gunn?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a790d8f554299029c4b5eec",
+      "question": "Which English musician is known for both the songs \"See Yourself\" and \"Withing You Without You\"?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5add673e5542992ae4cec54d",
+      "question": "Joe Walker played for which team that ends their regular season with the Civil War rivalry game?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a8eea4a5542990e94052bb7",
+      "question": "When was the Western Germanic language spoken from which the small settlement situated on the river Leda opposite Leer derives its name?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a7d61775542991319bc93b9",
+      "question": "During Siege of Bharatpur, which Commander-in-Chief of Ireland and Commander-in-Chief of India contributed to the storming of the castle?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a8361b65542992ef85e22a0",
+      "question": "Vince Phillips held a junior welterweight title by an organization recognized by what larger Hall of Fame?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a8e0a005542995085b373a1",
+      "question": "Bordan Tkachuk was the CEO of a company that provides what sort of products?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ab859a955429934fafe6d7b",
+      "question": "Who is the writer of this song that was inspired by words on a tombstone and was the first track on the box set Back to Mono?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ae005b555429942ec259bec",
+      "question": "In what year was the novel that Louren\u00e7o Mutarelli based \"Nina\" on based first published?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a8bb29b554299240d9c2089",
+      "question": "Which American film actor and dancer starred in the 1945 film Johnny Angel?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a74ce9655429974ef308c6c",
+      "question": "What retailer in ABQ Uptown is headquarted in Poole, Dorset, United Kingdom?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a8a43eb5542996c9b8d5e82",
+      "question": "Which Australian city founded in 1838 contains a boarding school opened by a Prime Minister of Australia and named after a school in London of the same name.",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5aba7cfe554299232ef4a2fd",
+      "question": "The 2017\u201318 Wigan Athletic F.C. season will be a year in which the team competes in the league cup known as what for sponsorship reasons?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ac32b565542995ef918c154",
+      "question": "Where is the stadium at which 1964 Georgia Tech Yellow Jackets football team played their home game located?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ae0d4c9554299603e418468",
+      "question": "Roger O. Egeberg was Assistant Secretary for Health and Scientific Affairs during the administration of a president that served during what years?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a8133725542995ce29dcbdb",
+      "question": "Which writer was from England, Henry Roth or Robert Erskine Childers?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ae7eaf65542994a481bbe1d",
+      "question": "When was the  former Indian cricketer who made his ODI debuts during the 2000 ICC KnockOut Trophy born?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5aba5d2e55429901930fa799",
+      "question": "What was the name of a woman from the book titled \"Their Lives: The Women Targeted by the Clinton Machine \" and was also a former white house intern?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5abc8d75554299700f9d7900",
+      "question": "Since 2 June 2017, The Leader of Fine Gael had been held by which Irish Fine Gael politician who has served as Taoiseach and Minister for Defence?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ab29c24554299449642c932",
+      "question": "Are Giuseppe Verdi and Ambroise Thomas both Opera composers ?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ae52c0f5542992663a4f12e",
+      "question": "What major city is the Faith Lutheran Middle School and High School located by?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a7320565542991f9a20c61d",
+      "question": "who is younger Keith Bostic or Jerry Glanville ?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    }
+  ]
+}

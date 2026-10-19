@@ -1,0 +1,22 @@
+{
+  "d4_transfer_agreement_rate": 0.0,
+  "d1_transfer_agreement_rate": 0.0,
+  "breakdown_by_natural_cause": {
+    "F2": {
+      "count": 12,
+      "d4_recall": 0.0,
+      "d4_prediction_distribution": {
+        "F0": 10,
+        "F3": 2
+      }
+    },
+    "REASONING_ERROR": {
+      "count": 8,
+      "d4_recall": 0.0,
+      "d4_prediction_distribution": {
+        "F0": 8
+      }
+    }
+  },
+  "scientific_interpretation": "Controlled fault injection benchmarks transit interventions (F1-F4). On natural multi-hop failures, the vast majority are generator reasoning errors (REASONING_ERROR) where evidence was retrieved, but the extractive generator failed multi-hop synthesis. Diagnostics designed for transit faults predict F0 because retrieval scores and lexical overlap are nominal, demonstrating that transit diagnostics do not transfer to reasoning-dominated natural failures without dedicated generation reasoning judges."
+}

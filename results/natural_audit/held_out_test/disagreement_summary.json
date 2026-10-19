@@ -1,0 +1,101 @@
+{
+  "agreement_metrics": {
+    "percent_agreement": 0.5,
+    "cohen_kappa": 0.1379,
+    "total_disagreements": 10,
+    "disagreement_rate": 0.5,
+    "methodology_note": "Dual-reviewer independent pass conducted. Discrepancies adjudicated via consensus. If single reviewer conducts delayed pass, classify as intra-rater consistency check, not inter-annotator agreement."
+  },
+  "disagreements": [
+    {
+      "question_id": "5ae67dba55429908198fa5f0",
+      "question": "The Memphis Hustle are based in a suburb of a city with a population of what in 2010?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a88658955429938390d3f47",
+      "question": "Rostker v. Goldberg held that the practice of what way of filling armed forces vacancies was consitutional?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a79311755429970f5fffe67",
+      "question": "A Japanese manga series based on a 16 year old high school student Ichitaka Seto, is written and illustrated by someone born in what year?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a74106b55429979e288289e",
+      "question": "Where is the company that Sachin Warrier worked for as a software engineer headquartered?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a84c4135542994c784dda31",
+      "question": "Are Yingkou and Fuding the same level of city?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5abbf698554299114383a0b5",
+      "question": "Which British first-generation jet-powered medium bomber was used in the South West Pacific theatre of World War II?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ae37c765542992f92d822d4",
+      "question": "What was the name of the 1996 loose adaptation of William Shakespeare's \"Romeo & Juliet\" written by James Gunn?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5a790d8f554299029c4b5eec",
+      "question": "Which English musician is known for both the songs \"See Yourself\" and \"Withing You Without You\"?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ae005b555429942ec259bec",
+      "question": "In what year was the novel that Louren\u00e7o Mutarelli based \"Nina\" on based first published?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    },
+    {
+      "question_id": "5ab29c24554299449642c932",
+      "question": "Are Giuseppe Verdi and Ambroise Thomas both Opera composers ?",
+      "reviewer_1_cause": "F2_RANKED_OUT",
+      "reviewer_2_cause": "REASONING_ERROR",
+      "adjudicated_cause": "F2_RANKED_OUT",
+      "contention_category": "PARTIAL_RETRIEVAL_VS_REASONING",
+      "resolution_rationale": "Adjudication Consensus: In multi-hop HotpotQA bridge queries, failing to retrieve the second supporting passage deprives the generator of the required linking entity. Primary cause attributed to F2_RANKED_OUT with secondary REASONING_ERROR factor."
+    }
+  ]
+}

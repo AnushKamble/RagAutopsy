@@ -236,7 +236,7 @@ def audit_natural(
     output_dir: str = typer.Option("results/natural_audit", "--output", "-o", help="Output directory."),
 ) -> None:
     """Execute natural (unmodified) failure audit and report diagnostic transfer agreement."""
-    from rag_autopsy.evaluation.natural_audit import run_natural_failure_audit
+    from rag_autopsy.evaluation.natural_audit import export_natural_audit_report, run_natural_failure_audit
 
     setup_logging(level="INFO")
     console.print(Panel("[bold yellow]Starting Natural Failure Audit on Clean Unmodified Pipeline[/bold yellow]"))
@@ -266,7 +266,10 @@ def audit_natural(
     table.add_row("Clean Pipeline Accuracy", f"{audit_results['clean_pipeline_accuracy']*100:.1f}%")
     table.add_row("Total Natural Failures Identified", str(audit_results["total_natural_failures"]))
     table.add_row("Natural Failure Rate", f"{audit_results['natural_failure_rate']*100:.1f}%")
-    table.add_row("D4 Diagnostic Transfer Agreement", f"[bold green]{audit_results['d4_transfer_agreement_rate']*100:.1f}%[/bold green]")
+    table.add_row("Reviewer Raw Agreement", f"{audit_results['reviewer_agreement']['percent_agreement']*100:.1f}%")
+    table.add_row("Reviewer Cohen's Kappa (kappa)", f"{audit_results['reviewer_agreement']['cohen_kappa']:.3f}")
+    table.add_row("Total Reviewer Disagreements", str(audit_results['reviewer_agreement']['total_disagreements']))
+    table.add_row("D4 Diagnostic Transfer Agreement", f"[bold green]{audit_results['transfer_analysis']['d4_transfer_agreement_rate']*100:.1f}%[/bold green]")
 
     console.print(table)
 
@@ -280,14 +283,23 @@ def audit_natural(
 
     console.print(cause_table)
 
-    # Save output artifacts
-    out_dir = Path(output_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    with open(out_dir / "natural_audit_summary.json", "w", encoding="utf-8") as f:
-        import json
-        json.dump(audit_results, f, indent=2)
+    # Print Transfer Breakdown by Cause
+    transfer_table = Table(title="Diagnostic Transfer Breakdown by Natural Cause")
+    transfer_table.add_column("Natural Cause", style="bold yellow")
+    transfer_table.add_column("Count", style="white")
+    transfer_table.add_column("D4 Recall", style="green")
+    transfer_table.add_column("D4 Predictions Distribution", style="magenta")
 
-    console.print(f"Saved natural audit summary: [bold green]{out_dir / 'natural_audit_summary.json'}[/bold green]")
+    for cause, data in audit_results["transfer_analysis"]["breakdown_by_natural_cause"].items():
+        dist_str = ", ".join(f"{k}: {v}" for k, v in data["d4_prediction_distribution"].items())
+        transfer_table.add_row(cause, str(data["count"]), f"{data['d4_recall']*100:.1f}%", dist_str)
+
+    console.print(transfer_table)
+
+    # Save output artifacts
+    artifacts = export_natural_audit_report(audit_results, output_dir=output_dir)
+    for k, p in artifacts.items():
+        console.print(f"Saved {k}: [bold green]{p}[/bold green]")
 
 
 @app.command()
