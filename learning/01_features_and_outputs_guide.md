@@ -81,25 +81,43 @@ The Streamlit Visual Studio is a graphical interface designed for live demonstra
 
 ### What to Click and Test in the UI:
 1. **Sidebar — "Select Test Query"**: Choose any of the 100 real HotpotQA questions.
-2. **Sidebar — "Inject Fault Intervention"**:
+2. **Sidebar — "Generator Engine" (Crucial for seeing Qwen 3 8B in Action!)**:
+   - **`Local Ollama (Qwen 3 8B)`**: Automatically detects whether your local Ollama server is running. When selected:
+     - The pipeline sends the query and assembled context to your local GPU-accelerated Qwen 3 8B model!
+     - **Temperature Slider**: Adjust between `0.0` (deterministic/benchmark mode) and `1.0` (creative variation). If temperature is set to `0.0`, the model performs greedy decoding (producing consistent, reproducible answers). When increased (e.g., `0.7`), the model synthesizes natural variations in its answers across re-runs!
+     - **Max Tokens Slider**: Sets maximum generation limit (default 256 tokens).
+     - **Disk Cache Checkbox**: Caches responses by hash for instant re-runs.
+   - **`Mock Extractive (Sentence Overlap Heuristic)`**: Ultra-fast test harness that mechanically selects the highest word-overlap sentence from context (useful for testing when offline).
+   - **`HuggingFace (Flan-T5 / CPU)`**: Local CPU transformer reader.
+3. **Sidebar — "Retriever Architecture"**:
+   - Choose between **`BM25 (Pure Python / Lexical)`**, **`Dense Embedding (Sublinear TF-IDF / Cosine)`**, and **`Hybrid (BM25 + Dense RRF)`** with adjustable alpha weight.
+4. **Sidebar — "Injected Fault Intervention"**:
    - `F0: Clean Control` — Normal execution without any errors.
    - `F1: Evidence Unavailable` — Simulates missing corpus evidence.
    - `F2: Ranked Out` — Injects distracting documents that push the true gold evidence from rank 1 down to rank 4 (below the top-3 window).
    - `F3: Context Assembly Loss` — Simulates context window truncation where a retrieved passage is dropped before reaching the LLM.
    - `F4: Contradictory Evidence` — Injects an inverted fact (e.g., changing "in California" to "emphatically NOT in California").
    - `F5: Unsupported Generation` — Simulates generator hallucination where the context is valid, but the generator invents an answer.
-3. **Sidebar — "Observability Regime"**:
+5. **Sidebar — "Observability Regime"**:
    - Select **Regime A**: The diagnoser sees top-3 passages AND candidate pool scores ($K=20$).
    - Select **Regime B**: The diagnoser sees ONLY top-3 text and scores. Notice how when you inject **F2**, Regime A detects it immediately, while Regime B honestly abstains with `UNKNOWN`!
-4. **Main View — "DiagnosticTrace (Visible to Diagnoser)"**:
-   - Expand this box. Notice what is present: `query`, `retrieved_passages`, `pre_assembly_ids`, `post_assembly_ids`, `context`, `generated_answer`.
-   - **Crucial Observation:** Notice what is NOT present: there is **no gold answer, no gold evidence ID, and no injected fault label**. The diagnoser must figure it out entirely from observable transit clues.
-5. **Main View — "Live Diagnostic Decision" Card**:
-   - Shows: `Predicted Cause: F3`
-   - Confidence: `0.95`
-   - Rationale: *"Structural context loss detected: 1 retrieved passage omitted before generator context."*
-6. **Main View — "Evaluator Ground Truth (Privileged Verification)"**:
-   - Reveals the true injected fault and shows `Attribution Match: True` (green) or `False` (red).
+6. **Main View — "Unprivileged Diagnostic Trace (Observable)"**:
+   - **Answer Output**: Displays the answer synthesized by the active generator.
+   - **🧠 Qwen 3 8B Internal Chain-of-Thought (Reasoning Trace)**:
+     - When using `qwen3:8b`, an expander displays the model's **internal thinking tokens** generated before emitting the final answer. You will see Qwen actively reading the context, checking constraints, eliminating distractions, and synthesizing the conclusion!
+   - **🔍 Top-k Retrieved Passages**: Inspect ranks, scores, and text excerpts.
+   - **📦 Context Assembly Stream**: Shows pre-assembly vs. post-assembly passage IDs, displaying a red warning banner if any passage was dropped in transit (F3).
+   - **📊 Candidate Pool Score Distribution**: Bar chart of candidate scores (Regime A).
+7. **Main View — "Diagnostic Attribution Comparison Table"**:
+   - Displays side-by-side predictions and confidence scores from:
+     - `D1 Retrieval Rules`
+     - `D2 Lexical Support`
+     - `D3 NLI Model`
+     - `D4 Combined Policy`
+     - **`D5 LLM Judge (Qwen 3 8B)`**: Qwen itself reads the unprivileged trace and acts as an autonomous forensic judge, returning its predicted failure cause and confidence!
+   - **🤖 D5 LLM Judge Natural Language Rationale**: Expand to read Qwen's written justification for its failure diagnosis.
+8. **Main View — "Evaluator Reveal (Privileged Ground Truth)"**:
+   - Reveals the true injected fault and shows whether D4 Combined and D5 LLM Judge successfully attributed the failure without leaking privileged data.
 
 ---
 
