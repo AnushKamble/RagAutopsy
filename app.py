@@ -32,13 +32,50 @@ from rag_autopsy.pipeline.rag_pipeline import RAGPipeline
 from rag_autopsy.pipeline.retriever import BM25Retriever
 
 
+REPO_ROOT = Path(__file__).resolve().parent
+
+
 @st.cache_resource
 def load_data():
-    p = Path(".data/processed/hotpot_subset_100.json")
+    p = REPO_ROOT / ".data" / "processed" / "hotpot_subset_100.json"
     if p.is_file():
-        return load_qa_records(p)
-    synth = Path("tests/fixtures/synthetic_qa.json")
-    return parse_hotpot_records(load_raw_hotpot_json(synth))
+        try:
+            return load_qa_records(p)
+        except Exception:
+            pass
+
+    synth = REPO_ROOT / "tests" / "fixtures" / "synthetic_qa.json"
+    if synth.is_file():
+        try:
+            return parse_hotpot_records(load_raw_hotpot_json(synth))
+        except Exception:
+            pass
+
+    # Safe fallback if neither file is found
+    from rag_autopsy.data.schema import PassageRecord, QARecord
+
+    return [
+        QARecord(
+            question_id="demo_fallback_01",
+            question="Where is Bubblegum Alley located in California?",
+            gold_answer="San Luis Obispo, California",
+            gold_evidence_passage_ids=["p1"],
+            passages=[
+                PassageRecord(
+                    passage_id="p1",
+                    title="Bubblegum Alley",
+                    text="Bubblegum Alley is a tourist attraction in downtown San Luis Obispo, California.",
+                    sentences=["Bubblegum Alley is a tourist attraction in downtown San Luis Obispo, California."],
+                ),
+                PassageRecord(
+                    passage_id="p2",
+                    title="Gum Wall",
+                    text="The Market Theater Gum Wall is a brick wall covered in used chewing gum in Seattle.",
+                    sentences=["The Market Theater Gum Wall is a brick wall covered in used chewing gum in Seattle."],
+                ),
+            ],
+        )
+    ]
 
 
 def main():
