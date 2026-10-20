@@ -122,4 +122,25 @@ def test_cli_quality_compare(tmp_path) -> None:
     assert (tmp_path / "quality_vs_attribution.json").is_file()
 
 
+def test_cli_evaluate_with_generator_and_d5(tmp_path) -> None:
+    result = runner.invoke(
+        app,
+        [
+            "evaluate",
+            "--split",
+            "test",
+            "--bootstraps",
+            "5",
+            "--output",
+            str(tmp_path),
+            "--generator",
+            "mock",
+            "--include-d5",
+        ],
+    )
+    assert result.exit_code == 0
+    assert (tmp_path / "evaluation_summary.json").is_file()
+
+
+
 

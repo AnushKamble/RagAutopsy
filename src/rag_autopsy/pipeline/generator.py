@@ -219,9 +219,9 @@ class OpenAICompatibleGenerator(BaseGenerator):
         api_base: str = "http://localhost:11434/v1",
         model_name: str = "qwen2.5:0.5b",
         temperature: float = 0.0,
-        max_tokens: int = 64,
+        max_tokens: int = 256,
         api_key: str | None = None,
-        timeout_seconds: float = 30.0,
+        timeout_seconds: float = 60.0,
     ):
         self.api_base = api_base.rstrip("/")
         self.model_name = model_name
@@ -257,6 +257,7 @@ class OpenAICompatibleGenerator(BaseGenerator):
             ],
             "temperature": self.temperature,
             "max_tokens": self.max_tokens,
+            "stream": False,
         }
 
         data_bytes = json.dumps(payload).encode("utf-8")
@@ -269,9 +270,47 @@ class OpenAICompatibleGenerator(BaseGenerator):
         try:
             with urllib.request.urlopen(req, timeout=self.timeout_seconds) as resp:
                 resp_json = json.loads(resp.read().decode("utf-8"))
-                return resp_json["choices"][0]["message"]["content"].strip()
+                choice_msg = resp_json["choices"][0]["message"]
+                content = choice_msg.get("content", "").strip()
+                if not content and "reasoning" in choice_msg:
+                    content = choice_msg["reasoning"].strip()
+                return content
         except urllib.error.URLError as e:
             raise ConnectionError(
                 f"Failed to connect to OpenAI-compatible endpoint at {endpoint}: {e}. "
                 "Ensure local model server (e.g. Ollama) is running."
             )
+
+
+class OllamaGenerator(OpenAICompatibleGenerator):
+    """Specialized Ollama generator adapter with automatic availability checking and native fallback."""
+
+    def __init__(
+        self,
+        model_name: str = "qwen3:8b",
+        api_base: str = "http://localhost:11434/v1",
+        temperature: float = 0.0,
+        max_tokens: int = 128,
+        timeout_seconds: float = 60.0,
+    ):
+        super().__init__(
+            api_base=api_base,
+            model_name=model_name,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            api_key="ollama",
+            timeout_seconds=timeout_seconds,
+        )
+
+    @classmethod
+    def is_available(cls, api_base: str = "http://localhost:11434/v1", model_name: str = "qwen3:8b") -> bool:
+        """Check if Ollama server is running and the specified model is installed."""
+        try:
+            req = urllib.request.Request(f"{api_base.rstrip('/')}/models")
+            with urllib.request.urlopen(req, timeout=2.0) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+                available_ids = [m.get("id") for m in data.get("data", [])]
+                return any(model_name in aid for aid in available_ids)
+        except Exception:
+            return False
+

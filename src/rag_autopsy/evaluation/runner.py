@@ -291,6 +291,7 @@ def run_experiment_harness(
     include_f5: bool = False,
     include_d3: bool = False,
     include_d4_learned: bool = False,
+    include_d5: bool = False,
     low_score_threshold: float = 2.0,
     score_gap_threshold: float = 1.0,
     min_overlap_ratio: float = 0.3,
@@ -397,6 +398,11 @@ def run_experiment_harness(
         d4_learned.fit(valid_train_traces, train_y)
         diagnostics.append(d4_learned)
 
+    if include_d5:
+        from rag_autopsy.diagnostics.d5_llm_judge import D5LLMJudgeDiagnostic
+        d5 = D5LLMJudgeDiagnostic()
+        diagnostics.append(d5)
+
     # 6. Run predictions and collect metrics
     results_by_diagnostic: dict[str, Any] = {}
     per_trial_rows: list[dict[str, Any]] = []
@@ -496,6 +502,8 @@ def run_experiment_harness(
             row["pred_d3"] = predictions_by_diag[d3.name]["predictions"][idx]
         if include_d4_learned and d4_learned.name in predictions_by_diag:
             row["pred_d4_learned"] = predictions_by_diag[d4_learned.name]["predictions"][idx]
+        if include_d5 and "d5_llm_judge" in predictions_by_diag:
+            row["pred_d5"] = predictions_by_diag["d5_llm_judge"]["predictions"][idx]
 
         per_trial_rows.append(row)
 

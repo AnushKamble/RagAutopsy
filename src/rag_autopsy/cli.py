@@ -109,9 +109,11 @@ def evaluate(
     regime: str = typer.Option("regime_a", "--regime", "-r", help="Observability regime ('regime_a' | 'regime_b')."),
     output_dir: str = typer.Option("results", "--output", "-o", help="Directory to save output reports."),
     bootstraps: int = typer.Option(100, "--bootstraps", "-b", help="Number of question-level bootstrap iterations."),
+    generator_type: str = typer.Option("mock", "--generator", "-g", help="Generator strategy ('mock' | 'ollama' | 'hf')."),
     include_f5: bool = typer.Option(False, "--include-f5", help="Include F5 Unsupported Generation in benchmark."),
     include_d3: bool = typer.Option(False, "--include-d3", help="Include D3 NLI Support Diagnostic in benchmark."),
     include_d4_learned: bool = typer.Option(False, "--include-d4-learned", help="Include D4 Learned Decision Tree Policy in benchmark."),
+    include_d5: bool = typer.Option(False, "--include-d5", help="Include D5 LLM-as-a-judge diagnostic (Qwen 3 8B via Ollama)."),
 ) -> None:
     """Execute full evaluation harness and output metrics summary and confusion matrix."""
     setup_logging(level="INFO")
@@ -151,15 +153,28 @@ def evaluate(
         manifest = create_question_splits(records, dev_ratio=0.6, calibration_ratio=0.2, test_ratio=0.2, seed=42)
         console.print(f"Partitioned questions across splits: {manifest.split_counts}")
 
+    # Configure generator
+    gen = None
+    if generator_type.lower() in ["ollama", "qwen", "qwen3:8b", "qwen2.5:7b"]:
+        from rag_autopsy.pipeline.generator import CachedGenerator, OllamaGenerator
+        gen = CachedGenerator(OllamaGenerator(model_name="qwen3:8b"))
+        console.print("[bold green]Configured local Ollama generator: qwen3:8b (disk cached)[/bold green]")
+    elif generator_type.lower() == "hf":
+        from rag_autopsy.pipeline.generator import CachedGenerator, HuggingFaceGenerator
+        gen = CachedGenerator(HuggingFaceGenerator())
+        console.print("[bold green]Configured local HuggingFace generator (disk cached)[/bold green]")
+
     results = run_experiment_harness(
         qa_records=records,
         split_manifest=manifest,
         target_split=split,
         regime=regime,
         n_bootstraps=bootstraps,
+        generator=gen,
         include_f5=include_f5,
         include_d3=include_d3,
         include_d4_learned=include_d4_learned,
+        include_d5=include_d5,
     )
 
     # Print Validity Summary Table
@@ -236,6 +251,7 @@ def audit_natural(
         None, "--data", "-d", help="Path to QA records JSON file."
     ),
     regime: str = typer.Option("regime_a", "--regime", "-r", help="Observability regime."),
+    generator_type: str = typer.Option("mock", "--generator", "-g", help="Generator strategy ('mock' | 'ollama' | 'hf')."),
     output_dir: str = typer.Option("results/natural_audit", "--output", "-o", help="Output directory."),
 ) -> None:
     """Execute natural (unmodified) failure audit and report diagnostic transfer agreement."""
@@ -261,7 +277,18 @@ def audit_natural(
         records = parse_hotpot_records(raw)
 
     console.print(f"Loaded [cyan]{len(records)}[/cyan] questions for natural audit.")
-    audit_results = run_natural_failure_audit(records, regime=regime)
+
+    gen = None
+    if generator_type.lower() in ["ollama", "qwen", "qwen3:8b", "qwen2.5:7b"]:
+        from rag_autopsy.pipeline.generator import CachedGenerator, OllamaGenerator
+        gen = CachedGenerator(OllamaGenerator(model_name="qwen3:8b"))
+        console.print("[bold green]Configured local Ollama generator: qwen3:8b (disk cached)[/bold green]")
+    elif generator_type.lower() == "hf":
+        from rag_autopsy.pipeline.generator import CachedGenerator, HuggingFaceGenerator
+        gen = CachedGenerator(HuggingFaceGenerator())
+        console.print("[bold green]Configured local HuggingFace generator (disk cached)[/bold green]")
+
+    audit_results = run_natural_failure_audit(records, regime=regime, generator=gen)
 
     # Print summary table
     table = Table(title="Natural Failure Audit & Transfer Analysis")

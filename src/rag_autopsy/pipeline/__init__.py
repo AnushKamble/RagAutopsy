@@ -6,9 +6,15 @@ from rag_autopsy.pipeline.generator import (
     BaseGenerator,
     CachedGenerator,
     MockExtractiveGenerator,
+    OllamaGenerator,
+    OpenAICompatibleGenerator,
 )
 from rag_autopsy.pipeline.rag_pipeline import RAGPipeline
-from rag_autopsy.pipeline.retriever import BM25Retriever
+from rag_autopsy.pipeline.retriever import (
+    BM25Retriever,
+    DenseRetriever,
+    HybridRetriever,
+)
 
 __all__ = [
     "BM25Retriever",
@@ -16,6 +22,10 @@ __all__ = [
     "CachedGenerator",
     "ContextBuilder",
     "Corpus",
+    "DenseRetriever",
+    "HybridRetriever",
     "MockExtractiveGenerator",
+    "OllamaGenerator",
+    "OpenAICompatibleGenerator",
     "RAGPipeline",
 ]

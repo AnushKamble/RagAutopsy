@@ -7,6 +7,7 @@ from rag_autopsy.diagnostics.d2_support import D2LexicalSupportDiagnostic
 from rag_autopsy.diagnostics.d3_nli import D3NLISupportDiagnostic
 from rag_autopsy.diagnostics.d4_learned import D4LearnedClassifierPolicy
 from rag_autopsy.diagnostics.d4_policy import D4CombinedAttributionPolicy
+from rag_autopsy.diagnostics.d5_llm_judge import D5LLMJudgeDiagnostic
 
 __all__ = [
     "BaseDiagnostic",
@@ -15,6 +16,7 @@ __all__ = [
     "D3NLISupportDiagnostic",
     "D4CombinedAttributionPolicy",
     "D4LearnedClassifierPolicy",
+    "D5LLMJudgeDiagnostic",
     "MajorityCauseBaseline",
     "RandomBaseline",
 ]

@@ -3,7 +3,7 @@
 **Fault-Injection-Validated Failure Attribution for RAG Systems**
 
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3110/)
-[![Tests: 131 Passed](https://img.shields.io/badge/tests-131%20passed-brightgreen.svg)](tests/)
+[![Tests: 140 Passed](https://img.shields.io/badge/tests-140%20passed-brightgreen.svg)](tests/)
 [![Coverage: 89%](https://img.shields.io/badge/coverage-89%25-brightgreen.svg)](tests/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
@@ -78,7 +78,7 @@ flowchart TD
                                                   |
                                                   v
                                          [Diagnostic Engine]
-                                   (D1: Retrieval, D2: Lexical, D3: NLI, D4: Learned)
+                                   (D1: Retrieval, D2: Lexical, D3: NLI, D4: Learned, D5: Local LLM Judge)
                                                   |
                                                   v
                                               [Diagnosis]
@@ -220,17 +220,19 @@ uv pip install -e ".[dev]"
 
 | Step | Command | Estimated Runtime | Primary Output Artifact |
 |---|---|---|---|
-| **1. Regression Tests** | `pytest -q` | ~25 sec | 131 passed tests, zero regressions |
+| **1. Regression Tests** | `pytest -q` | ~30 sec | 140 passed tests, zero regressions |
 | **2. Interactive Demo** | `python demo.py` | ~5 sec | Formatted 4-step terminal walkthrough |
 | **3. Streamlit Studio** | `streamlit run app.py` | ~3 sec startup | Interactive browser dashboard (`localhost:8501`) |
 | **4. Full 6-Class Benchmark** | `rag-autopsy evaluate --data .data/processed/hotpot_subset_100.json --split test --regime regime_a --bootstraps 100 --include-f5 --include-d3 --include-d4-learned` | ~30 sec | `results/evaluation_summary.json`<br>`results/trial_predictions.csv` |
-| **5. Natural Failure Audit** | `rag-autopsy audit-natural --data .data/processed/hotpot_subset_100.json` | ~15 sec | `results/natural_audit/natural_audit_summary.json` |
-| **6. 5-Axis Ablation Suite** | `rag-autopsy ablate` | ~45 sec | `results/ablations/ablation_study_report.json` |
-| **7. Severity Parameter Sweeps**| `rag-autopsy severity` | ~30 sec | `results/severity/severity_report.json` |
-| **8. RAGTruth Benchmark** | `rag-autopsy ragtruth` | ~5 sec | `results/ragtruth/ragtruth_benchmark_report.json` |
-| **9. Quality vs. Attribution** | `rag-autopsy quality-compare` | ~10 sec | `results/rag_quality/quality_vs_attribution.json` |
-| **10. Generate HTML Report** | `rag-autopsy report --summary results/evaluation_summary.json --predictions results/trial_predictions.csv --output results/report.html` | ~2 sec | `results/report.html` (Standalone interactive report) |
-| **11. Generate Static Plots** | `rag-autopsy generate-plots` | ~4 sec | `results/plots/regime_a_d4_confusion_matrix.png`<br>`results/plots/regime_comparison_d4.png`<br>`results/plots/regime_a_macro_f1_bootstrap.png` |
+| **5. LLM Judge Diagnostic (Ollama Qwen 3 8B)** | `rag-autopsy evaluate --split test --include-d5` | ~45 sec | Benchmark comparison including local LLM-as-a-judge attribution |
+| **6. Natural Failure Audit** | `rag-autopsy audit-natural --data .data/processed/hotpot_subset_100.json` | ~15 sec | `results/natural_audit/natural_audit_summary.json` |
+| **7. Natural Audit with Local LLM** | `rag-autopsy audit-natural --generator ollama` | ~60 sec | Compare real generative LLM reasoning vs extractive reader |
+| **8. 5-Axis Ablation Suite** | `rag-autopsy ablate` | ~45 sec | `results/ablations/ablation_study_report.json` |
+| **9. Severity Parameter Sweeps**| `rag-autopsy severity` | ~30 sec | `results/severity/severity_report.json` |
+| **10. RAGTruth Benchmark** | `rag-autopsy ragtruth` | ~5 sec | `results/ragtruth/ragtruth_benchmark_report.json` |
+| **11. Quality vs. Attribution** | `rag-autopsy quality-compare` | ~10 sec | `results/rag_quality/quality_vs_attribution.json` |
+| **12. Generate HTML Report** | `rag-autopsy report --summary results/evaluation_summary.json --predictions results/trial_predictions.csv --output results/report.html` | ~2 sec | `results/report.html` (Standalone interactive report) |
+| **13. Generate Static Plots** | `rag-autopsy generate-plots` | ~4 sec | `results/plots/regime_a_d4_confusion_matrix.png`<br>`results/plots/regime_comparison_d4.png`<br>`results/plots/regime_a_macro_f1_bootstrap.png` |
 
 ---
 

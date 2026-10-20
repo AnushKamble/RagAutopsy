@@ -72,3 +72,113 @@ class BM25Retriever:
             )
 
         return top_k_passages, candidate_pool_scores
+
+
+class DenseRetriever:
+    """Dense semantic vector retriever using TF-IDF / sublinear n-gram embeddings and cosine similarity."""
+
+    def __init__(self, corpus: Corpus, ngram_range: tuple[int, int] = (1, 2), min_df: int = 1):
+        from sklearn.feature_extraction.text import TfidfVectorizer
+
+        self.corpus = corpus
+        self.passages = corpus.passages
+        self.vectorizer = TfidfVectorizer(
+            ngram_range=ngram_range,
+            sublinear_tf=True,
+            min_df=min_df,
+            token_pattern=r"(?u)\b\w+\b",
+        )
+        if self.passages:
+            texts = [p.text for p in self.passages]
+            self.doc_embeddings = self.vectorizer.fit_transform(texts)
+        else:
+            self.doc_embeddings = None
+
+    def retrieve(
+        self, query: str, top_k: int = 3, candidate_pool_size: int = 20
+    ) -> tuple[list[RetrievedPassage], list[float]]:
+        from sklearn.metrics.pairwise import cosine_similarity
+
+        if self.doc_embeddings is None or not self.passages:
+            return [], []
+
+        query_vec = self.vectorizer.transform([query])
+        sims = cosine_similarity(query_vec, self.doc_embeddings)[0]
+
+        scored_pairs = sorted(
+            zip(self.passages, sims),
+            key=lambda pair: pair[1],
+            reverse=True,
+        )
+
+        candidate_pool_scores = [round(float(s), 4) for _, s in scored_pairs[:candidate_pool_size]]
+        top_k_passages: list[RetrievedPassage] = []
+        for rank_idx, (passage, score) in enumerate(scored_pairs[:top_k], start=1):
+            top_k_passages.append(
+                RetrievedPassage(
+                    passage_id=passage.passage_id,
+                    rank=rank_idx,
+                    score=round(float(score), 4),
+                    text=passage.text,
+                    title=getattr(passage, "title", None),
+                )
+            )
+
+        return top_k_passages, candidate_pool_scores
+
+
+class HybridRetriever:
+    """Hybrid retriever combining lexical BM25 and dense semantic scores via weighted score fusion."""
+
+    def __init__(
+        self,
+        corpus: Corpus,
+        alpha: float = 0.5,
+        bm25_retriever: BM25Retriever | None = None,
+        dense_retriever: DenseRetriever | None = None,
+    ):
+        self.corpus = corpus
+        self.alpha = alpha  # Weight for BM25 (1 - alpha for Dense)
+        self.bm25 = bm25_retriever or BM25Retriever(corpus)
+        self.dense = dense_retriever or DenseRetriever(corpus)
+        self.passages = corpus.passages
+
+    def retrieve(
+        self, query: str, top_k: int = 3, candidate_pool_size: int = 20
+    ) -> tuple[list[RetrievedPassage], list[float]]:
+        if not self.passages:
+            return [], []
+
+        # Get full scores from both retrievers
+        bm25_top, bm25_scores = self.bm25.retrieve(query, top_k=len(self.passages), candidate_pool_size=len(self.passages))
+        dense_top, dense_scores = self.dense.retrieve(query, top_k=len(self.passages), candidate_pool_size=len(self.passages))
+
+        bm25_dict = {p.passage_id: p.score for p in bm25_top}
+        dense_dict = {p.passage_id: p.score for p in dense_top}
+
+        max_bm25 = max(bm25_dict.values()) if bm25_dict and max(bm25_dict.values()) > 0 else 1.0
+        max_dense = max(dense_dict.values()) if dense_dict and max(dense_dict.values()) > 0 else 1.0
+
+        hybrid_scored = []
+        for p in self.passages:
+            norm_b = bm25_dict.get(p.passage_id, 0.0) / max_bm25
+            norm_d = dense_dict.get(p.passage_id, 0.0) / max_dense
+            combined_score = self.alpha * norm_b + (1.0 - self.alpha) * norm_d
+            hybrid_scored.append((p, combined_score))
+
+        hybrid_scored.sort(key=lambda pair: pair[1], reverse=True)
+
+        candidate_pool_scores = [round(float(s), 4) for _, s in hybrid_scored[:candidate_pool_size]]
+        top_k_passages: list[RetrievedPassage] = []
+        for rank_idx, (passage, score) in enumerate(hybrid_scored[:top_k], start=1):
+            top_k_passages.append(
+                RetrievedPassage(
+                    passage_id=passage.passage_id,
+                    rank=rank_idx,
+                    score=round(float(score), 4),
+                    text=passage.text,
+                    title=getattr(passage, "title", None),
+                )
+            )
+
+        return top_k_passages, candidate_pool_scores
