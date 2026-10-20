@@ -1,6 +1,7 @@
 """Integration and unit tests for the RAG reference pipeline."""
 
 from pathlib import Path
+
 from rag_autopsy.data.adapter import load_raw_hotpot_json, parse_hotpot_records
 from rag_autopsy.pipeline.context_builder import ContextBuilder
 from rag_autopsy.pipeline.corpus import Corpus

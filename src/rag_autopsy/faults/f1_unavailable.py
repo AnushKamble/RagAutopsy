@@ -4,7 +4,6 @@ Intervention: Removes all gold supporting passages from the searchable corpus
 for that trial, simulating indexing failure or document omission.
 """
 
-from typing import Optional, Set
 from rag_autopsy.data.schema import QARecord
 from rag_autopsy.faults.base import BaseFaultInjector, InjectionResult
 from rag_autopsy.pipeline.corpus import Corpus
@@ -17,7 +16,7 @@ class F1EvidenceUnavailableInjector(BaseFaultInjector):
         self.fault_id = fault_id
 
     def inject(self, qa_record: QARecord, base_corpus: Corpus) -> InjectionResult:
-        gold_passage_ids: Set[str] = set(qa_record.gold_evidence_passage_ids)
+        gold_passage_ids: set[str] = set(qa_record.gold_evidence_passage_ids)
 
         if not gold_passage_ids:
             return InjectionResult(

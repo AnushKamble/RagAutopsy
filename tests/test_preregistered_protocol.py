@@ -1,14 +1,12 @@
 """Tests verifying the preregistered evaluation protocol invariants, leakage isolation, and identifiability."""
 
-import json
 from pathlib import Path
-import pytest
+
 import yaml
 
-from rag_autopsy.core.schemas import DiagnosticTrace, EvaluatorRecord, RetrievedPassage
+from rag_autopsy.core.schemas import DiagnosticTrace, RetrievedPassage
 from rag_autopsy.data.splits import load_split_manifest
 from rag_autopsy.diagnostics.d1_retrieval import D1RetrievalDiagnostic
-from rag_autopsy.diagnostics.d2_support import D2LexicalSupportDiagnostic
 from rag_autopsy.diagnostics.d4_policy import D4CombinedAttributionPolicy
 from rag_autopsy.evaluation.attribution_metrics import compute_attribution_metrics
 

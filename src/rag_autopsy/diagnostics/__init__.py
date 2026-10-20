@@ -10,11 +10,11 @@ from rag_autopsy.diagnostics.d4_policy import D4CombinedAttributionPolicy
 
 __all__ = [
     "BaseDiagnostic",
-    "MajorityCauseBaseline",
-    "RandomBaseline",
     "D1RetrievalDiagnostic",
     "D2LexicalSupportDiagnostic",
     "D3NLISupportDiagnostic",
     "D4CombinedAttributionPolicy",
     "D4LearnedClassifierPolicy",
+    "MajorityCauseBaseline",
+    "RandomBaseline",
 ]

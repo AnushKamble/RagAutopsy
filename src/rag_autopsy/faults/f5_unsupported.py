@@ -4,7 +4,6 @@ Intervention: Gold evidence is successfully retrieved and present in the generat
 but the generator emits an unsupported/hallucinated answer that is not grounded in the context.
 """
 
-from typing import List, Optional, Tuple
 from rag_autopsy.core.schemas import RetrievedPassage
 from rag_autopsy.data.schema import QARecord
 from rag_autopsy.faults.base import BaseFaultInjector, InjectionResult
@@ -33,9 +32,9 @@ class F5UnsupportedGenerationInjector(BaseFaultInjector):
     def apply_to_generation(
         self,
         qa_record: QARecord,
-        retrieved_passages: List[RetrievedPassage],
+        retrieved_passages: list[RetrievedPassage],
         assembled_context: str,
-    ) -> Tuple[str, InjectionResult]:
+    ) -> tuple[str, InjectionResult]:
         """Verify evidence is present in context, and generate an unsupported answer.
         
         Returns:

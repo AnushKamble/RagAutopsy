@@ -1,6 +1,5 @@
 """Unit tests for attribution metrics and confusion matrix calculations."""
 
-import pytest
 from rag_autopsy.evaluation.attribution_metrics import compute_attribution_metrics
 
 

@@ -1,6 +1,7 @@
 """Unit and behavioral tests for diagnostic methods and attribution policies."""
 
 import pytest
+
 from rag_autopsy.core.schemas import DiagnosticTrace, EvaluatorRecord, RetrievedPassage
 from rag_autopsy.diagnostics.baselines import MajorityCauseBaseline, RandomBaseline
 from rag_autopsy.diagnostics.d1_retrieval import D1RetrievalDiagnostic

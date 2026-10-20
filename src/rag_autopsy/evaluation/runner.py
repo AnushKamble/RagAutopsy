@@ -1,20 +1,20 @@
 import random
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
+
 from rag_autopsy.core.schemas import (
     DiagnosticTrace,
-    EvaluatedTrial,
     EvaluatorRecord,
     EvaluatorStore,
-    explicit_evaluation_join,
     generate_stable_trial_id,
 )
 from rag_autopsy.data.schema import QARecord
-
 from rag_autopsy.data.splits import SplitManifest
 from rag_autopsy.diagnostics.baselines import MajorityCauseBaseline, RandomBaseline
 from rag_autopsy.diagnostics.d1_retrieval import D1RetrievalDiagnostic
 from rag_autopsy.diagnostics.d2_support import D2LexicalSupportDiagnostic
+from rag_autopsy.diagnostics.d3_nli import D3NLISupportDiagnostic
+from rag_autopsy.diagnostics.d4_learned import D4LearnedClassifierPolicy
 from rag_autopsy.diagnostics.d4_policy import D4CombinedAttributionPolicy
 from rag_autopsy.evaluation.attribution_metrics import compute_attribution_metrics
 from rag_autopsy.evaluation.bootstrap import clustered_bootstrap_attribution
@@ -24,8 +24,6 @@ from rag_autopsy.faults.f2_ranked_out import F2EvidenceRankedOutInjector
 from rag_autopsy.faults.f3_assembly_loss import F3ContextAssemblyLossInjector
 from rag_autopsy.faults.f4_contradiction import F4ContradictoryEvidenceInjector
 from rag_autopsy.faults.f5_unsupported import F5UnsupportedGenerationInjector
-from rag_autopsy.diagnostics.d3_nli import D3NLISupportDiagnostic
-from rag_autopsy.diagnostics.d4_learned import D4LearnedClassifierPolicy
 from rag_autopsy.pipeline.context_builder import ContextBuilder
 from rag_autopsy.pipeline.corpus import Corpus
 from rag_autopsy.pipeline.generator import BaseGenerator, MockExtractiveGenerator
@@ -34,14 +32,14 @@ from rag_autopsy.pipeline.retriever import BM25Retriever
 
 
 def _generate_split_trials(
-    records: List[QARecord],
+    records: list[QARecord],
     split_name: str,
     top_k: int = 3,
     candidate_pool_size: int = 20,
     seed: int = 42,
-    generator: Optional[BaseGenerator] = None,
+    generator: BaseGenerator | None = None,
     include_f5: bool = False,
-) -> Tuple[List[DiagnosticTrace], List[EvaluatorRecord]]:
+) -> tuple[list[DiagnosticTrace], list[EvaluatorRecord]]:
     """Generate diagnostic traces and privileged evaluator records across a partition of QA records."""
     base_corpus = Corpus.from_qa_records(records)
     gen = generator or MockExtractiveGenerator()
@@ -53,8 +51,8 @@ def _generate_split_trials(
     f4_injector = F4ContradictoryEvidenceInjector()
     f5_injector = F5UnsupportedGenerationInjector()
 
-    traces: List[DiagnosticTrace] = []
-    eval_records: List[EvaluatorRecord] = []
+    traces: list[DiagnosticTrace] = []
+    eval_records: list[EvaluatorRecord] = []
 
     for rec in records:
         # F0: Clean control
@@ -281,7 +279,7 @@ def _generate_split_trials(
 
 
 def run_experiment_harness(
-    qa_records: List[QARecord],
+    qa_records: list[QARecord],
     split_manifest: SplitManifest,
     target_split: str = "test",
     regime: str = "regime_a",
@@ -289,14 +287,14 @@ def run_experiment_harness(
     candidate_pool_size: int = 20,
     n_bootstraps: int = 100,
     seed: int = 42,
-    generator: Optional[BaseGenerator] = None,
+    generator: BaseGenerator | None = None,
     include_f5: bool = False,
     include_d3: bool = False,
     include_d4_learned: bool = False,
     low_score_threshold: float = 2.0,
     score_gap_threshold: float = 1.0,
     min_overlap_ratio: float = 0.3,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Execute end-to-end fault-injection experiment and diagnostic attribution benchmark."""
     # 1. Filter QA records for target partition
     target_ids = set(
@@ -400,19 +398,19 @@ def run_experiment_harness(
         diagnostics.append(d4_learned)
 
     # 6. Run predictions and collect metrics
-    results_by_diagnostic: Dict[str, Any] = {}
-    per_trial_rows: List[Dict[str, Any]] = []
+    results_by_diagnostic: dict[str, Any] = {}
+    per_trial_rows: list[dict[str, Any]] = []
 
     y_true = [valid_eval_map[t.trial_id].injected_fault for t in valid_traces]
     q_ids = [t.question_id for t in valid_traces]
 
-    predictions_by_diag: Dict[str, Dict[str, List[Any]]] = {}
+    predictions_by_diag: dict[str, dict[str, list[Any]]] = {}
 
     for diag in diagnostics:
-        predictions: List[str] = []
-        abstained_flags: List[bool] = []
-        confidences: List[float] = []
-        rationales: List[str] = []
+        predictions: list[str] = []
+        abstained_flags: list[bool] = []
+        confidences: list[float] = []
+        rationales: list[str] = []
 
         t0 = time.perf_counter()
         for trace in valid_traces:

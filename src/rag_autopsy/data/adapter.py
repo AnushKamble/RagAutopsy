@@ -1,15 +1,15 @@
 """Dataset adapter for HotpotQA: loading, parsing, and normalization."""
 
 import json
-from pathlib import Path
 import random
-from typing import List, Optional, Union
+from pathlib import Path
+
 from pydantic import ValidationError
 
 from rag_autopsy.data.schema import PassageRecord, QARecord, RawHotpotItem, slugify
 
 
-def load_raw_hotpot_json(file_path: Union[str, Path]) -> List[RawHotpotItem]:
+def load_raw_hotpot_json(file_path: str | Path) -> list[RawHotpotItem]:
     """Load and validate raw HotpotQA JSON file into RawHotpotItem models."""
     path = Path(file_path)
     if not path.is_file():
@@ -21,7 +21,7 @@ def load_raw_hotpot_json(file_path: Union[str, Path]) -> List[RawHotpotItem]:
     if not isinstance(data, list):
         raise ValueError(f"Expected JSON array of records, got {type(data).__name__}")
 
-    items: List[RawHotpotItem] = []
+    items: list[RawHotpotItem] = []
     errors = []
     for idx, raw_dict in enumerate(data):
         try:
@@ -35,16 +35,16 @@ def load_raw_hotpot_json(file_path: Union[str, Path]) -> List[RawHotpotItem]:
     return items
 
 
-def parse_hotpot_records(raw_items: List[RawHotpotItem]) -> List[QARecord]:
+def parse_hotpot_records(raw_items: list[RawHotpotItem]) -> list[QARecord]:
     """Convert raw HotpotQA items into normalized QARecord domain objects."""
-    records: List[QARecord] = []
+    records: list[QARecord] = []
 
     for item in raw_items:
         # Extract unique gold evidence titles
         gold_titles = list(dict.fromkeys(title for title, _ in item.supporting_facts))
 
-        passages: List[PassageRecord] = []
-        gold_passage_ids: List[str] = []
+        passages: list[PassageRecord] = []
+        gold_passage_ids: list[str] = []
 
         for p_idx, (title, sentences) in enumerate(item.context):
             is_gold = title in gold_titles
@@ -81,8 +81,8 @@ def parse_hotpot_records(raw_items: List[RawHotpotItem]) -> List[QARecord]:
 
 
 def create_deterministic_subset(
-    records: List[QARecord], sample_size: int, seed: int = 42
-) -> List[QARecord]:
+    records: list[QARecord], sample_size: int, seed: int = 42
+) -> list[QARecord]:
     """Select a deterministic subset of records using a fixed random seed."""
     if sample_size >= len(records):
         return list(records)
@@ -93,7 +93,7 @@ def create_deterministic_subset(
     return rng.sample(sorted_records, sample_size)
 
 
-def save_qa_records(records: List[QARecord], output_path: Union[str, Path]) -> None:
+def save_qa_records(records: list[QARecord], output_path: str | Path) -> None:
     """Save normalized QARecord objects to a JSON file."""
     path = Path(output_path)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -101,7 +101,7 @@ def save_qa_records(records: List[QARecord], output_path: Union[str, Path]) -> N
         json.dump([r.model_dump() for r in records], f, indent=2)
 
 
-def load_qa_records(file_path: Union[str, Path]) -> List[QARecord]:
+def load_qa_records(file_path: str | Path) -> list[QARecord]:
     """Load normalized QARecord objects from a JSON file."""
     path = Path(file_path)
     if not path.is_file():
@@ -114,8 +114,8 @@ def load_qa_records(file_path: Union[str, Path]) -> List[QARecord]:
 
 
 def load_raw_hotpot_parquet(
-    file_path: Union[str, Path], limit: Optional[int] = None
-) -> List[RawHotpotItem]:
+    file_path: str | Path, limit: int | None = None
+) -> list[RawHotpotItem]:
     """Load and validate raw HotpotQA records from a Parquet file (e.g. from Hugging Face)."""
     import pyarrow.parquet as pq
 
@@ -128,7 +128,7 @@ def load_raw_hotpot_parquet(
         table = table.slice(0, limit)
 
     rows = table.to_pylist()
-    items: List[RawHotpotItem] = []
+    items: list[RawHotpotItem] = []
 
     for row in rows:
         sf = list(zip(row["supporting_facts"]["title"], row["supporting_facts"]["sent_id"]))

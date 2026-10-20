@@ -1,7 +1,9 @@
 """Tests for configuration parsing and validation."""
 
 from pathlib import Path
+
 import pytest
+
 from rag_autopsy.core.config import ExperimentConfig, load_config, save_config
 
 

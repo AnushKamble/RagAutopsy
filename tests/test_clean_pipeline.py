@@ -1,8 +1,6 @@
 """Unit and contract tests for the clean RAG reference pipeline and trace completeness."""
 
-import json
 from pathlib import Path
-import pytest
 
 from rag_autopsy.core.schemas import (
     DiagnosticTrace,

@@ -1,6 +1,7 @@
 """Unit tests for standalone interactive HTML reporting."""
 
 from pathlib import Path
+
 from rag_autopsy.reports.html_report import generate_interactive_html_report
 
 

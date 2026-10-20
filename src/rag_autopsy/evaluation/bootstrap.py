@@ -1,8 +1,8 @@
 """Clustered bootstrap uncertainty estimation at the Question ID level."""
 
-from collections import defaultdict
 import random
-from typing import Any, Dict, List, Optional, Tuple
+from collections import defaultdict
+
 import numpy as np
 from pydantic import BaseModel
 
@@ -24,10 +24,10 @@ class AttributionBootstrapSummary(BaseModel):
 
 
 def clustered_bootstrap_attribution(
-    question_ids: List[str],
-    y_true: List[str],
-    y_pred: List[str],
-    labels: Optional[List[str]] = None,
+    question_ids: list[str],
+    y_true: list[str],
+    y_pred: list[str],
+    labels: list[str] | None = None,
     n_bootstraps: int = 1000,
     alpha: float = 0.05,
     seed: int = 42,
@@ -56,13 +56,13 @@ def clustered_bootstrap_attribution(
 
     rng = random.Random(seed)
 
-    boot_macro_f1: List[float] = []
-    boot_bal_acc: List[float] = []
-    boot_acc: List[float] = []
+    boot_macro_f1: list[float] = []
+    boot_bal_acc: list[float] = []
+    boot_acc: list[float] = []
 
     for _ in range(n_bootstraps):
         sampled_qids = rng.choices(unique_qids, k=n_questions)
-        sampled_indices: List[int] = []
+        sampled_indices: list[int] = []
         for qid in sampled_qids:
             sampled_indices.extend(q_to_indices[qid])
 

@@ -7,8 +7,9 @@ do not identify the failed pipeline stage, whereas RAG-Autopsy pinpoints the int
 """
 
 import re
-from typing import Any, Dict, List, Optional, Set
+
 from pydantic import BaseModel, Field
+
 from rag_autopsy.core.schemas import DiagnosticTrace, EvaluatorRecord, RetrievedPassage
 from rag_autopsy.evaluation.answer_metrics import evaluate_answer_correctness
 
@@ -45,14 +46,14 @@ class QualityVsAttributionComparison(BaseModel):
     overall_context_precision: float
     overall_faithfulness: float
     overall_token_f1: float
-    profiles_by_fault: Dict[str, FaultQualityProfile]
+    profiles_by_fault: dict[str, FaultQualityProfile]
     interpretability_gap_summary: str
 
 
 def compute_context_precision_at_k(
-    retrieved_passages: List[RetrievedPassage],
-    gold_evidence_ids: List[str],
-    cutoff_k: Optional[int] = None,
+    retrieved_passages: list[RetrievedPassage],
+    gold_evidence_ids: list[str],
+    cutoff_k: int | None = None,
 ) -> float:
     """Compute Context Precision@k (Mean Average Precision among retrieved passages).
     
@@ -67,7 +68,7 @@ def compute_context_precision_at_k(
     if k == 0:
         return 0.0
 
-    gold_set: Set[str] = set(gold_evidence_ids)
+    gold_set: set[str] = set(gold_evidence_ids)
     relevant_hits = 0
     precision_sum = 0.0
 
@@ -84,7 +85,7 @@ def compute_context_precision_at_k(
     return round(precision_sum / relevant_hits, 4)
 
 
-def split_into_claims(text: str) -> List[str]:
+def split_into_claims(text: str) -> list[str]:
     """Segment text into individual sentence claims for faithfulness evaluation."""
     clean = text.strip()
     if not clean:
@@ -135,7 +136,7 @@ def compute_faithfulness(answer: str, generator_context: str) -> float:
     return round(supported_count / len(claims), 4)
 
 
-FAULT_DISTINCTION_DESCRIPTIONS: Dict[str, str] = {
+FAULT_DISTINCTION_DESCRIPTIONS: dict[str, str] = {
     "F0": "Clean execution. High precision and faithfulness; establishes reference performance ceiling.",
     "F1": "Evidence Unavailable. Context precision drops to 0.0 because evidence is missing from corpus. Scalar score cannot distinguish whether evidence was unindexed (F1) vs demoted (F2).",
     "F2": "Evidence Ranked Out. Context precision drops to 0.0 due to distractor dominance. Evidence exists in index but missed cutoff; requires retriever tuning, not corpus re-indexing.",
@@ -148,12 +149,12 @@ FAULT_DISTINCTION_DESCRIPTIONS: Dict[str, str] = {
 
 
 def evaluate_rag_quality_dataset(
-    traces: List[DiagnosticTrace],
-    eval_records: List[EvaluatorRecord],
+    traces: list[DiagnosticTrace],
+    eval_records: list[EvaluatorRecord],
 ) -> QualityVsAttributionComparison:
     """Evaluate quality metrics across all trials and contrast against fault attribution."""
     trace_map = {t.trial_id: t for t in traces}
-    trial_scores: List[TrialQualityScore] = []
+    trial_scores: list[TrialQualityScore] = []
 
     for ev in eval_records:
         tr = trace_map.get(ev.trial_id)
@@ -179,11 +180,11 @@ def evaluate_rag_quality_dataset(
         raise ValueError("No matching trials found to compute RAG quality metrics.")
 
     # Aggregate by fault type
-    by_fault: Dict[str, List[TrialQualityScore]] = {}
+    by_fault: dict[str, list[TrialQualityScore]] = {}
     for s in trial_scores:
         by_fault.setdefault(s.injected_fault, []).append(s)
 
-    profiles: Dict[str, FaultQualityProfile] = {}
+    profiles: dict[str, FaultQualityProfile] = {}
     for fid, scores in sorted(by_fault.items()):
         n = len(scores)
         profiles[fid] = FaultQualityProfile(

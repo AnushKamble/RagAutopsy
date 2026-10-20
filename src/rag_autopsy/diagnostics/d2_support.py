@@ -3,10 +3,9 @@
 import re
 import string
 import time
-from typing import List, Set
+
 from rag_autopsy.core.schemas import Diagnosis, DiagnosticTrace
 from rag_autopsy.diagnostics.base import BaseDiagnostic
-
 
 CONTRADICTION_CUES = [
     "contradict",
@@ -21,7 +20,7 @@ CONTRADICTION_CUES = [
 ]
 
 
-def extract_keywords(text: str) -> Set[str]:
+def extract_keywords(text: str) -> set[str]:
     """Extract lowercase non-punctuation keywords."""
     clean = re.sub(r"[%s]" % re.escape(string.punctuation), " ", text.lower())
     stop_words = {"the", "a", "an", "is", "was", "and", "or", "of", "to", "in", "it", "that", "this"}

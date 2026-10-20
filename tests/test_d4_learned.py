@@ -1,6 +1,5 @@
 """Unit tests for D4: Learned Classifier Attribution Policy."""
 
-import numpy as np
 from rag_autopsy.core.schemas import DiagnosticTrace, RetrievedPassage
 from rag_autopsy.diagnostics.d4_learned import D4LearnedClassifierPolicy
 

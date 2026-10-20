@@ -4,8 +4,8 @@
 **Registration Date:** 2026-10-18T23:30:00Z  
 **Status:** FROZEN  
 **Project Identifier:** AI-01 (RAG-Autopsy: Fault-Injection-Validated Failure Attribution for RAG Systems)  
-**Configuration File:** [`configs/frozen_protocol_v1.yaml`](file:///C:/Users/anush/OneDrive/Desktop/Project/Projects/AIML/RagAutopsy/configs/frozen_protocol_v1.yaml)  
-**Frozen Calibration Parameters:** [`configs/frozen_calibration_params.yaml`](file:///C:/Users/anush/OneDrive/Desktop/Project/Projects/AIML/RagAutopsy/configs/frozen_calibration_params.yaml)  
+**Configuration File:** [`configs/frozen_protocol_v1.yaml`](../configs/frozen_protocol_v1.yaml)  
+**Frozen Calibration Parameters:** [`configs/frozen_calibration_params.yaml`](../configs/frozen_calibration_params.yaml)  
 
 ---
 
@@ -46,7 +46,7 @@ To eliminate data leakage between diagnostic development, calibration, and final
    $$\text{IDs}(\text{dev}) \cap \text{IDs}(\text{calibration}) = \emptyset$$
    $$\text{IDs}(\text{dev}) \cap \text{IDs}(\text{test}) = \emptyset$$
    $$\text{IDs}(\text{calibration}) \cap \text{IDs}(\text{test}) = \emptyset$$
-   Enforced deterministically by [`SplitManifest`](file:///C:/Users/anush/OneDrive/Desktop/Project/Projects/AIML/RagAutopsy/src/rag_autopsy/data/splits.py#L13-L60) and frozen in [`configs/split_manifest_100.json`](file:///C:/Users/anush/OneDrive/Desktop/Project/Projects/AIML/RagAutopsy/configs/split_manifest_100.json).
+   Enforced deterministically by [`SplitManifest`](../src/rag_autopsy/data/splits.py) and frozen in [`configs/split_manifest_100.json`](../configs/split_manifest_100.json).
 
 ---
 
@@ -86,7 +86,7 @@ $$\text{trial\_valid} = \text{injection\_applied} \land \text{trace\_condition\_
 
 ## 5. Diagnostic-Visible Features vs Forbidden Privileged Fields
 
-### Permitted Observational Trace Features ([`DiagnosticTrace`](file:///C:/Users/anush/OneDrive/Desktop/Project/Projects/AIML/RagAutopsy/src/rag_autopsy/core/schemas.py#L72-L108))
+### Permitted Observational Trace Features ([`DiagnosticTrace`](../src/rag_autopsy/core/schemas.py))
 1. `trial_id` (anonymized hash identifier)
 2. `question_id` (source question identifier)
 3. `question` (raw query string)
@@ -100,8 +100,8 @@ $$\text{trial\_valid} = \text{injection\_applied} \land \text{trace\_condition\_
 11. `latency_ms` (execution timing)
 12. `generator_model`, `generator_config` (model architecture metadata)
 
-### Forbidden Privileged Fields ([`EvaluatorRecord`](file:///C:/Users/anush/OneDrive/Desktop/Project/Projects/AIML/RagAutopsy/src/rag_autopsy/core/schemas.py#L111-L135))
-The following fields are strictly quarantined in [`EvaluatorStore`](file:///C:/Users/anush/OneDrive/Desktop/Project/Projects/AIML/RagAutopsy/src/rag_autopsy/core/schemas.py#L138-L165) and **never** visible to diagnostics:
+### Forbidden Privileged Fields ([`EvaluatorRecord`](../src/rag_autopsy/core/schemas.py))
+The following fields are strictly quarantined in [`EvaluatorStore`](../src/rag_autopsy/core/schemas.py) and **never** visible to diagnostics:
 - ❌ `injected_fault` (ground-truth cause)
 - ❌ `fault_parameters` (injection parameters, perturbation rates)
 - ❌ `gold_answer` / `gold_answers` (reference answers)
@@ -112,7 +112,7 @@ The following fields are strictly quarantined in [`EvaluatorStore`](file:///C:/U
 - ❌ `trial_valid`
 - ❌ `invalid_reason`
 
-Any diagnostic attempting to ingest an [`EvaluatorRecord`](file:///C:/Users/anush/OneDrive/Desktop/Project/Projects/AIML/RagAutopsy/src/rag_autopsy/core/schemas.py#L111-L135) or access forbidden keys will trigger an immediate, fatal `TypeError: Data boundary violation`.
+Any diagnostic attempting to ingest an [`EvaluatorRecord`](../src/rag_autopsy/core/schemas.py) or access forbidden keys will trigger an immediate, fatal `TypeError: Data boundary violation`.
 
 ---
 
@@ -120,7 +120,7 @@ Any diagnostic attempting to ingest an [`EvaluatorRecord`](file:///C:/Users/anus
 
 All diagnostic thresholds were tuned on the **20% Calibration Partition** ($N=20$ questions, $100$ trials) using grid search maximizing balanced accuracy on non-abstained trials. 
 
-**Frozen Parameters ([`configs/frozen_calibration_params.yaml`](file:///C:/Users/anush/OneDrive/Desktop/Project/Projects/AIML/RagAutopsy/configs/frozen_calibration_params.yaml)):**
+**Frozen Parameters ([`configs/frozen_calibration_params.yaml`](../configs/frozen_calibration_params.yaml)):**
 - $\tau_{\text{low}} = 2.0$ (`low_score_threshold` for $D_1$)
 - $\tau_{\text{gap}} = 1.0$ (`score_gap_threshold` for $D_1$)
 - $\tau_{\text{overlap}} = 0.30$ (`min_overlap_ratio` for $D_2$)

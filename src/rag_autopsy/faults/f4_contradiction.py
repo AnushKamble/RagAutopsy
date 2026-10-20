@@ -5,7 +5,7 @@ alongside the original evidence, so both conflicting claims reach the generator.
 """
 
 import hashlib
-from typing import List, Tuple
+
 from rag_autopsy.core.schemas import RetrievedPassage
 from rag_autopsy.data.schema import QARecord
 from rag_autopsy.faults.base import BaseFaultInjector, InjectionResult
@@ -30,8 +30,8 @@ class F4ContradictoryEvidenceInjector(BaseFaultInjector):
     def apply_to_context_passages(
         self,
         qa_record: QARecord,
-        retrieved_passages: List[RetrievedPassage],
-    ) -> Tuple[List[RetrievedPassage], InjectionResult]:
+        retrieved_passages: list[RetrievedPassage],
+    ) -> tuple[list[RetrievedPassage], InjectionResult]:
         """Inject an explicit contradictory passage into the retrieved list so both reach generator context."""
         gold_passage_ids = set(qa_record.gold_evidence_passage_ids)
         gold_retrieved = [p for p in retrieved_passages if p.passage_id in gold_passage_ids]
@@ -46,7 +46,7 @@ class F4ContradictoryEvidenceInjector(BaseFaultInjector):
             )
 
         # Synthesize an explicit contradictory claim with opaque identifier
-        contra_hash = hashlib.sha256(f"{qa_record.question_id}_rev".encode("utf-8")).hexdigest()[:8]
+        contra_hash = hashlib.sha256(f"{qa_record.question_id}_rev".encode()).hexdigest()[:8]
         contra_id = f"passage_syn_{contra_hash}"
         subject_title = qa_record.gold_evidence_titles[0] if qa_record.gold_evidence_titles else "Subject"
         contra_title = f"Report on {subject_title}"

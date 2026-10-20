@@ -1,6 +1,7 @@
 """Base diagnostic interface enforcing strict visible-trace input constraints."""
 
 from abc import ABC, abstractmethod
+
 from rag_autopsy.core.schemas import FORBIDDEN_LEAKAGE_KEYS, Diagnosis, DiagnosticTrace
 
 
@@ -32,4 +33,3 @@ class BaseDiagnostic(ABC):
     @abstractmethod
     def _predict(self, trace: DiagnosticTrace) -> Diagnosis:
         """Internal diagnostic logic implemented by subclasses."""
-        pass

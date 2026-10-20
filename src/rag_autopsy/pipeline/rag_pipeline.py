@@ -1,7 +1,7 @@
 """End-to-end RAG reference pipeline orchestrator."""
 
 import time
-from typing import List, Optional, Tuple
+
 from rag_autopsy.core.schemas import DiagnosticTrace, EvaluatorRecord
 from rag_autopsy.evaluation.answer_metrics import evaluate_answer_correctness
 from rag_autopsy.pipeline.context_builder import ContextBuilder
@@ -15,8 +15,8 @@ class RAGPipeline:
     def __init__(
         self,
         retriever: BM25Retriever,
-        context_builder: Optional[ContextBuilder] = None,
-        generator: Optional[BaseGenerator] = None,
+        context_builder: ContextBuilder | None = None,
+        generator: BaseGenerator | None = None,
         top_k: int = 3,
         candidate_pool_size: int = 20,
     ):
@@ -32,15 +32,15 @@ class RAGPipeline:
         question_id: str,
         question: str,
         split: str = "dev",
-        gold_answers: Optional[List[str]] = None,
-        gold_evidence_ids: Optional[List[str]] = None,
+        gold_answers: list[str] | None = None,
+        gold_evidence_ids: list[str] | None = None,
         injected_fault: str = "F0",
-        fault_parameters: Optional[dict] = None,
+        fault_parameters: dict | None = None,
         injection_applied: bool = False,
         trace_condition_achieved: bool = True,
         trial_valid: bool = True,
-        invalid_reason: Optional[str] = None,
-    ) -> Tuple[DiagnosticTrace, EvaluatorRecord]:
+        invalid_reason: str | None = None,
+    ) -> tuple[DiagnosticTrace, EvaluatorRecord]:
         """Execute one query trial end-to-end."""
         start_time = time.perf_counter()
 

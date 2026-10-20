@@ -2,14 +2,14 @@
 
 import re
 import string
-from typing import List, Tuple
+
 from rank_bm25 import BM25Okapi
 
 from rag_autopsy.core.schemas import RetrievedPassage
 from rag_autopsy.pipeline.corpus import Corpus
 
 
-def simple_tokenize(text: str) -> List[str]:
+def simple_tokenize(text: str) -> list[str]:
     """Tokenize text into lowercase words with punctuation removed."""
     clean_text = re.sub(r"[%s]" % re.escape(string.punctuation), " ", text.lower())
     return [token for token in clean_text.split() if token]
@@ -33,7 +33,7 @@ class BM25Retriever:
 
     def retrieve(
         self, query: str, top_k: int = 3, candidate_pool_size: int = 20
-    ) -> Tuple[List[RetrievedPassage], List[float]]:
+    ) -> tuple[list[RetrievedPassage], list[float]]:
         """Retrieve top-k passages and candidate pool scores.
         
         Returns:
@@ -59,7 +59,7 @@ class BM25Retriever:
 
         candidate_pool_scores = [round(float(s), 4) for _, s in scored_pairs[:candidate_pool_size]]
 
-        top_k_passages: List[RetrievedPassage] = []
+        top_k_passages: list[RetrievedPassage] = []
         for rank_idx, (passage, score) in enumerate(scored_pairs[:top_k], start=1):
             top_k_passages.append(
                 RetrievedPassage(

@@ -1,9 +1,10 @@
 """Calibration engine: tuning diagnostic thresholds on the calibration split before freezing."""
 
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any
+
 import yaml
-from rag_autopsy.core.schemas import DiagnosticTrace, EvaluatorRecord
+
 from rag_autopsy.data.schema import QARecord
 from rag_autopsy.data.splits import SplitManifest
 from rag_autopsy.diagnostics.d4_policy import D4CombinedAttributionPolicy
@@ -12,11 +13,11 @@ from rag_autopsy.evaluation.runner import run_experiment_harness
 
 
 def calibrate_thresholds(
-    qa_records: List[QARecord],
+    qa_records: list[QARecord],
     split_manifest: SplitManifest,
     regime: str = "regime_a",
     output_path: str = "configs/frozen_calibration_params.yaml",
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Tune diagnostic thresholds strictly on the calibration partition and freeze parameters.
     
     Tuning Grid:
@@ -66,8 +67,8 @@ def calibrate_thresholds(
                 policy.d2.min_overlap_ratio = overlap
 
                 # Get predictions
-                preds: List[str] = []
-                true_labels: List[str] = []
+                preds: list[str] = []
+                true_labels: list[str] = []
 
                 # Trace objects are in the runner harness
                 # We can simulate metrics based on calibration results

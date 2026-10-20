@@ -1,8 +1,9 @@
 """Tests for the RAG-Autopsy CLI."""
 
 from typer.testing import CliRunner
-from rag_autopsy.cli import app
+
 from rag_autopsy import __version__
+from rag_autopsy.cli import app
 
 runner = CliRunner()
 

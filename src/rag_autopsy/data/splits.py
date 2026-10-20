@@ -1,10 +1,9 @@
 """Deterministic question-grouped split generation and manifest tracking."""
 
-from datetime import datetime, timezone
-import json
-from pathlib import Path
 import random
-from typing import Dict, List, Set, Union
+from datetime import UTC, datetime
+from pathlib import Path
+
 from pydantic import BaseModel, Field, model_validator
 
 from rag_autopsy.data.schema import QARecord
@@ -13,20 +12,20 @@ from rag_autopsy.data.schema import QARecord
 class SplitManifest(BaseModel):
     """Manifest recording the exact partition of question IDs across splits."""
     manifest_version: str = "1.0.0"
-    created_at_utc: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    created_at_utc: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
     random_seed: int
     total_questions: int
-    split_counts: Dict[str, int]
-    dev_ids: List[str]
-    calibration_ids: List[str]
-    test_ids: List[str]
+    split_counts: dict[str, int]
+    dev_ids: list[str]
+    calibration_ids: list[str]
+    test_ids: list[str]
 
     @model_validator(mode="after")
     def verify_split_disjointness(self) -> "SplitManifest":
         """Verify that dev, calibration, and test sets are strictly pairwise disjoint."""
-        s_dev: Set[str] = set(self.dev_ids)
-        s_cal: Set[str] = set(self.calibration_ids)
-        s_test: Set[str] = set(self.test_ids)
+        s_dev: set[str] = set(self.dev_ids)
+        s_cal: set[str] = set(self.calibration_ids)
+        s_test: set[str] = set(self.test_ids)
 
         if s_dev.intersection(s_cal):
             overlap = s_dev.intersection(s_cal)
@@ -60,7 +59,7 @@ class SplitManifest(BaseModel):
 
 
 def create_question_splits(
-    records: List[QARecord],
+    records: list[QARecord],
     dev_ratio: float = 0.6,
     calibration_ratio: float = 0.2,
     test_ratio: float = 0.2,
@@ -104,7 +103,7 @@ def create_question_splits(
     return manifest
 
 
-def save_split_manifest(manifest: SplitManifest, output_path: Union[str, Path]) -> None:
+def save_split_manifest(manifest: SplitManifest, output_path: str | Path) -> None:
     """Save SplitManifest to JSON."""
     path = Path(output_path)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -112,7 +111,7 @@ def save_split_manifest(manifest: SplitManifest, output_path: Union[str, Path]) 
         f.write(manifest.model_dump_json(indent=2))
 
 
-def load_split_manifest(file_path: Union[str, Path]) -> SplitManifest:
+def load_split_manifest(file_path: str | Path) -> SplitManifest:
     """Load SplitManifest from JSON."""
     path = Path(file_path)
     if not path.is_file():

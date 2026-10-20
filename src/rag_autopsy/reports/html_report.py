@@ -2,12 +2,12 @@
 
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 def generate_interactive_html_report(
-    summary_data: Dict[str, Any],
-    trial_records: List[Dict[str, Any]],
+    summary_data: dict[str, Any],
+    trial_records: list[dict[str, Any]],
     output_path: str = "results/report.html",
 ) -> str:
     """Generate a zero-dependency, self-contained interactive HTML evaluation dashboard.

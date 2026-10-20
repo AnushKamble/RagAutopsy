@@ -2,13 +2,12 @@
 
 import logging
 import sys
-from typing import Optional
 
 
 def setup_logging(
     level: str = "INFO",
     json_format: bool = False,
-    log_file: Optional[str] = None,
+    log_file: str | None = None,
 ) -> logging.Logger:
     """Configure the root logger for the application."""
     log_level = getattr(logging, level.upper(), logging.INFO)
@@ -46,7 +45,7 @@ def setup_logging(
     return logger
 
 
-def get_logger(name: Optional[str] = None) -> logging.Logger:
+def get_logger(name: str | None = None) -> logging.Logger:
     """Get a child logger under the rag_autopsy namespace."""
     base_logger = logging.getLogger("rag_autopsy")
     if name:

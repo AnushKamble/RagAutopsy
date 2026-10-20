@@ -1,6 +1,6 @@
 """Context assembly and truncation logging engine."""
 
-from typing import List, Tuple
+
 from rag_autopsy.core.schemas import RetrievedPassage
 
 
@@ -12,8 +12,8 @@ class ContextBuilder:
         self.separator = separator
 
     def build_context(
-        self, retrieved_passages: List[RetrievedPassage]
-    ) -> Tuple[str, List[str], List[str]]:
+        self, retrieved_passages: list[RetrievedPassage]
+    ) -> tuple[str, list[str], list[str]]:
         """Assemble passages into generator context, logging pre- and post-assembly passage IDs.
         
         Returns:
@@ -23,8 +23,8 @@ class ContextBuilder:
             - post_assembly_passage_ids: List[str]
         """
         pre_assembly_ids = [p.passage_id for p in retrieved_passages]
-        post_assembly_ids: List[str] = []
-        context_parts: List[str] = []
+        post_assembly_ids: list[str] = []
+        context_parts: list[str] = []
 
         current_length = 0
         for passage in retrieved_passages:

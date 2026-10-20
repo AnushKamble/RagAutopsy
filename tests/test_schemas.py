@@ -1,7 +1,13 @@
 """Tests for core schemas and data contract validation."""
 
-from typing import Any, Dict, List
-from rag_autopsy.core.schemas import Diagnosis, DiagnosticTrace, EvaluatorRecord, RetrievedPassage
+from typing import Any
+
+from rag_autopsy.core.schemas import (
+    Diagnosis,
+    DiagnosticTrace,
+    EvaluatorRecord,
+    RetrievedPassage,
+)
 
 
 def test_retrieved_passage_schema() -> None:
@@ -45,7 +51,7 @@ def test_diagnosis_schema() -> None:
     assert diag.abstained is False
 
 
-def test_synthetic_qa_fixture_conformance(synthetic_qa_data: List[Dict[str, Any]]) -> None:
+def test_synthetic_qa_fixture_conformance(synthetic_qa_data: list[dict[str, Any]]) -> None:
     assert len(synthetic_qa_data) >= 2
     for item in synthetic_qa_data:
         assert "_id" in item

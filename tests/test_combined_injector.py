@@ -1,6 +1,7 @@
 """Unit tests for Combined / Compound Fault Injector (F2+F3, F3+F4)."""
 
 from pathlib import Path
+
 from rag_autopsy.core.schemas import generate_stable_trial_id
 from rag_autopsy.data.adapter import load_raw_hotpot_json, parse_hotpot_records
 from rag_autopsy.faults.combined import CombinedFaultInjector

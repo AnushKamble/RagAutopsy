@@ -1,6 +1,7 @@
 """Unit tests for D3: NLI Support and Contradiction Diagnostic."""
 
 from pathlib import Path
+
 from rag_autopsy.core.schemas import DiagnosticTrace, RetrievedPassage
 from rag_autopsy.diagnostics.d3_nli import D3NLISupportDiagnostic
 

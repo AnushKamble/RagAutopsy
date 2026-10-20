@@ -3,10 +3,9 @@
 Follows official SQuAD / HotpotQA text normalization conventions.
 """
 
-from collections import Counter
 import re
 import string
-from typing import List, Tuple
+from collections import Counter
 
 
 def normalize_answer(s: str) -> str:
@@ -58,8 +57,8 @@ def compute_token_f1(prediction: str, ground_truth: str) -> float:
 
 
 def evaluate_answer_correctness(
-    prediction: str, gold_answers: List[str]
-) -> Tuple[bool, float]:
+    prediction: str, gold_answers: list[str]
+) -> tuple[bool, float]:
     """Evaluate prediction against multiple reference answers (taking max over references).
     
     Returns:

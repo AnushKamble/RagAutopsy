@@ -1,9 +1,8 @@
 """Simple, interpretable baselines: Majority-Cause and Random."""
 
-from collections import Counter
 import random
 import time
-from typing import List, Optional
+from collections import Counter
 
 from rag_autopsy.core.schemas import Diagnosis, DiagnosticTrace
 from rag_autopsy.diagnostics.base import BaseDiagnostic
@@ -16,7 +15,7 @@ class MajorityCauseBaseline(BaseDiagnostic):
         super().__init__(name="baseline_majority_cause")
         self.majority_cause = majority_cause
 
-    def fit(self, training_causes: List[str]) -> None:
+    def fit(self, training_causes: list[str]) -> None:
         """Fit the baseline on calibration/training labels."""
         if not training_causes:
             return
@@ -40,7 +39,7 @@ class MajorityCauseBaseline(BaseDiagnostic):
 class RandomBaseline(BaseDiagnostic):
     """Predicts a cause uniformly at random among candidate classes."""
 
-    def __init__(self, candidate_causes: Optional[List[str]] = None, seed: int = 42):
+    def __init__(self, candidate_causes: list[str] | None = None, seed: int = 42):
         super().__init__(name="baseline_random")
         self.candidate_causes = candidate_causes or ["F0", "F1", "F2", "F3", "F4"]
         self.rng = random.Random(seed)

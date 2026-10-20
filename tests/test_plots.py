@@ -2,13 +2,14 @@
 
 import json
 from pathlib import Path
+
 import pytest
 
 from rag_autopsy.reports.plots import (
+    generate_all_evaluation_plots,
+    plot_bootstrap_macro_f1,
     plot_confusion_matrix,
     plot_regime_comparison,
-    plot_bootstrap_macro_f1,
-    generate_all_evaluation_plots,
 )
 
 

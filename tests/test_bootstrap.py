@@ -1,6 +1,7 @@
 """Unit tests for clustered bootstrap uncertainty estimation."""
 
 import pytest
+
 from rag_autopsy.evaluation.bootstrap import clustered_bootstrap_attribution
 
 

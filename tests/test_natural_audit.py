@@ -1,11 +1,11 @@
 """Unit and integration tests for the natural failure audit, 8-dimensional rubric, and transfer analysis."""
 
 from pathlib import Path
+
 import pytest
 
 from rag_autopsy.data.adapter import load_raw_hotpot_json, parse_hotpot_records
 from rag_autopsy.evaluation.natural_audit import (
-    NaturalFailureRecord,
     export_natural_audit_report,
     run_natural_failure_audit,
 )

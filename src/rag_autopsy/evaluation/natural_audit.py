@@ -1,9 +1,10 @@
 """Natural failure audit engine: analyzing transfer of diagnostics to organic pipeline errors."""
 
-from collections import Counter, defaultdict
 import json
+from collections import Counter
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
+
 import numpy as np
 from pydantic import BaseModel, Field
 from sklearn.metrics import cohen_kappa_score
@@ -11,9 +12,11 @@ from sklearn.metrics import cohen_kappa_score
 from rag_autopsy.core.schemas import DiagnosticTrace, EvaluatorRecord
 from rag_autopsy.data.schema import QARecord
 from rag_autopsy.diagnostics.d1_retrieval import D1RetrievalDiagnostic
-from rag_autopsy.diagnostics.d2_support import D2LexicalSupportDiagnostic, extract_keywords
+from rag_autopsy.diagnostics.d2_support import (
+    D2LexicalSupportDiagnostic,
+    extract_keywords,
+)
 from rag_autopsy.diagnostics.d4_policy import D4CombinedAttributionPolicy
-from rag_autopsy.evaluation.answer_metrics import evaluate_answer_correctness
 from rag_autopsy.pipeline.context_builder import ContextBuilder
 from rag_autopsy.pipeline.corpus import Corpus
 from rag_autopsy.pipeline.generator import BaseGenerator, MockExtractiveGenerator
@@ -28,9 +31,9 @@ class NaturalFailureRecord(BaseModel):
     question: str
     gold_answer: str
     generated_answer: str
-    retrieved_passage_ids: List[str]
-    context_passage_ids: List[str]
-    gold_evidence_ids: List[str]
+    retrieved_passage_ids: list[str]
+    context_passage_ids: list[str]
+    gold_evidence_ids: list[str]
 
     # Rubric Dimensions 1-5
     answer_correctness: str  # CORRECT, PARTIALLY_CORRECT, INCORRECT
@@ -41,7 +44,7 @@ class NaturalFailureRecord(BaseModel):
 
     # Rubric Dimensions 6-8: Cause attribution
     likely_primary_cause: str  # REASONING_ERROR, F2_RANKED_OUT, F1_UNAVAILABLE, F3_ASSEMBLY_LOSS, F4_CONTRADICTION
-    multiple_plausible_causes: List[str] = Field(default_factory=list)
+    multiple_plausible_causes: list[str] = Field(default_factory=list)
     is_unknown: bool = False
     reviewer_rationale: str = ""
 
@@ -77,7 +80,7 @@ def evaluate_rubric_dimensions(
     eval_rec: EvaluatorRecord,
     retriever: BM25Retriever,
     candidate_pool_size: int = 20,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Evaluate dimensions 1-5 objectively according to the frozen annotation rubric."""
     gold_ids = set(rec.gold_evidence_passage_ids)
     retrieved_ids = set(trace.pre_assembly_passage_ids)
@@ -148,8 +151,8 @@ def evaluate_rubric_dimensions(
 
 
 def adjudicate_reviewers(
-    rubric: Dict[str, Any],
-) -> Tuple[str, str, str, List[str], str]:
+    rubric: dict[str, Any],
+) -> tuple[str, str, str, list[str], str]:
     """Execute dual-reviewer independent labeling and consensus adjudication.
     
     Returns:
@@ -205,12 +208,12 @@ def adjudicate_reviewers(
 
 
 def run_natural_failure_audit(
-    qa_records: List[QARecord],
-    generator: Optional[BaseGenerator] = None,
+    qa_records: list[QARecord],
+    generator: BaseGenerator | None = None,
     top_k: int = 3,
     candidate_pool_size: int = 20,
     regime: str = "regime_a",
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Execute clean, unmodified RAG pipeline across questions, extract natural failures,
     apply the 8-dimensional reviewer rubric, evaluate dual-reviewer agreement, and compute transfer metrics.
     """
@@ -232,11 +235,11 @@ def run_natural_failure_audit(
     d4 = D4CombinedAttributionPolicy(regime=regime)
 
     total_evaluated = len(qa_records)
-    natural_failures: List[NaturalFailureRecord] = []
-    disagreements: List[ReviewerDisagreement] = []
+    natural_failures: list[NaturalFailureRecord] = []
+    disagreements: list[ReviewerDisagreement] = []
 
-    r1_ratings: List[str] = []
-    r2_ratings: List[str] = []
+    r1_ratings: list[str] = []
+    r2_ratings: list[str] = []
     adjudicated_counts = Counter()
 
     for idx, rec in enumerate(qa_records):
@@ -402,9 +405,9 @@ def run_natural_failure_audit(
 
 
 def export_natural_audit_report(
-    audit_data: Dict[str, Any],
+    audit_data: dict[str, Any],
     output_dir: str = "results/natural_audit",
-) -> Dict[str, str]:
+) -> dict[str, str]:
     """Persist machine-readable audit report artifacts to disk."""
     out_p = Path(output_dir)
     out_p.mkdir(parents=True, exist_ok=True)
@@ -415,8 +418,7 @@ def export_natural_audit_report(
 
     records_file = out_p / "natural_failure_records.jsonl"
     with open(records_file, "w", encoding="utf-8") as f:
-        for f_rec in audit_data["failures"]:
-            f.write(json.dumps(f_rec) + "\n")
+        f.writelines(json.dumps(f_rec) + "\n" for f_rec in audit_data["failures"])
 
     disagreements_file = out_p / "disagreement_summary.json"
     with open(disagreements_file, "w", encoding="utf-8") as f:

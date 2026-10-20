@@ -4,11 +4,11 @@ Strictly separates diagnostic-visible data from privileged evaluator metadata.
 """
 
 import hashlib
-from pathlib import Path
 import re
-from typing import Any, Dict, List, Optional, Tuple, Union
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pathlib import Path
+from typing import Any
 
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 # Exhaustive list of forbidden substring tokens and evaluator keys
 FORBIDDEN_LEAKAGE_KEYS = [
@@ -53,7 +53,7 @@ def generate_stable_trial_id(seed: int, question_id: str, intervention_key: str,
     Produces a 16-character hexadecimal hash prefixed with 'trial_'.
     Guaranteed not to contain isolated fault label tokens or reveal intervention type.
     """
-    raw = f"{seed}:{question_id}:{intervention_key}:{salt}".encode("utf-8")
+    raw = f"{seed}:{question_id}:{intervention_key}:{salt}".encode()
     digest = hashlib.sha256(raw).hexdigest()[:16]
     return f"trial_{digest}"
 
@@ -66,7 +66,7 @@ class RetrievedPassage(BaseModel):
     rank: int
     score: float
     text: str
-    title: Optional[str] = Field(default=None, description="Source article/passage title.")
+    title: str | None = Field(default=None, description="Source article/passage title.")
 
 
 class DiagnosticTrace(BaseModel):
@@ -84,27 +84,27 @@ class DiagnosticTrace(BaseModel):
     question: str
 
     # Retrieval pre-assembly trace
-    retrieved_top_k: List[RetrievedPassage]
-    candidate_pool_scores: Optional[List[float]] = Field(
+    retrieved_top_k: list[RetrievedPassage]
+    candidate_pool_scores: list[float] | None = Field(
         default=None,
         description="Retriever scores for top-K (e.g. K=20) candidates to detect score cliffs without leaking text."
     )
-    source_passage_ids: List[str] = Field(
+    source_passage_ids: list[str] = Field(
         default_factory=list,
         description="Explicit source passage IDs retrieved from corpus."
     )
 
     # Context assembly trace
-    pre_assembly_passage_ids: List[str]
-    post_assembly_passage_ids: List[str]
+    pre_assembly_passage_ids: list[str]
+    post_assembly_passage_ids: list[str]
     generator_context: str
 
     # Generation trace
     answer: str
     latency_ms: float
-    generator_model: Optional[str] = Field(default=None, description="Identifier of generator model used.")
-    generator_config: Dict[str, Any] = Field(default_factory=dict, description="Configuration parameters of generator.")
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    generator_model: str | None = Field(default=None, description="Identifier of generator model used.")
+    generator_config: dict[str, Any] = Field(default_factory=dict, description="Configuration parameters of generator.")
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
     @model_validator(mode="after")
     def verify_no_leakage(self) -> "DiagnosticTrace":
@@ -156,7 +156,7 @@ class DiagnosticTrace(BaseModel):
 
 
 
-def verify_trace_reconstructibility(trace: DiagnosticTrace) -> Tuple[bool, Optional[str]]:
+def verify_trace_reconstructibility(trace: DiagnosticTrace) -> tuple[bool, str | None]:
     """Validate that the trace contains complete information to reconstruct what the generator saw.
     
     Verifies that:
@@ -200,22 +200,22 @@ class EvaluatorRecord(BaseModel):
 
     # Injected intervention details
     injected_fault: str  # "F0", "F1", "F2", "F3", "F4", "F5"
-    fault_parameters: Dict[str, Any] = Field(default_factory=dict)
+    fault_parameters: dict[str, Any] = Field(default_factory=dict)
 
     # Gold reference labels
-    gold_answers: List[str]
-    gold_evidence_ids: List[str]
+    gold_answers: list[str]
+    gold_evidence_ids: list[str]
 
     # Injection validity adjudication
     injection_applied: bool = True
     trace_condition_achieved: bool = True
     trial_valid: bool = True
-    invalid_reason: Optional[str] = None
+    invalid_reason: str | None = None
 
     # Downstream evaluation results
-    answer_exact_match: Optional[bool] = None
-    answer_token_f1: Optional[float] = None
-    answer_supported_by_context: Optional[bool] = None
+    answer_exact_match: bool | None = None
+    answer_token_f1: float | None = None
+    answer_supported_by_context: bool | None = None
 
 
 class Diagnosis(BaseModel):
@@ -227,7 +227,7 @@ class Diagnosis(BaseModel):
     predicted_cause: str  # "F0", "F1", "F2", "F3", "F4", "F5", "F1_F2_RETRIEVAL_MISS", "UNKNOWN"
     confidence: float
     abstained: bool = False
-    abstention_reason: Optional[str] = None
+    abstention_reason: str | None = None
     evidence_rationale: str
     runtime_ms: float
 
@@ -239,7 +239,7 @@ class EvaluatorStore(BaseModel):
     passed directly or via convenience references to diagnostic routines.
     """
     model_config = ConfigDict(extra="forbid")
-    records: Dict[str, EvaluatorRecord] = Field(default_factory=dict)
+    records: dict[str, EvaluatorRecord] = Field(default_factory=dict)
 
     def add(self, record: EvaluatorRecord) -> None:
         """Add an evaluator record to the store, ensuring uniqueness of trial_id."""
@@ -249,7 +249,7 @@ class EvaluatorStore(BaseModel):
             raise ValueError(f"Duplicate trial_id in EvaluatorStore: '{record.trial_id}'")
         self.records[record.trial_id] = record
 
-    def get(self, trial_id: str) -> Optional[EvaluatorRecord]:
+    def get(self, trial_id: str) -> EvaluatorRecord | None:
         """Retrieve an evaluator record by trial_id."""
         return self.records.get(trial_id)
 
@@ -262,16 +262,15 @@ class EvaluatorStore(BaseModel):
     def __iter__(self):
         return iter(self.records.values())
 
-    def to_jsonl(self, path: Union[str, Path]) -> None:
+    def to_jsonl(self, path: str | Path) -> None:
         """Safely serialize evaluator records to a dedicated evaluator-only JSONL file."""
         p = Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
         with open(p, "w", encoding="utf-8") as f:
-            for rec in self.records.values():
-                f.write(rec.model_dump_json() + "\n")
+            f.writelines(rec.model_dump_json() + "\n" for rec in self.records.values())
 
     @classmethod
-    def from_jsonl(cls, path: Union[str, Path]) -> "EvaluatorStore":
+    def from_jsonl(cls, path: str | Path) -> "EvaluatorStore":
         """Load evaluator records from a dedicated JSONL file enforcing strict schema parsing."""
         p = Path(path)
         store = cls()
@@ -295,14 +294,14 @@ class EvaluatedTrial(BaseModel):
     question_id: str
     trace: DiagnosticTrace
     evaluator_record: EvaluatorRecord
-    diagnoses: Dict[str, Diagnosis] = Field(default_factory=dict)
+    diagnoses: dict[str, Diagnosis] = Field(default_factory=dict)
 
 
 def explicit_evaluation_join(
-    traces: List[DiagnosticTrace],
-    diagnoses_by_diagnostic: Dict[str, List[Diagnosis]],
+    traces: list[DiagnosticTrace],
+    diagnoses_by_diagnostic: dict[str, list[Diagnosis]],
     evaluator_store: EvaluatorStore,
-) -> List[EvaluatedTrial]:
+) -> list[EvaluatedTrial]:
     """Perform strict, explicit join between visible traces, diagnostic outputs, and evaluator records.
     
     Joins exclusively on trial_id. Fails loudly if:
@@ -310,9 +309,9 @@ def explicit_evaluation_join(
     2. Any diagnosis does not match a known trial_id.
     3. question_id mismatches between trace and evaluator_record.
     """
-    joined: List[EvaluatedTrial] = []
+    joined: list[EvaluatedTrial] = []
 
-    diag_lookup: Dict[str, Dict[str, Diagnosis]] = {}
+    diag_lookup: dict[str, dict[str, Diagnosis]] = {}
     for diag_name, diag_list in diagnoses_by_diagnostic.items():
         for d in diag_list:
             if d.trial_id not in diag_lookup:
@@ -341,7 +340,7 @@ def explicit_evaluation_join(
     return joined
 
 
-def save_traces_jsonl(traces: List[DiagnosticTrace], path: Union[str, Path]) -> None:
+def save_traces_jsonl(traces: list[DiagnosticTrace], path: str | Path) -> None:
     """Safely serialize diagnostic-visible traces to a dedicated JSONL file.
     
     Guarantees that only DiagnosticTrace schema fields are serialized.
@@ -349,14 +348,13 @@ def save_traces_jsonl(traces: List[DiagnosticTrace], path: Union[str, Path]) -> 
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
     with open(p, "w", encoding="utf-8") as f:
-        for tr in traces:
-            f.write(tr.model_dump_json() + "\n")
+        f.writelines(tr.model_dump_json() + "\n" for tr in traces)
 
 
-def load_traces_jsonl(path: Union[str, Path]) -> List[DiagnosticTrace]:
+def load_traces_jsonl(path: str | Path) -> list[DiagnosticTrace]:
     """Load diagnostic traces from JSONL, enforcing strict schema validation (extra='forbid')."""
     p = Path(path)
-    traces: List[DiagnosticTrace] = []
+    traces: list[DiagnosticTrace] = []
     with open(p, "r", encoding="utf-8") as f:
         for line in f:
             line = line.strip()
@@ -365,19 +363,18 @@ def load_traces_jsonl(path: Union[str, Path]) -> List[DiagnosticTrace]:
     return traces
 
 
-def save_evaluator_records_jsonl(records: List[EvaluatorRecord], path: Union[str, Path]) -> None:
+def save_evaluator_records_jsonl(records: list[EvaluatorRecord], path: str | Path) -> None:
     """Safely serialize evaluator records to a dedicated JSONL file."""
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
     with open(p, "w", encoding="utf-8") as f:
-        for rec in records:
-            f.write(rec.model_dump_json() + "\n")
+        f.writelines(rec.model_dump_json() + "\n" for rec in records)
 
 
-def load_evaluator_records_jsonl(path: Union[str, Path]) -> List[EvaluatorRecord]:
+def load_evaluator_records_jsonl(path: str | Path) -> list[EvaluatorRecord]:
     """Load evaluator records from JSONL, enforcing strict schema validation (extra='forbid')."""
     p = Path(path)
-    records: List[EvaluatorRecord] = []
+    records: list[EvaluatorRecord] = []
     with open(p, "r", encoding="utf-8") as f:
         for line in f:
             line = line.strip()

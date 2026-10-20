@@ -8,23 +8,24 @@ Spec Section 12: Predeclared systematic ablations:
 5. Context Budget Window Ablation (tight vs generous assembly limits).
 """
 
-from typing import Any, Dict, List, Optional
-from pydantic import BaseModel, Field
+from typing import Any
+
+from pydantic import BaseModel
+
 from rag_autopsy.core.schemas import generate_stable_trial_id
 from rag_autopsy.data.schema import QARecord
 from rag_autopsy.data.splits import SplitManifest
-from rag_autopsy.diagnostics.baselines import MajorityCauseBaseline, RandomBaseline
-from rag_autopsy.diagnostics.d1_retrieval import D1RetrievalDiagnostic
-from rag_autopsy.diagnostics.d2_support import D2LexicalSupportDiagnostic
-from rag_autopsy.diagnostics.d3_nli import D3NLISupportDiagnostic
 from rag_autopsy.diagnostics.d4_policy import D4CombinedAttributionPolicy
 from rag_autopsy.evaluation.attribution_metrics import compute_attribution_metrics
 from rag_autopsy.evaluation.runner import run_experiment_harness
-from rag_autopsy.evaluation.severity import sweep_context_budget_severity, sweep_distractor_severity
+from rag_autopsy.evaluation.severity import (
+    sweep_context_budget_severity,
+    sweep_distractor_severity,
+)
 from rag_autopsy.faults.combined import CombinedFaultInjector
 from rag_autopsy.pipeline.context_builder import ContextBuilder
 from rag_autopsy.pipeline.corpus import Corpus
-from rag_autopsy.pipeline.generator import BaseGenerator, MockExtractiveGenerator
+from rag_autopsy.pipeline.generator import MockExtractiveGenerator
 from rag_autopsy.pipeline.rag_pipeline import RAGPipeline
 from rag_autopsy.pipeline.retriever import BM25Retriever
 
@@ -61,20 +62,20 @@ class SingleVsCombinedEntry(BaseModel):
 class AblationSuiteReport(BaseModel):
     """Comprehensive systematic ablation study report."""
 
-    diagnostic_ablation: List[DiagnosticAblationEntry]
-    abstention_ablation: List[AbstentionAblationEntry]
-    combined_faults_ablation: List[SingleVsCombinedEntry]
-    distractor_severity_ablation: List[Dict[str, Any]]
-    context_budget_ablation: List[Dict[str, Any]]
+    diagnostic_ablation: list[DiagnosticAblationEntry]
+    abstention_ablation: list[AbstentionAblationEntry]
+    combined_faults_ablation: list[SingleVsCombinedEntry]
+    distractor_severity_ablation: list[dict[str, Any]]
+    context_budget_ablation: list[dict[str, Any]]
     predeclared_findings: str
 
 
 def run_diagnostic_ablation(
-    harness_results: Dict[str, Any]
-) -> List[DiagnosticAblationEntry]:
+    harness_results: dict[str, Any]
+) -> list[DiagnosticAblationEntry]:
     """Ablation 1: Compare D1, D2, D3, D4, and baselines."""
     diag_res = harness_results.get("diagnostic_results", {})
-    entries: List[DiagnosticAblationEntry] = []
+    entries: list[DiagnosticAblationEntry] = []
 
     for name, res in diag_res.items():
         m = res.get("metrics", {})
@@ -93,9 +94,9 @@ def run_diagnostic_ablation(
 
 
 def run_abstention_ablation(
-    harness_results: Dict[str, Any],
+    harness_results: dict[str, Any],
     fallback_cause: str = "F1",
-) -> List[AbstentionAblationEntry]:
+) -> list[AbstentionAblationEntry]:
     """Ablation 2: Compare allowed abstention vs forced prediction on D4 Combined Policy."""
     trial_rows = harness_results.get("trial_rows", [])
     if not trial_rows:
@@ -136,10 +137,10 @@ def run_abstention_ablation(
 
 
 def run_combined_faults_ablation(
-    records: List[QARecord],
+    records: list[QARecord],
     base_corpus: Corpus,
     seed: int = 42,
-) -> List[SingleVsCombinedEntry]:
+) -> list[SingleVsCombinedEntry]:
     """Ablation 3: Evaluate diagnostic performance on single isolated vs combined faults."""
     d4 = D4CombinedAttributionPolicy()
     gen = MockExtractiveGenerator()
@@ -202,7 +203,7 @@ def run_combined_faults_ablation(
 
 
 def run_ablation_study_suite(
-    records: List[QARecord],
+    records: list[QARecord],
     split_manifest: SplitManifest,
     target_split: str = "dev",
     seed: int = 42,

@@ -8,7 +8,8 @@ Verifies that:
 """
 
 from pathlib import Path
-from rag_autopsy.core.schemas import DiagnosticTrace, generate_stable_trial_id
+
+from rag_autopsy.core.schemas import generate_stable_trial_id
 from rag_autopsy.data.adapter import load_raw_hotpot_json, parse_hotpot_records
 from rag_autopsy.diagnostics.d1_retrieval import D1RetrievalDiagnostic
 from rag_autopsy.diagnostics.d2_support import D2LexicalSupportDiagnostic

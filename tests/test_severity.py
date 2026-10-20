@@ -1,6 +1,7 @@
 """Unit tests for fault severity scaling and sensitivity sweeps."""
 
 from pathlib import Path
+
 from rag_autopsy.data.adapter import load_raw_hotpot_json, parse_hotpot_records
 from rag_autopsy.evaluation.severity import (
     run_severity_analysis,

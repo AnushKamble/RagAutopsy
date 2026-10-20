@@ -7,10 +7,9 @@ leakage constraints by inspecting only unprivileged trace fields.
 
 import hashlib
 import json
-from pathlib import Path
 import re
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from pathlib import Path
 
 from rag_autopsy.core.schemas import Diagnosis, DiagnosticTrace
 from rag_autopsy.diagnostics.base import BaseDiagnostic
@@ -24,7 +23,7 @@ class D3NLISupportDiagnostic(BaseDiagnostic):
         model_name: str = "prajjwal1/bert-tiny-mnli",
         contradiction_threshold: float = 0.60,
         unsupported_entailment_threshold: float = 0.30,
-        cache_dir: Optional[str] = ".cache/nli_cache",
+        cache_dir: str | None = ".cache/nli_cache",
         use_fallback_if_unavailable: bool = True,
         load_model_weights: bool = False,
     ):
@@ -61,10 +60,10 @@ class D3NLISupportDiagnostic(BaseDiagnostic):
         return self._pipeline
 
     def _compute_cache_key(self, premise: str, hypothesis: str) -> str:
-        payload = f"{self.model_name}:::{premise.strip()}:::{hypothesis.strip()}".encode("utf-8")
+        payload = f"{self.model_name}:::{premise.strip()}:::{hypothesis.strip()}".encode()
         return hashlib.sha256(payload).hexdigest()
 
-    def evaluate_pair(self, premise: str, hypothesis: str) -> Dict[str, float]:
+    def evaluate_pair(self, premise: str, hypothesis: str) -> dict[str, float]:
         """Compute entailment, contradiction, and neutral scores for a single pair."""
         if not premise.strip() or not hypothesis.strip():
             return {"entailment": 0.0, "neutral": 1.0, "contradiction": 0.0}
@@ -111,7 +110,7 @@ class D3NLISupportDiagnostic(BaseDiagnostic):
 
         return scores
 
-    def _heuristic_fallback(self, premise: str, hypothesis: str) -> Dict[str, float]:
+    def _heuristic_fallback(self, premise: str, hypothesis: str) -> dict[str, float]:
         """Deterministic lexical entailment and contradiction approximation fallback."""
         p_lower = premise.lower()
         h_lower = hypothesis.lower()
@@ -141,7 +140,7 @@ class D3NLISupportDiagnostic(BaseDiagnostic):
         else:
             return {"entailment": 0.10, "neutral": 0.80, "contradiction": 0.10}
 
-    def score_trace(self, trace: DiagnosticTrace) -> Dict[str, float]:
+    def score_trace(self, trace: DiagnosticTrace) -> dict[str, float]:
         """Evaluate NLI scores across all visible passages against the generated answer."""
         passages = [p.text for p in trace.retrieved_top_k]
         if not passages and trace.generator_context.strip():
@@ -155,8 +154,8 @@ class D3NLISupportDiagnostic(BaseDiagnostic):
                 "mean_contradiction": 0.0,
             }
 
-        entailments: List[float] = []
-        contradictions: List[float] = []
+        entailments: list[float] = []
+        contradictions: list[float] = []
 
         for p_text in passages:
             res = self.evaluate_pair(p_text, trace.answer)

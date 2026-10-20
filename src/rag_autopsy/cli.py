@@ -1,17 +1,20 @@
 """Command-line interface for RAG-Autopsy."""
 
 from pathlib import Path
-from typing import Optional
+
 import typer
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
 from rag_autopsy import __version__
-from rag_autopsy.core.config import ExperimentConfig, load_config
+from rag_autopsy.core.config import load_config
 from rag_autopsy.core.logging import setup_logging
-from rag_autopsy.core.schemas import DiagnosticTrace, EvaluatorRecord, RetrievedPassage
-from rag_autopsy.data.adapter import load_qa_records, load_raw_hotpot_json, parse_hotpot_records
+from rag_autopsy.data.adapter import (
+    load_qa_records,
+    load_raw_hotpot_json,
+    parse_hotpot_records,
+)
 from rag_autopsy.data.splits import create_question_splits
 from rag_autopsy.evaluation.runner import run_experiment_harness
 from rag_autopsy.reports.summary import export_evaluation_report
@@ -53,7 +56,7 @@ def info() -> None:
 
 @app.command()
 def smoke(
-    config_path: Optional[str] = typer.Option(
+    config_path: str | None = typer.Option(
         None, "--config", "-c", help="Path to custom experiment YAML configuration."
     )
 ) -> None:
@@ -96,10 +99,10 @@ def smoke(
 
 @app.command()
 def evaluate(
-    data_path: Optional[str] = typer.Option(
+    data_path: str | None = typer.Option(
         None, "--data", "-d", help="Path to raw HotpotQA JSON file. Defaults to synthetic fixture."
     ),
-    manifest_file: Optional[str] = typer.Option(
+    manifest_file: str | None = typer.Option(
         None, "--manifest", "-m", help="Path to frozen SplitManifest JSON file."
     ),
     split: str = typer.Option("test", "--split", "-s", help="Target split to evaluate ('dev' | 'test')."),
@@ -229,14 +232,17 @@ def evaluate(
 
 @app.command()
 def audit_natural(
-    data_path: Optional[str] = typer.Option(
+    data_path: str | None = typer.Option(
         None, "--data", "-d", help="Path to QA records JSON file."
     ),
     regime: str = typer.Option("regime_a", "--regime", "-r", help="Observability regime."),
     output_dir: str = typer.Option("results/natural_audit", "--output", "-o", help="Output directory."),
 ) -> None:
     """Execute natural (unmodified) failure audit and report diagnostic transfer agreement."""
-    from rag_autopsy.evaluation.natural_audit import export_natural_audit_report, run_natural_failure_audit
+    from rag_autopsy.evaluation.natural_audit import (
+        export_natural_audit_report,
+        run_natural_failure_audit,
+    )
 
     setup_logging(level="INFO")
     console.print(Panel("[bold yellow]Starting Natural Failure Audit on Clean Unmodified Pipeline[/bold yellow]"))
@@ -310,7 +316,7 @@ def generate_plots(
         "-a",
         help="Path to Regime A evaluation summary JSON.",
     ),
-    regime_b_summary: Optional[str] = typer.Option(
+    regime_b_summary: str | None = typer.Option(
         "results/test_regime_b/evaluation_summary.json",
         "--regime-b",
         "-b",
@@ -351,7 +357,7 @@ def generate_plots(
 
 @app.command()
 def demo(
-    data_path: Optional[str] = typer.Option(
+    data_path: str | None = typer.Option(
         None, "--data", "-d", help="Path to QA records JSON file."
     ),
 ) -> None:
@@ -387,6 +393,7 @@ def report(
     """Generate standalone interactive HTML report from evaluation results."""
     import csv
     import json
+
     from rag_autopsy.reports.html_report import generate_interactive_html_report
 
     s_path = Path(summary_path)
@@ -418,7 +425,7 @@ def report(
     console.print(f"[bold green]Successfully generated interactive HTML report: {out_file}[/bold green]")
 
 
-def _resolve_records(data_path: Optional[str]):
+def _resolve_records(data_path: str | None):
     if data_path:
         fpath = Path(data_path)
     else:
@@ -434,7 +441,7 @@ def _resolve_records(data_path: Optional[str]):
 
 @app.command(name="ablate")
 def ablate(
-    data_path: Optional[str] = typer.Option(
+    data_path: str | None = typer.Option(
         None, "--data", "-d", help="Path to QA records JSON file."
     ),
     target_split: str = typer.Option(
@@ -447,6 +454,7 @@ def ablate(
 ) -> None:
     """Run systematic 5-axis ablation study suite (spec Section 12)."""
     import json
+
     from rag_autopsy.evaluation.ablations import run_ablation_study_suite
 
     console.print(Panel("[bold cyan]Running RAG-Autopsy Systematic Ablation Suite[/bold cyan]"))
@@ -503,7 +511,7 @@ def ablate(
 
 @app.command(name="severity")
 def severity(
-    data_path: Optional[str] = typer.Option(
+    data_path: str | None = typer.Option(
         None, "--data", "-d", help="Path to QA records JSON file."
     ),
     output_dir: str = typer.Option(
@@ -513,6 +521,7 @@ def severity(
 ) -> None:
     """Run fault severity sensitivity analysis across distractors and context budget."""
     import json
+
     from rag_autopsy.evaluation.severity import run_severity_analysis
     from rag_autopsy.pipeline.corpus import Corpus
 
@@ -574,7 +583,7 @@ def severity(
 
 @app.command(name="ragtruth")
 def ragtruth(
-    fixture_path: Optional[str] = typer.Option(
+    fixture_path: str | None = typer.Option(
         None, "--file", "-f", help="Path to RAGTruth JSON samples file."
     ),
     output_dir: str = typer.Option(
@@ -584,6 +593,7 @@ def ragtruth(
 ) -> None:
     """Run hallucination/grounding benchmark on RAGTruth human-annotated dataset."""
     import json
+
     from rag_autopsy.data.ragtruth import load_ragtruth_json
     from rag_autopsy.diagnostics.d2_support import D2LexicalSupportDiagnostic
     from rag_autopsy.diagnostics.d3_nli import D3NLISupportDiagnostic
@@ -635,7 +645,7 @@ def ragtruth(
 
 @app.command(name="quality-compare")
 def quality_compare(
-    data_path: Optional[str] = typer.Option(
+    data_path: str | None = typer.Option(
         None, "--data", "-d", help="Path to QA records JSON file."
     ),
     target_split: str = typer.Option(
@@ -648,6 +658,7 @@ def quality_compare(
 ) -> None:
     """Compare conventional scalar RAG quality metrics (Ragas) vs RAG-Autopsy fault attribution."""
     import json
+
     from rag_autopsy.evaluation.rag_quality import evaluate_rag_quality_dataset
 
     console.print(Panel("[bold cyan]Comparing Scalar RAG Quality Metrics vs Fault Attribution[/bold cyan]"))

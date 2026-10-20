@@ -1,13 +1,13 @@
 """Pluggable generator interfaces with hash-keyed disk caching and real model adapters."""
 
-from abc import ABC, abstractmethod
 import hashlib
 import json
-from pathlib import Path
 import re
-from typing import Any, Dict, Optional
 import urllib.error
 import urllib.request
+from abc import ABC, abstractmethod
+from pathlib import Path
+from typing import Any
 
 
 class BaseGenerator(ABC):
@@ -18,14 +18,12 @@ class BaseGenerator(ABC):
     @abstractmethod
     def generate(self, question: str, context: str) -> str:
         """Produce an answer string given a question and assembled context."""
-        pass
 
     @abstractmethod
     def get_model_name(self) -> str:
         """Return the unique model or adapter name."""
-        pass
 
-    def get_config(self) -> Dict[str, Any]:
+    def get_config(self) -> dict[str, Any]:
         """Return all result-changing configuration parameters for caching."""
         return {}
 
@@ -45,7 +43,7 @@ class MockExtractiveGenerator(BaseGenerator):
     def get_model_name(self) -> str:
         return "test_extractive_heuristic"
 
-    def get_config(self) -> Dict[str, Any]:
+    def get_config(self) -> dict[str, Any]:
         return {
             "strategy": "sentence_word_overlap",
             "test_infrastructure_only": True,
@@ -84,7 +82,7 @@ class MockExtractiveGenerator(BaseGenerator):
 class CachedGenerator(BaseGenerator):
     """Caching wrapper around any generator, strictly keyed by all result-changing inputs."""
 
-    def __init__(self, inner_generator: BaseGenerator, cache_dir: Optional[str] = ".cache/generator"):
+    def __init__(self, inner_generator: BaseGenerator, cache_dir: str | None = ".cache/generator"):
         self.inner_generator = inner_generator
         self.is_test_generator = getattr(inner_generator, "is_test_generator", False)
         self.cache_dir = Path(cache_dir) if cache_dir else None
@@ -94,14 +92,14 @@ class CachedGenerator(BaseGenerator):
     def get_model_name(self) -> str:
         return f"cached_{self.inner_generator.get_model_name()}"
 
-    def get_config(self) -> Dict[str, Any]:
+    def get_config(self) -> dict[str, Any]:
         return self.inner_generator.get_config()
 
     def compute_cache_key(self, question: str, context: str) -> str:
         """Compute SHA-256 hash strictly keyed by model name, config params, question, and context."""
         model_name = self.inner_generator.get_model_name()
         config_canonical = json.dumps(self.inner_generator.get_config(), sort_keys=True)
-        payload = f"{model_name}:::{config_canonical}:::{question.strip()}:::{context.strip()}".encode("utf-8")
+        payload = f"{model_name}:::{config_canonical}:::{question.strip()}:::{context.strip()}".encode()
         return hashlib.sha256(payload).hexdigest()
 
     def generate(self, question: str, context: str) -> str:
@@ -157,7 +155,7 @@ class HuggingFaceGenerator(BaseGenerator):
     def get_model_name(self) -> str:
         return f"hf_{self.model_name.replace('/', '_')}"
 
-    def get_config(self) -> Dict[str, Any]:
+    def get_config(self) -> dict[str, Any]:
         return {
             "model_name": self.model_name,
             "max_new_tokens": self.max_new_tokens,
@@ -222,7 +220,7 @@ class OpenAICompatibleGenerator(BaseGenerator):
         model_name: str = "qwen2.5:0.5b",
         temperature: float = 0.0,
         max_tokens: int = 64,
-        api_key: Optional[str] = None,
+        api_key: str | None = None,
         timeout_seconds: float = 30.0,
     ):
         self.api_base = api_base.rstrip("/")
@@ -235,7 +233,7 @@ class OpenAICompatibleGenerator(BaseGenerator):
     def get_model_name(self) -> str:
         return f"api_{self.model_name.replace(':', '_')}"
 
-    def get_config(self) -> Dict[str, Any]:
+    def get_config(self) -> dict[str, Any]:
         return {
             "api_base": self.api_base,
             "model_name": self.model_name,

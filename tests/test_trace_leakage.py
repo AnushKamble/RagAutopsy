@@ -2,13 +2,13 @@
 
 import json
 from pathlib import Path
+
 import pytest
 from pydantic import ValidationError
 
 from rag_autopsy.core.schemas import (
-    DiagnosticTrace,
     Diagnosis,
-    EvaluatedTrial,
+    DiagnosticTrace,
     EvaluatorRecord,
     EvaluatorStore,
     RetrievedPassage,
@@ -455,6 +455,7 @@ def test_logging_does_not_smuggle_privileged_evaluator_data(
 ) -> None:
     """Verify that diagnostic logging does not output forbidden evaluator keys."""
     import logging
+
     from rag_autopsy.diagnostics.d1_retrieval import D1RetrievalDiagnostic
 
     logger = logging.getLogger("rag_autopsy")

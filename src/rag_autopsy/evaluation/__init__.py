@@ -8,8 +8,8 @@ from rag_autopsy.evaluation.answer_metrics import (
 )
 
 __all__ = [
-    "normalize_answer",
     "compute_exact_match",
     "compute_token_f1",
     "evaluate_answer_correctness",
+    "normalize_answer",
 ]

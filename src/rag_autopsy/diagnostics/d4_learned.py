@@ -7,7 +7,7 @@ partitioning by question_id so fault variants of a single query never leak acros
 
 import re
 import time
-from typing import Any, Dict, List, Optional, Tuple
+
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
@@ -49,7 +49,7 @@ class D4LearnedClassifierPolicy(BaseDiagnostic):
             raise ValueError(f"Unsupported classifier_type '{classifier_type}'. Choose 'decision_tree' or 'logistic_regression'.")
 
         self.is_fitted = False
-        self.classes_: List[str] = []
+        self.classes_: list[str] = []
 
     @classmethod
     def extract_features(cls, trace: DiagnosticTrace) -> np.ndarray:
@@ -108,7 +108,7 @@ class D4LearnedClassifierPolicy(BaseDiagnostic):
             contra_detected,
         ], dtype=float)
 
-    def fit(self, traces: List[DiagnosticTrace], targets: List[str]) -> "D4LearnedClassifierPolicy":
+    def fit(self, traces: list[DiagnosticTrace], targets: list[str]) -> "D4LearnedClassifierPolicy":
         """Train classifier on feature vectors extracted from diagnostic traces."""
         X = np.array([self.extract_features(t) for t in traces], dtype=float)
         y = np.array(targets)

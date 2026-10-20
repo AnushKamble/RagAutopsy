@@ -1,11 +1,11 @@
 """Unit tests for RAGTruth adapter and evaluation harness."""
 
 from pathlib import Path
-from rag_autopsy.data.ragtruth import RAGTruthSample, load_ragtruth_json
+
+from rag_autopsy.data.ragtruth import load_ragtruth_json
 from rag_autopsy.diagnostics.d2_support import D2LexicalSupportDiagnostic
 from rag_autopsy.diagnostics.d3_nli import D3NLISupportDiagnostic
 from rag_autopsy.evaluation.ragtruth_eval import (
-    evaluate_diagnostic_on_ragtruth,
     run_ragtruth_benchmark,
 )
 

@@ -5,7 +5,7 @@ so that gold evidence remains searchable, but drops below top-k (rank > k).
 """
 
 import hashlib
-from typing import List, Set
+
 from rag_autopsy.data.schema import PassageRecord, QARecord
 from rag_autopsy.faults.base import BaseFaultInjector, InjectionResult
 from rag_autopsy.pipeline.corpus import Corpus
@@ -21,7 +21,7 @@ class F2EvidenceRankedOutInjector(BaseFaultInjector):
         self.cutoff_k = cutoff_k
 
     def inject(self, qa_record: QARecord, base_corpus: Corpus) -> InjectionResult:
-        gold_passage_ids: Set[str] = set(qa_record.gold_evidence_passage_ids)
+        gold_passage_ids: set[str] = set(qa_record.gold_evidence_passage_ids)
 
         if not gold_passage_ids:
             return InjectionResult(
@@ -45,10 +45,10 @@ class F2EvidenceRankedOutInjector(BaseFaultInjector):
 
         # Create distracting passages repeating question keywords heavily to inflate BM25 score
         keyword_repeat = " ".join(q_tokens * 3)
-        injected_distractors: List[PassageRecord] = []
+        injected_distractors: list[PassageRecord] = []
 
         for i in range(self.distractor_count):
-            d_hash = hashlib.sha256(f"{qa_record.question_id}_d_{i}".encode("utf-8")).hexdigest()[:8]
+            d_hash = hashlib.sha256(f"{qa_record.question_id}_d_{i}".encode()).hexdigest()[:8]
             d_id = f"passage_syn_{d_hash}"
             d_title = f"Reference Overview {i+1} regarding {qa_record.question[:20]}"
             d_text = f"{d_title}\nThis document contains background discussion on {keyword_repeat}. It mentions various unrelated historical events."

@@ -2,7 +2,8 @@
 
 import json
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
+
 import pytest
 
 from rag_autopsy.core.schemas import DiagnosticTrace, EvaluatorRecord, RetrievedPassage
@@ -19,7 +20,7 @@ def synthetic_fixture_path(fixtures_dir: Path) -> Path:
 
 
 @pytest.fixture
-def synthetic_qa_data(synthetic_fixture_path: Path) -> List[Dict[str, Any]]:
+def synthetic_qa_data(synthetic_fixture_path: Path) -> list[dict[str, Any]]:
     with open(synthetic_fixture_path, "r", encoding="utf-8") as f:
         return json.load(f)
 

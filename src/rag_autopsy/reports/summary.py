@@ -3,18 +3,23 @@
 import csv
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from rag_autopsy.core.schemas import DiagnosticTrace, EvaluatorRecord, save_evaluator_records_jsonl, save_traces_jsonl
+from rag_autopsy.core.schemas import (
+    DiagnosticTrace,
+    EvaluatorRecord,
+    save_evaluator_records_jsonl,
+    save_traces_jsonl,
+)
 
 
 def export_evaluation_report(
-    summary_data: Dict[str, Any],
-    trial_records: List[Dict[str, Any]],
+    summary_data: dict[str, Any],
+    trial_records: list[dict[str, Any]],
     output_dir: str = "results",
-    traces: Optional[List[DiagnosticTrace]] = None,
-    evaluator_records: Optional[List[EvaluatorRecord]] = None,
-) -> Dict[str, str]:
+    traces: list[DiagnosticTrace] | None = None,
+    evaluator_records: list[EvaluatorRecord] | None = None,
+) -> dict[str, str]:
     """Export machine-readable JSON metrics summary, per-trial predictions CSV,
     and strictly decoupled diagnostic_traces.jsonl and evaluator_records.jsonl files.
     

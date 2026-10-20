@@ -1,7 +1,7 @@
 """Configuration loading and validation using Pydantic."""
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+
 import yaml
 from pydantic import BaseModel, Field
 
@@ -11,7 +11,7 @@ class DatasetConfig(BaseModel):
     split: str = "dev"
     setting: str = "distractor"
     data_dir: str = ".data"
-    raw_file: Optional[str] = None
+    raw_file: str | None = None
     sample_size: int = 500
     seed: int = 42
     train_ratio: float = 0.6
@@ -36,7 +36,7 @@ class GeneratorConfig(BaseModel):
 
 
 class DiagnosticConfig(BaseModel):
-    enabled_diagnostics: List[str] = Field(default_factory=lambda: ["d1_retrieval", "d2_lexical"])
+    enabled_diagnostics: list[str] = Field(default_factory=lambda: ["d1_retrieval", "d2_lexical"])
     abstention_enabled: bool = True
     regime: str = "regime_a"  # "regime_a" (candidate pool probe) | "regime_b" (blind top-k)
     d1_score_gap_threshold: float = 0.5
@@ -54,7 +54,7 @@ class ExperimentConfig(BaseModel):
     diagnostics: DiagnosticConfig = Field(default_factory=DiagnosticConfig)
 
 
-def load_config(config_path: Optional[str] = None) -> ExperimentConfig:
+def load_config(config_path: str | None = None) -> ExperimentConfig:
     """Load configuration from a YAML file, merging with default values."""
     if config_path is None:
         return ExperimentConfig()

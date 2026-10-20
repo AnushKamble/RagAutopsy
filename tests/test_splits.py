@@ -1,8 +1,9 @@
 """Unit tests for question-grouped split generation and manifest disjointness."""
 
 from pathlib import Path
+
 import pytest
-from rag_autopsy.data.adapter import load_raw_hotpot_json, parse_hotpot_records
+
 from rag_autopsy.data.schema import QARecord
 from rag_autopsy.data.splits import (
     SplitManifest,

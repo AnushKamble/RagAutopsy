@@ -1,7 +1,9 @@
 """Unit tests for HotpotQA dataset adapter and normalization."""
 
 from pathlib import Path
+
 import pytest
+
 from rag_autopsy.data.adapter import (
     create_deterministic_subset,
     load_qa_records,

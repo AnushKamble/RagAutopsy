@@ -2,7 +2,7 @@
 
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 try:
     import matplotlib
@@ -23,10 +23,10 @@ def _check_matplotlib():
 
 
 def plot_confusion_matrix(
-    matrix: Union[List[List[float]], Any],
-    labels: List[str],
+    matrix: list[list[float]] | Any,
+    labels: list[str],
     title: str = "Attribution Confusion Matrix",
-    output_path: Optional[Union[str, Path]] = None,
+    output_path: str | Path | None = None,
     normalize: bool = True,
     cmap: str = "Blues",
 ) -> Any:
@@ -88,11 +88,11 @@ def plot_confusion_matrix(
 
 
 def plot_regime_comparison(
-    matrix_a: Union[List[List[float]], Any],
-    matrix_b: Union[List[List[float]], Any],
-    labels: List[str],
+    matrix_a: list[list[float]] | Any,
+    matrix_b: list[list[float]] | Any,
+    labels: list[str],
     title: str = "D4 Policy Identifiability: Regime A vs Regime B",
-    output_path: Optional[Union[str, Path]] = None,
+    output_path: str | Path | None = None,
 ) -> Any:
     """Side-by-side comparison of Regime A (Candidate Pool) vs Regime B (Blind Top-k).
     
@@ -140,9 +140,9 @@ def plot_regime_comparison(
 
 
 def plot_bootstrap_macro_f1(
-    summary_data: Dict[str, Any],
+    summary_data: dict[str, Any],
     title: str = "Held-Out Test Attribution Performance (95% Clustered Bootstrap CI)",
-    output_path: Optional[Union[str, Path]] = None,
+    output_path: str | Path | None = None,
 ) -> Any:
     """Plot Macro-F1 comparison with error bars representing 95% bootstrap confidence intervals."""
     _check_matplotlib()
@@ -214,10 +214,10 @@ def plot_bootstrap_macro_f1(
 
 
 def generate_all_evaluation_plots(
-    regime_a_summary_path: Union[str, Path] = "results/test_regime_a/evaluation_summary.json",
-    regime_b_summary_path: Optional[Union[str, Path]] = "results/test_regime_b/evaluation_summary.json",
-    output_dir: Union[str, Path] = "results/plots",
-) -> Dict[str, str]:
+    regime_a_summary_path: str | Path = "results/test_regime_a/evaluation_summary.json",
+    regime_b_summary_path: str | Path | None = "results/test_regime_b/evaluation_summary.json",
+    output_dir: str | Path = "results/plots",
+) -> dict[str, str]:
     """Generate all standard evaluation plots from saved JSON summaries.
     
     Returns:

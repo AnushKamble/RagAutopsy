@@ -1,7 +1,7 @@
 """Injection validity adjudication and effectiveness accounting."""
 
 from collections import Counter, defaultdict
-from typing import Any, Dict, List, Tuple
+
 from pydantic import BaseModel
 
 from rag_autopsy.core.schemas import EvaluatorRecord
@@ -12,7 +12,7 @@ class FaultValidityStats(BaseModel):
     valid: int
     invalid: int
     effectiveness_rate: float
-    invalid_reasons: Dict[str, int]
+    invalid_reasons: dict[str, int]
 
 
 class InjectionValiditySummary(BaseModel):
@@ -20,19 +20,19 @@ class InjectionValiditySummary(BaseModel):
     total_valid: int
     total_invalid: int
     overall_validity_rate: float
-    by_fault: Dict[str, FaultValidityStats]
+    by_fault: dict[str, FaultValidityStats]
 
 
 def adjudicate_trials(
-    evaluator_records: List[EvaluatorRecord],
-) -> Tuple[List[EvaluatorRecord], List[EvaluatorRecord], InjectionValiditySummary]:
+    evaluator_records: list[EvaluatorRecord],
+) -> tuple[list[EvaluatorRecord], list[EvaluatorRecord], InjectionValiditySummary]:
     """Separate valid trials from invalid trials and generate a full validity accounting report.
     
     Returns:
         (valid_records, invalid_records, validity_summary)
     """
-    valid_records: List[EvaluatorRecord] = []
-    invalid_records: List[EvaluatorRecord] = []
+    valid_records: list[EvaluatorRecord] = []
+    invalid_records: list[EvaluatorRecord] = []
 
     counts_by_fault = defaultdict(lambda: {"attempted": 0, "valid": 0, "invalid": 0, "reasons": Counter()})
 
@@ -53,7 +53,7 @@ def adjudicate_trials(
     total_valid = len(valid_records)
     total_invalid = len(invalid_records)
 
-    by_fault_stats: Dict[str, FaultValidityStats] = {}
+    by_fault_stats: dict[str, FaultValidityStats] = {}
     for fault, data in sorted(counts_by_fault.items()):
         att = data["attempted"]
         val = data["valid"]

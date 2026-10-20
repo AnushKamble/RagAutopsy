@@ -5,7 +5,8 @@ or F3 Assembly Loss + F4 Contradiction) as specified in Spec Section 6 and Secti
 """
 
 import hashlib
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
+
 from rag_autopsy.core.schemas import DiagnosticTrace, EvaluatorRecord, RetrievedPassage
 from rag_autopsy.data.schema import PassageRecord, QARecord
 from rag_autopsy.evaluation.answer_metrics import evaluate_answer_correctness
@@ -26,7 +27,7 @@ class CombinedFaultInjector(BaseFaultInjector):
 
     def __init__(
         self,
-        fault_types: Optional[List[str]] = None,
+        fault_types: list[str] | None = None,
         distractor_count: int = 3,
         cutoff_k: int = 5,
     ):
@@ -48,7 +49,7 @@ class CombinedFaultInjector(BaseFaultInjector):
             )
 
         current_corpus = base_corpus
-        applied_stages: List[Dict[str, Any]] = []
+        applied_stages: list[dict[str, Any]] = []
 
         # If F2 is part of combination, inject targeted distractors
         if "F2" in self.fault_types:
@@ -62,9 +63,9 @@ class CombinedFaultInjector(BaseFaultInjector):
                     invalid_reason="Precondition failed: Question has no tokens for F2 distractors.",
                 )
             keyword_repeat = " ".join(q_tokens * 3)
-            injected_distractors: List[PassageRecord] = []
+            injected_distractors: list[PassageRecord] = []
             for i in range(self.distractor_count):
-                d_hash = hashlib.sha256(f"{qa_record.question_id}_cd_{i}".encode("utf-8")).hexdigest()[:8]
+                d_hash = hashlib.sha256(f"{qa_record.question_id}_cd_{i}".encode()).hexdigest()[:8]
                 d_id = f"passage_syn_{d_hash}"
                 d_title = f"Reference Overview {i+1} regarding {qa_record.question[:20]}"
                 d_text = f"{d_title}\nThis document contains background discussion on {keyword_repeat}."
@@ -96,12 +97,12 @@ class CombinedFaultInjector(BaseFaultInjector):
     def apply_to_passages(
         self,
         qa_record: QARecord,
-        retrieved_passages: List[RetrievedPassage],
-    ) -> Tuple[List[RetrievedPassage], InjectionResult]:
+        retrieved_passages: list[RetrievedPassage],
+    ) -> tuple[list[RetrievedPassage], InjectionResult]:
         """Apply passage-level interventions (F4 contradiction, F3 assembly loss)."""
         gold_set = set(qa_record.gold_evidence_passage_ids)
         current_passages = list(retrieved_passages)
-        stages: List[Dict[str, Any]] = []
+        stages: list[dict[str, Any]] = []
 
         # Check if gold was present in retrieval
         gold_present = any(p.passage_id in gold_set for p in current_passages)
@@ -116,7 +117,7 @@ class CombinedFaultInjector(BaseFaultInjector):
                     trial_valid=False,
                     invalid_reason="Precondition failed: Original gold evidence was not retrieved, cannot co-occur with contradiction.",
                 )
-            contra_hash = hashlib.sha256(f"{qa_record.question_id}_cc_rev".encode("utf-8")).hexdigest()[:8]
+            contra_hash = hashlib.sha256(f"{qa_record.question_id}_cc_rev".encode()).hexdigest()[:8]
             contra_id = f"passage_syn_{contra_hash}"
             subject_title = qa_record.gold_evidence_titles[0] if qa_record.gold_evidence_titles else "Subject"
             contra_title = f"Report on {subject_title}"
@@ -164,7 +165,7 @@ class CombinedFaultInjector(BaseFaultInjector):
         base_corpus: Corpus,
         pipeline: RAGPipeline,
         split: str = "dev",
-    ) -> Tuple[DiagnosticTrace, EvaluatorRecord]:
+    ) -> tuple[DiagnosticTrace, EvaluatorRecord]:
         """Execute a full pipeline trial with all stages of the compound fault applied."""
         # Step 1: Apply corpus-level interventions
         corpus_res = self.inject(qa_record, base_corpus)

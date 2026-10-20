@@ -5,8 +5,8 @@ Evaluates diagnostic methods (D2 Lexical Support, D3 NLI Support, D4) against hu
 hallucination labels from RAGTruth. Measures agreement, balanced accuracy, and failure modes.
 """
 
-from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
+
 from rag_autopsy.data.ragtruth import RAGTruthSample
 from rag_autopsy.diagnostics.base import BaseDiagnostic
 
@@ -35,19 +35,19 @@ class RAGTruthBenchmarkReport(BaseModel):
     total_samples: int
     hallucinated_samples: int
     grounded_samples: int
-    diagnostic_metrics: Dict[str, DiagnosticRAGTruthMetrics]
+    diagnostic_metrics: dict[str, DiagnosticRAGTruthMetrics]
     comparative_summary: str
 
 
 def evaluate_diagnostic_on_ragtruth(
-    samples: List[RAGTruthSample],
+    samples: list[RAGTruthSample],
     diagnostic: BaseDiagnostic,
     seed: int = 42,
 ) -> DiagnosticRAGTruthMetrics:
     """Evaluate a single diagnostic on a collection of RAGTruth samples."""
     tp = fp = tn = fn = 0
     abstained_count = 0
-    latencies: List[float] = []
+    latencies: list[float] = []
 
     for s in samples:
         trace = s.to_diagnostic_trace(seed=seed)
@@ -105,8 +105,8 @@ def evaluate_diagnostic_on_ragtruth(
 
 
 def run_ragtruth_benchmark(
-    samples: List[RAGTruthSample],
-    diagnostics: List[BaseDiagnostic],
+    samples: list[RAGTruthSample],
+    diagnostics: list[BaseDiagnostic],
     seed: int = 42,
 ) -> RAGTruthBenchmarkReport:
     """Run full comparative benchmark across multiple diagnostics on RAGTruth."""
@@ -114,7 +114,7 @@ def run_ragtruth_benchmark(
     hallucinated = sum(1 for s in samples if s.has_hallucination)
     grounded = total - hallucinated
 
-    metrics_map: Dict[str, DiagnosticRAGTruthMetrics] = {}
+    metrics_map: dict[str, DiagnosticRAGTruthMetrics] = {}
     for diag in diagnostics:
         m = evaluate_diagnostic_on_ragtruth(samples, diag, seed=seed)
         metrics_map[diag.name] = m

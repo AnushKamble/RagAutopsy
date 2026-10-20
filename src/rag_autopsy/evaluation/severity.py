@@ -7,8 +7,8 @@ degrade or change across parameter sweeps of fault severity:
 2. Context Assembly Truncation Sweep (C in [500, 1000, 2000, 3000]): Impact of context budget on F3 Assembly Loss.
 """
 
-from typing import Any, Dict, List, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+
 from rag_autopsy.core.schemas import DiagnosticTrace, generate_stable_trial_id
 from rag_autopsy.data.schema import QARecord
 from rag_autopsy.diagnostics.d1_retrieval import D1RetrievalDiagnostic
@@ -51,19 +51,19 @@ class ContextBudgetSeverityPoint(BaseModel):
 class SeveritySensitivityReport(BaseModel):
     """Aggregate severity sweep report."""
 
-    distractor_curve: List[DistractorSeverityPoint]
-    context_budget_curve: List[ContextBudgetSeverityPoint]
+    distractor_curve: list[DistractorSeverityPoint]
+    context_budget_curve: list[ContextBudgetSeverityPoint]
     summary_findings: str
 
 
 def sweep_distractor_severity(
-    records: List[QARecord],
+    records: list[QARecord],
     base_corpus: Corpus,
-    distractor_counts: Optional[List[int]] = None,
+    distractor_counts: list[int] | None = None,
     cutoff_k: int = 3,
-    generator: Optional[BaseGenerator] = None,
+    generator: BaseGenerator | None = None,
     seed: int = 42,
-) -> List[DistractorSeverityPoint]:
+) -> list[DistractorSeverityPoint]:
     """Execute parameter sweep across distractor counts for F2 Evidence Ranked Out."""
     counts = distractor_counts or [1, 3, 5, 10, 20]
     gen = generator or MockExtractiveGenerator()
@@ -71,12 +71,12 @@ def sweep_distractor_severity(
     d1 = D1RetrievalDiagnostic()
     d4 = D4CombinedAttributionPolicy()
 
-    curve: List[DistractorSeverityPoint] = []
+    curve: list[DistractorSeverityPoint] = []
 
     for d_count in counts:
         injector = F2EvidenceRankedOutInjector(distractor_count=d_count, cutoff_k=cutoff_k)
         valid_count = 0
-        f1_scores: List[float] = []
+        f1_scores: list[float] = []
         d1_correct = 0
         d4_correct = 0
 
@@ -143,13 +143,13 @@ def sweep_distractor_severity(
 
 
 def sweep_context_budget_severity(
-    records: List[QARecord],
+    records: list[QARecord],
     base_corpus: Corpus,
-    max_chars_list: Optional[List[int]] = None,
+    max_chars_list: list[int] | None = None,
     top_k: int = 5,
-    generator: Optional[BaseGenerator] = None,
+    generator: BaseGenerator | None = None,
     seed: int = 42,
-) -> List[ContextBudgetSeverityPoint]:
+) -> list[ContextBudgetSeverityPoint]:
     """Execute parameter sweep across context character budgets for F3 Assembly Loss."""
     budgets = max_chars_list or [300, 600, 1200, 2500, 5000]
     gen = generator or MockExtractiveGenerator()
@@ -158,13 +158,13 @@ def sweep_context_budget_severity(
     d4 = D4CombinedAttributionPolicy()
     f3_injector = F3ContextAssemblyLossInjector()
 
-    curve: List[ContextBudgetSeverityPoint] = []
+    curve: list[ContextBudgetSeverityPoint] = []
 
     for budget in budgets:
         builder = ContextBuilder(max_context_chars=budget)
         valid_count = 0
         retained_count = 0
-        f1_scores: List[float] = []
+        f1_scores: list[float] = []
         d2_correct = 0
         d4_correct = 0
 
@@ -240,12 +240,12 @@ def sweep_context_budget_severity(
 
 
 def run_severity_analysis(
-    records: List[QARecord],
+    records: list[QARecord],
     base_corpus: Corpus,
-    distractor_counts: Optional[List[int]] = None,
-    context_budgets: Optional[List[int]] = None,
+    distractor_counts: list[int] | None = None,
+    context_budgets: list[int] | None = None,
     cutoff_k: int = 3,
-    generator: Optional[BaseGenerator] = None,
+    generator: BaseGenerator | None = None,
     seed: int = 42,
 ) -> SeveritySensitivityReport:
     """Run full sensitivity suite across both distractor and context budget axes."""

@@ -4,7 +4,7 @@ Intervention: Gold evidence is retrieved in top-k, but is truncated/dropped
 during context assembly, so it never reaches the generator.
 """
 
-from typing import List, Set, Tuple
+
 from rag_autopsy.core.schemas import RetrievedPassage
 from rag_autopsy.data.schema import QARecord
 from rag_autopsy.faults.base import BaseFaultInjector, InjectionResult
@@ -29,9 +29,9 @@ class F3ContextAssemblyLossInjector(BaseFaultInjector):
 
     def apply_to_retrieved_passages(
         self,
-        retrieved_passages: List[RetrievedPassage],
-        gold_passage_ids: List[str],
-    ) -> Tuple[List[RetrievedPassage], InjectionResult]:
+        retrieved_passages: list[RetrievedPassage],
+        gold_passage_ids: list[str],
+    ) -> tuple[list[RetrievedPassage], InjectionResult]:
         """Filter out gold passages from the post-assembly context stream.
         
         Returns:
@@ -39,7 +39,7 @@ class F3ContextAssemblyLossInjector(BaseFaultInjector):
             - modified_passages: list of passages that survive into context assembly
             - injection_result: InjectionResult
         """
-        gold_set: Set[str] = set(gold_passage_ids)
+        gold_set: set[str] = set(gold_passage_ids)
         gold_present_in_retrieved = any(p.passage_id in gold_set for p in retrieved_passages)
 
         if not gold_present_in_retrieved:

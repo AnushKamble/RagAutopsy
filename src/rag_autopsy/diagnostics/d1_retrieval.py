@@ -1,7 +1,7 @@
 """D1: Retrieval and ranking diagnostic heuristics."""
 
 import time
-from typing import Optional
+
 from rag_autopsy.core.schemas import Diagnosis, DiagnosticTrace
 from rag_autopsy.diagnostics.base import BaseDiagnostic
 

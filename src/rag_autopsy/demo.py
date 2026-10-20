@@ -1,13 +1,17 @@
 """Interactive live demonstration of RAG-Autopsy failure attribution."""
 
 from pathlib import Path
-from typing import Optional
+
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
 from rag_autopsy.core.schemas import DiagnosticTrace, EvaluatorRecord
-from rag_autopsy.data.adapter import load_qa_records, load_raw_hotpot_json, parse_hotpot_records
+from rag_autopsy.data.adapter import (
+    load_qa_records,
+    load_raw_hotpot_json,
+    parse_hotpot_records,
+)
 from rag_autopsy.data.schema import QARecord
 from rag_autopsy.diagnostics.d4_policy import D4CombinedAttributionPolicy
 from rag_autopsy.faults.f2_ranked_out import F2EvidenceRankedOutInjector
@@ -20,9 +24,9 @@ from rag_autopsy.pipeline.retriever import BM25Retriever
 
 
 def run_live_demo(
-    data_path: Optional[str] = None,
+    data_path: str | None = None,
     interactive: bool = False,
-    console: Optional[Console] = None,
+    console: Console | None = None,
 ) -> bool:
     """Execute interactive or automated walkthrough of RAG-Autopsy fault attribution.
     

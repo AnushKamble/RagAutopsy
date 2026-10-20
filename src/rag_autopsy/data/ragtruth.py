@@ -8,9 +8,15 @@ whether D2 (Lexical Support) and D3 (NLI Support) agree with human hallucination
 
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
+
 from pydantic import BaseModel, ConfigDict, Field
-from rag_autopsy.core.schemas import DiagnosticTrace, RetrievedPassage, generate_stable_trial_id
+
+from rag_autopsy.core.schemas import (
+    DiagnosticTrace,
+    RetrievedPassage,
+    generate_stable_trial_id,
+)
 
 
 class RAGTruthSample(BaseModel):
@@ -22,12 +28,12 @@ class RAGTruthSample(BaseModel):
     source_passage: str
     response: str
     has_hallucination: bool = Field(..., description="True if response contains human-annotated hallucination.")
-    hallucination_spans: List[str] = Field(default_factory=list)
-    hallucination_type: Optional[str] = Field(
+    hallucination_spans: list[str] = Field(default_factory=list)
+    hallucination_type: str | None = Field(
         default=None,
         description="Type: evidential_conflict, unsupported_fact, or none."
     )
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
     def to_diagnostic_trace(self, seed: int = 42) -> DiagnosticTrace:
         """Convert to a strictly isolated DiagnosticTrace visible to diagnostics.
@@ -63,7 +69,7 @@ class RAGTruthSample(BaseModel):
         )
 
 
-def load_ragtruth_json(file_path: Union[str, Path]) -> List[RAGTruthSample]:
+def load_ragtruth_json(file_path: str | Path) -> list[RAGTruthSample]:
     """Load and parse RAGTruth samples from a JSON file."""
     p = Path(file_path)
     if not p.exists():

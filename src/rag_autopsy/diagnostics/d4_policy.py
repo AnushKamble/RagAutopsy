@@ -1,7 +1,7 @@
 """D4: Combined attribution policy engine with abstention logic."""
 
 import time
-from typing import Optional
+
 from rag_autopsy.core.schemas import Diagnosis, DiagnosticTrace
 from rag_autopsy.diagnostics.base import BaseDiagnostic
 from rag_autopsy.diagnostics.d1_retrieval import D1RetrievalDiagnostic

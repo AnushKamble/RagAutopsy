@@ -50,7 +50,7 @@ A central scientific contribution of RAG-Autopsy is enforcing that **diagnostic 
 
 ### 2.1 `DiagnosticTrace` (Diagnostic-Visible Only)
 
-- **Class:** [`DiagnosticTrace`](file:///C:/Users/anush/OneDrive/Desktop/Project/Projects/AIML/RagAutopsy/src/rag_autopsy/core/schemas.py)
+- **Class:** [`DiagnosticTrace`](../src/rag_autopsy/core/schemas.py)
 - **Constraint:** `model_config = ConfigDict(extra="forbid")`
 - **Visibility:** Unprivileged runtime diagnosers, attribution policies, and logging handlers.
 
@@ -74,7 +74,7 @@ A central scientific contribution of RAG-Autopsy is enforcing that **diagnostic 
 
 ### 2.2 `RetrievedPassage` (Passage Item Schema)
 
-- **Class:** [`RetrievedPassage`](file:///C:/Users/anush/OneDrive/Desktop/Project/Projects/AIML/RagAutopsy/src/rag_autopsy/core/schemas.py)
+- **Class:** [`RetrievedPassage`](../src/rag_autopsy/core/schemas.py)
 - **Constraint:** `model_config = ConfigDict(extra="forbid")`
 
 | Field Name | Type | Description |
@@ -87,7 +87,7 @@ A central scientific contribution of RAG-Autopsy is enforcing that **diagnostic 
 
 ### 2.3 `EvaluatorRecord` (Privileged Ground Truth)
 
-- **Class:** [`EvaluatorRecord`](file:///C:/Users/anush/OneDrive/Desktop/Project/Projects/AIML/RagAutopsy/src/rag_autopsy/core/schemas.py)
+- **Class:** [`EvaluatorRecord`](../src/rag_autopsy/core/schemas.py)
 - **Constraint:** `model_config = ConfigDict(extra="forbid")`
 - **Visibility:** Evaluator only. Never passed to `BaseDiagnostic.diagnose()`.
 

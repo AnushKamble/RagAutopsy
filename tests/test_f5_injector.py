@@ -1,6 +1,7 @@
 """Unit tests for F5: Unsupported Generation / Hallucination injector."""
 
 from pathlib import Path
+
 from rag_autopsy.core.schemas import RetrievedPassage
 from rag_autopsy.data.adapter import load_raw_hotpot_json, parse_hotpot_records
 from rag_autopsy.faults.f5_unsupported import F5UnsupportedGenerationInjector

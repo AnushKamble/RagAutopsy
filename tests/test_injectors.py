@@ -1,6 +1,7 @@
 """Unit and contract tests for fault injectors F1–F4."""
 
 from pathlib import Path
+
 from rag_autopsy.core.schemas import RetrievedPassage
 from rag_autopsy.data.adapter import load_raw_hotpot_json, parse_hotpot_records
 from rag_autopsy.faults.f1_unavailable import F1EvidenceUnavailableInjector

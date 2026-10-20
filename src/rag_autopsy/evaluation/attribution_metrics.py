@@ -1,16 +1,17 @@
 """Attribution evaluation metrics: Macro-F1, balanced accuracy, confusion matrices, and coverage."""
 
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
+
 import numpy as np
 from sklearn.metrics import confusion_matrix, precision_recall_fscore_support
 
 
 def compute_attribution_metrics(
-    y_true: List[str],
-    y_pred: List[str],
-    labels: Optional[List[str]] = None,
+    y_true: list[str],
+    y_pred: list[str],
+    labels: list[str] | None = None,
     abstention_label: str = "UNKNOWN",
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Compute comprehensive multi-class attribution metrics with abstention handling.
     
     Args:
@@ -82,7 +83,7 @@ def compute_attribution_metrics(
         zero_division=0,
     )
 
-    per_class: Dict[str, Dict[str, float]] = {}
+    per_class: dict[str, dict[str, float]] = {}
     for idx, label in enumerate(target_labels):
         per_class[label] = {
             "precision": round(float(precision[idx]), 4),
