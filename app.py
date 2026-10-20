@@ -20,6 +20,7 @@ from rag_autopsy.diagnostics.d1_retrieval import D1RetrievalDiagnostic
 from rag_autopsy.diagnostics.d2_support import D2LexicalSupportDiagnostic
 from rag_autopsy.diagnostics.d3_nli import D3NLISupportDiagnostic
 from rag_autopsy.diagnostics.d4_policy import D4CombinedAttributionPolicy
+from rag_autopsy.diagnostics.d5_llm_judge import D5LLMJudgeDiagnostic
 from rag_autopsy.faults.f1_unavailable import F1EvidenceUnavailableInjector
 from rag_autopsy.faults.f2_ranked_out import F2EvidenceRankedOutInjector
 from rag_autopsy.faults.f3_assembly_loss import F3ContextAssemblyLossInjector
@@ -27,9 +28,14 @@ from rag_autopsy.faults.f4_contradiction import F4ContradictoryEvidenceInjector
 from rag_autopsy.faults.f5_unsupported import F5UnsupportedGenerationInjector
 from rag_autopsy.pipeline.context_builder import ContextBuilder
 from rag_autopsy.pipeline.corpus import Corpus
-from rag_autopsy.pipeline.generator import MockExtractiveGenerator
+from rag_autopsy.pipeline.generator import (
+    CachedGenerator,
+    HuggingFaceGenerator,
+    MockExtractiveGenerator,
+    OllamaGenerator,
+)
 from rag_autopsy.pipeline.rag_pipeline import RAGPipeline
-from rag_autopsy.pipeline.retriever import BM25Retriever
+from rag_autopsy.pipeline.retriever import BM25Retriever, DenseRetriever, HybridRetriever
 
 
 REPO_ROOT = Path(__file__).resolve().parent
@@ -94,6 +100,70 @@ def main():
     selected_label = st.sidebar.selectbox("Select Test Query:", list(q_map.keys()))
     rec = q_map[selected_label]
 
+    st.sidebar.markdown("---")
+    st.sidebar.subheader("⚙️ Model & Pipeline Engines")
+
+    # Detect Ollama status
+    ollama_online = OllamaGenerator.is_available(model_name="qwen3:8b")
+    gen_options = []
+    if ollama_online:
+        gen_options.append("Local Ollama (Qwen 3 8B)")
+    gen_options.append("Mock Extractive (Sentence Overlap Heuristic)")
+    gen_options.append("HuggingFace (Flan-T5 / CPU)")
+    if not ollama_online:
+        gen_options.append("Local Ollama (Offline - start with `ollama run qwen3:8b`)")
+
+    selected_gen_label = st.sidebar.selectbox(
+        "Generator Engine:",
+        gen_options,
+        index=0,
+        help="Choose generator backend. Ollama runs local Qwen 3 8B with real-time generative reasoning.",
+    )
+
+    # Generator parameters
+    temperature = 0.0
+    max_tokens = 256
+    use_cache = True
+
+    if "Local Ollama" in selected_gen_label and ollama_online:
+        st.sidebar.success("🟢 Ollama Server Online (Model: qwen3:8b)")
+        temperature = st.sidebar.slider(
+            "Temperature (Generative Variation):",
+            min_value=0.0,
+            max_value=1.0,
+            value=0.0,
+            step=0.05,
+            help="0.0 = Deterministic/Greedy (benchmark mode). > 0.0 introduces natural phrasing variations.",
+        )
+        max_tokens = st.sidebar.slider("Max New Tokens:", min_value=64, max_value=512, value=256, step=32)
+        use_cache = st.sidebar.checkbox("Enable Disk Cache (SHA-256)", value=(temperature == 0.0))
+        inner_gen = OllamaGenerator(
+            model_name="qwen3:8b",
+            temperature=temperature,
+            max_tokens=max_tokens,
+        )
+        gen = CachedGenerator(inner_gen) if use_cache else inner_gen
+    elif "HuggingFace" in selected_gen_label:
+        inner_gen = HuggingFaceGenerator()
+        gen = CachedGenerator(inner_gen)
+    else:
+        if not ollama_online and "Offline" in selected_gen_label:
+            st.sidebar.warning("⚠️ Ollama is offline or qwen3:8b not found. Falling back to Mock Extractive.")
+        gen = MockExtractiveGenerator()
+
+    # Retriever Selection
+    retriever_type = st.sidebar.selectbox(
+        "Retriever Architecture:",
+        ["BM25 (Pure Python / Lexical)", "Dense Embedding (Sublinear TF-IDF / Cosine)", "Hybrid (BM25 + Dense RRF)"],
+        index=0,
+    )
+    hybrid_alpha = 0.5
+    if "Hybrid" in retriever_type:
+        hybrid_alpha = st.sidebar.slider("Hybrid BM25 Weight (Alpha):", min_value=0.0, max_value=1.0, value=0.5, step=0.1)
+
+    st.sidebar.markdown("---")
+    st.sidebar.subheader("🔬 Fault Injection & Observability")
+
     regime = st.sidebar.radio(
         "Observability Regime:",
         ["regime_a", "regime_b"],
@@ -102,16 +172,21 @@ def main():
 
     fault = st.sidebar.selectbox(
         "Injected Fault Intervention:",
-        ["F0 (Clean Control)", "F1 (Evidence Unavailable)", "F2 (Evidence Ranked Out)", "F3 (Assembly Loss)", "F4 (Conflicting Evidence)", "F5 (Unsupported Generation)"],
+        [
+            "F0 (Clean Control)",
+            "F1 (Evidence Unavailable)",
+            "F2 (Evidence Ranked Out)",
+            "F3 (Assembly Loss)",
+            "F4 (Conflicting Evidence)",
+            "F5 (Unsupported Generation)",
+        ],
     )
     fault_code = fault.split()[0]
-
     top_k = st.sidebar.slider("Top-k Retrieval Cutoff:", min_value=1, max_value=5, value=3)
 
     # Simulation execution
     base_corpus = Corpus.from_qa_records([rec])
     builder = ContextBuilder(max_context_chars=3000)
-    gen = MockExtractiveGenerator()
 
     # Apply Intervention
     trial_corpus = base_corpus
@@ -137,8 +212,15 @@ def main():
         injected_valid = res_f2.trial_valid
         inv_reason = res_f2.invalid_reason
 
-    retriever = BM25Retriever(trial_corpus)
-    retrieved, candidate_scores = retriever.retrieve(rec.question, top_k=top_k, candidate_pool_size=20)
+    # Build active retriever
+    if "Dense" in retriever_type:
+        active_retriever = DenseRetriever(trial_corpus)
+    elif "Hybrid" in retriever_type:
+        active_retriever = HybridRetriever(trial_corpus, alpha=hybrid_alpha)
+    else:
+        active_retriever = BM25Retriever(trial_corpus)
+
+    retrieved, candidate_scores = active_retriever.retrieve(rec.question, top_k=top_k, candidate_pool_size=20)
 
     if regime == "regime_b":
         candidate_scores = None
@@ -161,14 +243,17 @@ def main():
     else:
         ctx, pre_ids, post_ids = builder.build_context(retrieved)
 
+    reasoning_trace = None
     if fault_code == "F5":
         f5_inj = F5UnsupportedGenerationInjector()
         override_ans, res_f5 = f5_inj.apply_to_generation(rec, retrieved, ctx)
         injected_applied = res_f5.injection_applied
         injected_valid = res_f5.trial_valid
         inv_reason = res_f5.invalid_reason
-
-    ans = override_ans or gen.generate(rec.question, ctx)
+        ans = override_ans
+        reasoning_trace = "F5 Intervention: Model answer overridden by synthetic unsupported generation fixture."
+    else:
+        ans, reasoning_trace = gen.generate_with_reasoning(rec.question, ctx)
 
     trace = DiagnosticTrace(
         trial_id="studio_interactive_trial",
@@ -182,7 +267,8 @@ def main():
         generator_context=ctx,
         answer=ans,
         latency_ms=12.5,
-        generator_model="MockExtractiveGenerator (Testing Infrastructure)",
+        generator_model=gen.get_model_name(),
+        generator_config=gen.get_config(),
     )
 
     eval_rec = EvaluatorRecord(
@@ -204,7 +290,18 @@ def main():
     with col1:
         st.subheader("📡 Unprivileged Diagnostic Trace (Observable)")
         st.info(f"**Query:** {rec.question}")
-        st.write(f"**Answer Output:** `{trace.answer}`")
+
+        st.markdown(f"**Active Generator:** `{gen.get_model_name()}` (Temp: `{temperature}`)")
+        st.write(f"**Answer Output:**")
+        st.code(trace.answer, language="markdown")
+
+        if reasoning_trace:
+            with st.expander("🧠 Qwen 3 8B Internal Chain-of-Thought (Reasoning Trace)", expanded=True):
+                st.markdown(
+                    "> [!NOTE]\n"
+                    "> This internal reasoning trace is emitted by local `qwen3:8b` via Ollama before producing the final synthesized answer."
+                )
+                st.caption(reasoning_trace)
 
         with st.expander("🔍 Top-k Retrieved Passages", expanded=True):
             for p in trace.retrieved_top_k:
@@ -215,7 +312,7 @@ def main():
             st.write(f"**Pre-Assembly Passage IDs:** `{trace.pre_assembly_passage_ids}`")
             st.write(f"**Post-Assembly Passage IDs:** `{trace.post_assembly_passage_ids}`")
             if len(trace.pre_assembly_passage_ids) > len(trace.post_assembly_passage_ids):
-                st.error("⚠️ Dropped Passages Detected in Transit!")
+                st.error("⚠️ Dropped Passages Detected in Transit (F3 Context Loss)!")
             else:
                 st.success("✅ Context Assembled Intact")
 
@@ -238,15 +335,41 @@ def main():
         diag_d3 = d3.diagnose(trace)
         diag_d4 = d4.diagnose(trace)
 
-        st.markdown("#### Diagnostic Attribution Comparison")
-        st.table([
+        comparison_rows = [
             {"Diagnostic Policy": "D1 Retrieval Rules", "Predicted Cause": diag_d1.predicted_cause, "Confidence": f"{diag_d1.confidence:.2f}"},
             {"Diagnostic Policy": "D2 Lexical Support", "Predicted Cause": diag_d2.predicted_cause, "Confidence": f"{diag_d2.confidence:.2f}"},
             {"Diagnostic Policy": "D3 NLI Model", "Predicted Cause": diag_d3.predicted_cause, "Confidence": f"{diag_d3.confidence:.2f}"},
             {"Diagnostic Policy": "D4 Combined Policy", "Predicted Cause": diag_d4.predicted_cause, "Confidence": f"{diag_d4.confidence:.2f}"},
-        ])
+        ]
+
+        # Optional D5 LLM Judge
+        diag_d5 = None
+        if ollama_online:
+            try:
+                d5 = D5LLMJudgeDiagnostic(
+                    model_name="qwen3:8b",
+                    cache_dir=".cache/llm_judge" if use_cache else None,
+                )
+                diag_d5 = d5.diagnose(trace)
+                comparison_rows.append(
+                    {
+                        "Diagnostic Policy": "D5 LLM Judge (Qwen 3 8B)",
+                        "Predicted Cause": diag_d5.predicted_cause,
+                        "Confidence": f"{diag_d5.confidence:.2f}",
+                    }
+                )
+            except Exception as e:
+                st.sidebar.error(f"D5 LLM Judge invocation error: {e}")
+
+        st.markdown("#### Diagnostic Attribution Comparison")
+        st.table(comparison_rows)
 
         st.markdown(f"**D4 Attribution Rationale:** _{diag_d4.evidence_rationale}_")
+
+        if diag_d5:
+            with st.expander("🤖 D5 LLM Judge Natural Language Attribution Rationale"):
+                st.write(diag_d5.evidence_rationale)
+                st.caption(f"Execution Latency: {diag_d5.runtime_ms:.1f}ms")
 
         st.subheader("🔐 Evaluator Reveal (Privileged Ground Truth)")
         is_match = (diag_d4.predicted_cause == eval_rec.injected_fault)
@@ -255,12 +378,19 @@ def main():
         st.write(f"**Adjudicated Valid:** `{eval_rec.trial_valid}`")
 
         if is_match:
-            st.success("🎯 Attribution Match: TRUE (Diagnoser recovered true fault without leakage)")
+            st.success("🎯 D4 Attribution Match: TRUE (Diagnoser recovered true fault without leakage)")
         else:
             if diag_d4.abstained:
-                st.warning("⚠️ Diagnoser Abstained (Ambiguous signature)")
+                st.warning("⚠️ D4 Diagnoser Abstained (Ambiguous signature)")
             else:
-                st.error("❌ Attribution Mismatch")
+                st.error("❌ D4 Attribution Mismatch")
+
+        if diag_d5:
+            d5_match = (diag_d5.predicted_cause == eval_rec.injected_fault)
+            if d5_match:
+                st.success("🎯 D5 LLM Judge Match: TRUE (Qwen accurately identified the failure)")
+            else:
+                st.info(f"ℹ️ D5 LLM Judge Predicted: `{diag_d5.predicted_cause}`")
 
 
 if __name__ == "__main__":

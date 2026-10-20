@@ -19,6 +19,10 @@ class BaseGenerator(ABC):
     def generate(self, question: str, context: str) -> str:
         """Produce an answer string given a question and assembled context."""
 
+    def generate_with_reasoning(self, question: str, context: str) -> tuple[str, str | None]:
+        """Produce an answer string and an optional reasoning trace (chain of thought)."""
+        return self.generate(question, context), None
+
     @abstractmethod
     def get_model_name(self) -> str:
         """Return the unique model or adapter name."""
@@ -102,9 +106,9 @@ class CachedGenerator(BaseGenerator):
         payload = f"{model_name}:::{config_canonical}:::{question.strip()}:::{context.strip()}".encode()
         return hashlib.sha256(payload).hexdigest()
 
-    def generate(self, question: str, context: str) -> str:
+    def generate_with_reasoning(self, question: str, context: str) -> tuple[str, str | None]:
         if not self.cache_dir:
-            return self.inner_generator.generate(question, context)
+            return self.inner_generator.generate_with_reasoning(question, context)
 
         cache_key = self.compute_cache_key(question, context)
         cache_file = self.cache_dir / f"{cache_key}.json"
@@ -113,12 +117,12 @@ class CachedGenerator(BaseGenerator):
             try:
                 with open(cache_file, "r", encoding="utf-8") as f:
                     data = json.load(f)
-                    return data["answer"]
+                    return data["answer"], data.get("reasoning")
             except (json.JSONDecodeError, KeyError):
                 pass
 
         # Cache miss: execute generation and write cache
-        answer = self.inner_generator.generate(question, context)
+        answer, reasoning = self.inner_generator.generate_with_reasoning(question, context)
         with open(cache_file, "w", encoding="utf-8") as f:
             json.dump(
                 {
@@ -128,11 +132,16 @@ class CachedGenerator(BaseGenerator):
                     "question": question,
                     "context_hash": hashlib.sha256(context.encode("utf-8")).hexdigest(),
                     "answer": answer,
+                    "reasoning": reasoning,
                 },
                 f,
                 indent=2,
             )
 
+        return answer, reasoning
+
+    def generate(self, question: str, context: str) -> str:
+        answer, _ = self.generate_with_reasoning(question, context)
         return answer
 
 
@@ -241,7 +250,7 @@ class OpenAICompatibleGenerator(BaseGenerator):
             "max_tokens": self.max_tokens,
         }
 
-    def generate(self, question: str, context: str) -> str:
+    def generate_with_reasoning(self, question: str, context: str) -> tuple[str, str | None]:
         endpoint = f"{self.api_base}/chat/completions"
         prompt = (
             f"Context:\n{context}\n\n"
@@ -272,14 +281,29 @@ class OpenAICompatibleGenerator(BaseGenerator):
                 resp_json = json.loads(resp.read().decode("utf-8"))
                 choice_msg = resp_json["choices"][0]["message"]
                 content = choice_msg.get("content", "").strip()
-                if not content and "reasoning" in choice_msg:
-                    content = choice_msg["reasoning"].strip()
-                return content
+                reasoning = choice_msg.get("reasoning", None)
+                if reasoning:
+                    reasoning = reasoning.strip()
+
+                # If content contains <think> tags, parse them
+                if not reasoning and "<think>" in content and "</think>" in content:
+                    parts = content.split("</think>")
+                    reasoning = parts[0].replace("<think>", "").strip()
+                    content = parts[1].strip()
+
+                if not content and reasoning:
+                    content = reasoning
+
+                return content, reasoning
         except urllib.error.URLError as e:
             raise ConnectionError(
                 f"Failed to connect to OpenAI-compatible endpoint at {endpoint}: {e}. "
                 "Ensure local model server (e.g. Ollama) is running."
             )
+
+    def generate(self, question: str, context: str) -> str:
+        content, _ = self.generate_with_reasoning(question, context)
+        return content
 
 
 class OllamaGenerator(OpenAICompatibleGenerator):
