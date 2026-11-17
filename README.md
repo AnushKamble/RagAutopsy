@@ -2,6 +2,7 @@
 
 **Fault-Injection-Validated Failure Attribution for RAG Systems**
 
+[![CI](https://github.com/AnushKamble/RagAutopsy/actions/workflows/ci.yml/badge.svg)](https://github.com/AnushKamble/RagAutopsy/actions/workflows/ci.yml)
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3110/)
 [![Tests: 140 Passed](https://img.shields.io/badge/tests-140%20passed-brightgreen.svg)](tests/)
 [![Coverage: 89%](https://img.shields.io/badge/coverage-89%25-brightgreen.svg)](tests/)
