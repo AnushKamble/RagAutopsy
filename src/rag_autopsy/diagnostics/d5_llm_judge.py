@@ -14,7 +14,7 @@ from rag_autopsy.diagnostics.base import BaseDiagnostic
 
 class D5LLMJudgeDiagnostic(BaseDiagnostic):
     """Diagnostic that prompts a local or remote LLM (e.g. Qwen 3 8B via Ollama) to attribute RAG failures.
-    
+
     Operates strictly on unprivileged `DiagnosticTrace` fields, presenting the same observable
     evidence as D1-D4 (query, top-k passages, ranks, BM25 scores, pre/post assembly IDs, context, answer).
     Caches diagnoses by trace content hash to prevent redundant LLM inferences.

@@ -88,7 +88,7 @@ To evaluate whether a diagnostic can accurately identify failures, we must creat
 ```mermaid
 flowchart TD
     Q["Query: HotpotQA Sample"] --> Ret["Retriever (BM25)"]
-    
+
     subgraph Injections ["Controlled Intervention Stages"]
         F1["F1: Remove evidence from Corpus"] -.-> Ret
         F2["F2: Push evidence below top-k"] -.-> Ret
@@ -98,7 +98,7 @@ flowchart TD
         F4["F4: Inject contradictory distractor"] -.-> CA
         F5["F5: Corrupt generator output"] -.-> Gen
     end
-    
+
     Gen --> Ans["Final Output Answer"]
 ```
 

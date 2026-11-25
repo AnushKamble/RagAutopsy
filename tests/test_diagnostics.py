@@ -152,7 +152,7 @@ def test_d4_combined_policy_precedence() -> None:
 
 def test_d1_misdiagnosis_failure_case() -> None:
     """Documented blind spot for D1: Naturally low-scoring query misdiagnosed as F1.
-    
+
     A clean trial (F0) with low BM25 score (e.g. domain vocabulary with low inverse document frequency)
     triggers D1's low_score_threshold (< 2.0), causing D1 to falsely attribute F1 (Evidence Unavailable).
     """
@@ -178,7 +178,7 @@ def test_d1_misdiagnosis_failure_case() -> None:
 
 def test_d2_misdiagnosis_failure_case_paraphrase() -> None:
     """Documented blind spot for D2: Valid abstractive paraphrase misdiagnosed as F1.
-    
+
     A clean trial (F0) where the generator answers using synonyms and abstraction
     (e.g., 'physician' for 'medical doctor', 'perished' for 'died').
     Because lexical keyword overlap falls below min_overlap_ratio (0.3), D2 falsely diagnoses F1.
@@ -204,7 +204,7 @@ def test_d2_misdiagnosis_failure_case_paraphrase() -> None:
 
 def test_d2_misdiagnosis_failure_case_hallucination_entity_copy() -> None:
     """Documented blind spot for D2: Factually false hallucination copying context entities misdiagnosed as F0.
-    
+
     A hallucinated response (F5) that repeats the subject entity but fabricates the predicate
     (e.g., 'Albert Einstein measured the speed of light in 1905').
     Because words like 'Albert', 'Einstein', 'speed', 'light' match the context, overlap >= 0.3

@@ -36,7 +36,7 @@ class F5UnsupportedGenerationInjector(BaseFaultInjector):
         assembled_context: str,
     ) -> tuple[str, InjectionResult]:
         """Verify evidence is present in context, and generate an unsupported answer.
-        
+
         Returns:
             Tuple of:
             - unsupported_answer: string claim not supported by assembled_context

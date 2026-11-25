@@ -11,7 +11,7 @@ def generate_interactive_html_report(
     output_path: str = "results/report.html",
 ) -> str:
     """Generate a zero-dependency, self-contained interactive HTML evaluation dashboard.
-    
+
     Includes metric cards, confusion matrices, bootstrap intervals, and an interactive
     per-trial inspector with zero data leakage.
     """
@@ -250,7 +250,7 @@ def generate_interactive_html_report(
 
         function filterTrials() {{
             const query = document.getElementById("searchInput").value.toLowerCase();
-            const filtered = trials.filter(t => 
+            const filtered = trials.filter(t =>
                 t.question.toLowerCase().includes(query) ||
                 t.injected_fault.toLowerCase().includes(query) ||
                 t.d4_prediction.toLowerCase().includes(query) ||

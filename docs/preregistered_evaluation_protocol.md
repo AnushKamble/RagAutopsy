@@ -1,11 +1,11 @@
 # RAG-Autopsy Preregistered & Frozen Evaluation Protocol
 
-**Protocol Version:** 1.0.0  
-**Registration Date:** 2026-10-18T23:30:00Z  
-**Status:** FROZEN  
-**Project Identifier:** AI-01 (RAG-Autopsy: Fault-Injection-Validated Failure Attribution for RAG Systems)  
-**Configuration File:** [`configs/frozen_protocol_v1.yaml`](../configs/frozen_protocol_v1.yaml)  
-**Frozen Calibration Parameters:** [`configs/frozen_calibration_params.yaml`](../configs/frozen_calibration_params.yaml)  
+**Protocol Version:** 1.0.0
+**Registration Date:** 2026-10-18T23:30:00Z
+**Status:** FROZEN
+**Project Identifier:** AI-01 (RAG-Autopsy: Fault-Injection-Validated Failure Attribution for RAG Systems)
+**Configuration File:** [`configs/frozen_protocol_v1.yaml`](../configs/frozen_protocol_v1.yaml)
+**Frozen Calibration Parameters:** [`configs/frozen_calibration_params.yaml`](../configs/frozen_calibration_params.yaml)
 
 ---
 
@@ -118,7 +118,7 @@ Any diagnostic attempting to ingest an [`EvaluatorRecord`](../src/rag_autopsy/co
 
 ## 6. Threshold Selection & Calibration Protocol
 
-All diagnostic thresholds were tuned on the **20% Calibration Partition** ($N=20$ questions, $100$ trials) using grid search maximizing balanced accuracy on non-abstained trials. 
+All diagnostic thresholds were tuned on the **20% Calibration Partition** ($N=20$ questions, $100$ trials) using grid search maximizing balanced accuracy on non-abstained trials.
 
 **Frozen Parameters ([`configs/frozen_calibration_params.yaml`](../configs/frozen_calibration_params.yaml)):**
 - $\tau_{\text{low}} = 2.0$ (`low_score_threshold` for $D_1$)

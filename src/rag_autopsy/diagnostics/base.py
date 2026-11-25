@@ -7,7 +7,7 @@ from rag_autopsy.core.schemas import FORBIDDEN_LEAKAGE_KEYS, Diagnosis, Diagnost
 
 class BaseDiagnostic(ABC):
     """Abstract base class for all diagnostic methods.
-    
+
     Guarantees that methods can only receive and inspect `DiagnosticTrace`.
     Rejects convenience wrappers, combined records, and objects smuggling privileged fields.
     """

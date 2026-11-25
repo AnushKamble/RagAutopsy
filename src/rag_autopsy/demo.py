@@ -29,12 +29,12 @@ def run_live_demo(
     console: Console | None = None,
 ) -> bool:
     """Execute interactive or automated walkthrough of RAG-Autopsy fault attribution.
-    
+
     Args:
         data_path: Optional path to QA records file.
         interactive: If True, prompt user between demonstration steps.
         console: Optional Rich console instance.
-        
+
     Returns:
         True if demonstration ran to completion.
     """

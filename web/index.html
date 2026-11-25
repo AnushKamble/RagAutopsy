@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG-Autopsy Benchmark Report (REGIME_A)</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            margin: 0;
+            padding: 30px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+        .header h1 { margin: 0 0 8px 0; font-size: 26px; }
+        .header p { margin: 0; opacity: 0.85; font-size: 15px; }
+        .badge {
+            display: inline-block;
+            background: #0284c7;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .card-label { font-size: 12px; font-weight: 600; text-transform: uppercase; color: #64748b; margin-bottom: 6px; }
+        .card-val { font-size: 24px; font-weight: 800; color: #0f172a; }
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+        .section h2 { margin: 0 0 15px 0; font-size: 18px; color: #1e293b; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px 14px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        th {
+            background-color: #f8fafc;
+            color: #475569;
+            font-weight: 700;
+        }
+        .search-box {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .trial-row { cursor: pointer; }
+        .trial-row:hover { background-color: #f1f5f9; }
+        .match-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .match-true { background: #dcfce7; color: #15803d; }
+        .match-false { background: #fee2e2; color: #b91c1c; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>RAG-Autopsy Benchmark Report</h1>
+            <p>Fault-Injection-Validated Failure Attribution for Retrieval-Augmented Generation</p>
+            <span class="badge">REGIME: REGIME_A</span>
+            <span class="badge" style="background: #10b981;">SPLIT: TEST</span>
+            <span class="badge" style="background: #8b5cf6;">LEAKAGE BOUNDARY: STRICT ZERO-LEAKAGE</span>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-label">Total Attempted Trials</div>
+                <div class="card-val">120</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Adjudicated Valid Trials</div>
+                <div class="card-val" style="color: #10b981;">114</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Validity Effectiveness Rate</div>
+                <div class="card-val">95.0%</div>
+            </div>
+            <div class="card">
+                <div class="card-label">D4 Combined Policy F1</div>
+                <div class="card-val" style="color: #0284c7;">0.718</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Benchmark Attribution Performance</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Diagnostic Policy</th>
+                        <th>Macro-F1 (95% Clustered CI)</th>
+                        <th>Balanced Accuracy</th>
+                        <th>Coverage</th>
+                        <th>Conditional Accuracy</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+        <tr>
+            <td style="font-weight: 600; color: #1e293b;">baseline_majority_cause</td>
+            <td style="font-weight: 700; color: #0284c7;">0.050 <span style="font-size: 0.85em; color: #64748b;">[0.048, 0.053]</span></td>
+            <td>0.167</td>
+            <td>100.0%</td>
+            <td>17.5%</td>
+        </tr>
+
+        <tr>
+            <td style="font-weight: 600; color: #1e293b;">baseline_random</td>
+            <td style="font-weight: 700; color: #0284c7;">0.169 <span style="font-size: 0.85em; color: #64748b;">[0.099, 0.264]</span></td>
+            <td>0.166</td>
+            <td>100.0%</td>
+            <td>16.7%</td>
+        </tr>
+
+        <tr>
+            <td style="font-weight: 600; color: #1e293b;">d1_retrieval_rules</td>
+            <td style="font-weight: 700; color: #0284c7;">0.379 <span style="font-size: 0.85em; color: #64748b;">[0.357, 0.403]</span></td>
+            <td>0.483</td>
+            <td>100.0%</td>
+            <td>49.1%</td>
+        </tr>
+
+        <tr>
+            <td style="font-weight: 600; color: #1e293b;">d2_lexical_support</td>
+            <td style="font-weight: 700; color: #0284c7;">0.385 <span style="font-size: 0.85em; color: #64748b;">[0.349, 0.416]</span></td>
+            <td>0.474</td>
+            <td>100.0%</td>
+            <td>46.5%</td>
+        </tr>
+
+        <tr>
+            <td style="font-weight: 600; color: #1e293b;">d4_combined_policy</td>
+            <td style="font-weight: 700; color: #0284c7;">0.718 <span style="font-size: 0.85em; color: #64748b;">[0.663, 0.761]</span></td>
+            <td>0.761</td>
+            <td>97.4%</td>
+            <td>77.5%</td>
+        </tr>
+
+        <tr>
+            <td style="font-weight: 600; color: #1e293b;">d3_nli_support</td>
+            <td style="font-weight: 700; color: #0284c7;">0.374 <span style="font-size: 0.85em; color: #64748b;">[0.328, 0.427]</span></td>
+            <td>0.447</td>
+            <td>100.0%</td>
+            <td>43.9%</td>
+        </tr>
+
+        <tr>
+            <td style="font-weight: 600; color: #1e293b;">d4_learned_decision_tree</td>
+            <td style="font-weight: 700; color: #0284c7;">0.765 <span style="font-size: 0.85em; color: #64748b;">[0.745, 0.778]</span></td>
+            <td>0.825</td>
+            <td>100.0%</td>
+            <td>81.6%</td>
+        </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Interactive Trial Inspector (Unprivileged Traces vs Evaluator Adjudication)</h2>
+            <input type="text" id="searchInput" class="search-box" placeholder="Filter trials by query, fault ID, or prediction..." onkeyup="filterTrials()">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Trial ID</th>
+                        <th>Question</th>
+                        <th>Injected Fault</th>
+                        <th>D4 Prediction</th>
+                        <th>Attribution Match</th>
+                        <th>Context Size</th>
+                    </tr>
+                </thead>
+                <tbody id="trialsTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const trials = [{"trial_id": "trial_000001", "question_id": "5ae67dba55429908198fa5f0", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "It is a suburb of Memphis, Tennessee, and a principal city in the Memphis metropolitan area.", "context_len": 0}, {"trial_id": "trial_000002", "question_id": "5ae67dba55429908198fa5f0", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "From 1990 to 2010 Olive Branch was the fastest growing city in the United States, with a growth rate of 838%.", "context_len": 0}, {"trial_id": "trial_000003", "question_id": "5ae67dba55429908198fa5f0", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nDistractor Overview 2 regarding The Memphis Hustle a\nThis document contains background discussion on the memphis hustle are based in a suburb of a city with a population of what in 2", "context_len": 0}, {"trial_id": "trial_000004", "question_id": "5ae67dba55429908198fa5f0", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "From 1990 to 2010 Olive Branch was the fastest growing city in the United States, with a growth rate of 838%.", "context_len": 0}, {"trial_id": "trial_000005", "question_id": "5ae67dba55429908198fa5f0", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 4]:\nContradicting Report on Memphis Hustle\nOfficial updated records contradict earlier reports: The true answer regarding 'The Memphis Hustle are based in a suburb of a city with a popul", "context_len": 0}, {"trial_id": "trial_000006", "question_id": "5ae67dba55429908198fa5f0", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The official documented figure is 65,999.", "context_len": 0}, {"trial_id": "trial_000007", "question_id": "5a88658955429938390d3f47", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "Rostker, Director of the Selective Service System.)  In a 6-3 decision, the Supreme Court held that this gender distinction was not a violation of the equal protection component of the due process cla", "context_len": 0}, {"trial_id": "trial_000008", "question_id": "5a88658955429938390d3f47", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "It was coined in , and has now entered political discourse as a way of measuring whether the government and society at large have kept to their obligations to support members of the armed forces.", "context_len": 0}, {"trial_id": "trial_000009", "question_id": "5a88658955429938390d3f47", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "Goldberg \nThis document contains background discussion on rostker v goldberg held that the practice of what way of filling armed forces vacancies was consitutional rostker v goldberg held that the pra", "context_len": 0}, {"trial_id": "trial_000010", "question_id": "5a88658955429938390d3f47", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "It was coined in , and has now entered political discourse as a way of measuring whether the government and society at large have kept to their obligations to support members of the armed forces.", "context_len": 0}, {"trial_id": "trial_000011", "question_id": "5a88658955429938390d3f47", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "Goldberg held that the practice of what way of filling armed forces vacancies was consitutional?' is emphatically NOT 'Conscription'.", "context_len": 0}, {"trial_id": "trial_000012", "question_id": "5a88658955429938390d3f47", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The documented subject is Conscription (disputed by Alternative Archive Records).", "context_len": 0}, {"trial_id": "trial_000013", "question_id": "5a85b2d95542997b5ce40028", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 3]:\nMethod Man\nClifford Smith (born April 1, 1971), better known by his stage name Method Man, is an American rapper, record producer, and actor.", "context_len": 0}, {"trial_id": "trial_000014", "question_id": "5a85b2d95542997b5ce40028", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nELDee\nLanre Dabiri (born May 23, 1977), better known by his stage name Eldee, stylized as eLDee, is a former Nigerian-American rapper, singer, and record producer but now an IT Consu", "context_len": 0}, {"trial_id": "trial_000015", "question_id": "5a85b2d95542997b5ce40028", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nDistractor Overview 2 regarding Who was known by his\nThis document contains background discussion on who was known by his stage name aladin and helped organizations improve their per", "context_len": 0}, {"trial_id": "trial_000016", "question_id": "5a85b2d95542997b5ce40028", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "He is known as a member of the East Coast hip hop collective Wu-Tang Clan.", "context_len": 0}, {"trial_id": "trial_000017", "question_id": "5a85b2d95542997b5ce40028", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 4]:\nContradicting Report on Eenasul Fateh\nOfficial updated records contradict earlier reports: The true answer regarding 'Who was known by his stage name Aladin and helped organizations ", "context_len": 0}, {"trial_id": "trial_000018", "question_id": "5a85b2d95542997b5ce40028", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The documented subject is Eenasul Fateh (disputed by Alternative Archive Records).", "context_len": 0}, {"trial_id": "trial_000019", "question_id": "5a79311755429970f5fffe67", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nThe Kindaichi Case Files\nThe Kindaichi Case Files (Japanese: \u91d1\u7530\u4e00\u5c11\u5e74\u306e\u4e8b\u4ef6\u7c3f , Hepburn: Kindaichi Sh\u014dnen no Jikenbo ) is a Japanese mystery manga series based on the crime solving adventur", "context_len": 0}, {"trial_id": "trial_000020", "question_id": "5a79311755429970f5fffe67", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "\"I'm Sakamoto, You Know?\")  is a Japanese manga series written and illustrated by Nami Sano.", "context_len": 0}, {"trial_id": "trial_000021", "question_id": "5a79311755429970f5fffe67", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nDistractor Overview 2 regarding A Japanese manga ser\nThis document contains background discussion on a japanese manga series based on a 16 year old high school student ichitaka seto ", "context_len": 0}, {"trial_id": "trial_000022", "question_id": "5a79311755429970f5fffe67", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "\"I'm Sakamoto, You Know?\")  is a Japanese manga series written and illustrated by Nami Sano.", "context_len": 0}, {"trial_id": "trial_000023", "question_id": "5a79311755429970f5fffe67", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 4]:\nContradicting Report on Masakazu Katsura\nOfficial updated records contradict earlier reports: The true answer regarding 'A Japanese manga series based on a 16 year old high school st", "context_len": 0}, {"trial_id": "trial_000024", "question_id": "5a79311755429970f5fffe67", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The official documented figure is 1979.", "context_len": 0}, {"trial_id": "trial_000025", "question_id": "5a74c85055429916b0164218", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nArild Nyquist\nArild Nyquist (6 March 1937 \u2013 21 December 2004) was a Norwegian novelist, poet, writer of children's books and musician.", "context_len": 0}, {"trial_id": "trial_000026", "question_id": "5a74c85055429916b0164218", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nArild Nyquist\nArild Nyquist (6 March 1937 \u2013 21 December 2004) was a Norwegian novelist, poet, writer of children's books and musician.", "context_len": 0}, {"trial_id": "trial_000027", "question_id": "5a74c85055429916b0164218", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nDistractor Overview 2 regarding Born on 6 March 1937\nThis document contains background discussion on born on 6 march 1937 this man was also a citizen of the united kingdom born on 6 ", "context_len": 0}, {"trial_id": "trial_000031", "question_id": "5a74106b55429979e288289e", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "He worked as a Software Engineer for Facebook.", "context_len": 0}, {"trial_id": "trial_000032", "question_id": "5a74106b55429979e288289e", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "He worked as a Software Engineer for Facebook.", "context_len": 0}, {"trial_id": "trial_000033", "question_id": "5a74106b55429979e288289e", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nDistractor Overview 2 regarding Where is the company\nThis document contains background discussion on where is the company that sachin warrier worked for as a software engineer headqu", "context_len": 0}, {"trial_id": "trial_000034", "question_id": "5a74106b55429979e288289e", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "He worked as a Software Engineer for Facebook.", "context_len": 0}, {"trial_id": "trial_000035", "question_id": "5a74106b55429979e288289e", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 4]:\nContradicting Report on Sachin Warrier\nOfficial updated records contradict earlier reports: The true answer regarding 'Where is the company that Sachin Warrier worked for as a softwa", "context_len": 0}, {"trial_id": "trial_000036", "question_id": "5a74106b55429979e288289e", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The documented subject is Mumbai (disputed by Alternative Archive Records).", "context_len": 0}, {"trial_id": "trial_000037", "question_id": "5a77cb335542997042120b3a", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nJohn John Florence\nJohn \"John\" Alexander Florence (born 18 October 1992) is an American professional surfer.", "context_len": 0}, {"trial_id": "trial_000038", "question_id": "5a77cb335542997042120b3a", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "Over the course of his professional career, he won three world titles (2002, 2003, 2004), three Quiksilver Pro France titles (2003, 2004, 2005), two Rip Curl Pro Search titles (2006 and 2007) and 20 e", "context_len": 0}, {"trial_id": "trial_000039", "question_id": "5a77cb335542997042120b3a", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nDistractor Overview 2 regarding What American profes\nThis document contains background discussion on what american professional hawaiian surfer born 18 october 1992 won the rip curl ", "context_len": 0}, {"trial_id": "trial_000040", "question_id": "5a77cb335542997042120b3a", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "Over the course of his professional career, he won three world titles (2002, 2003, 2004), three Quiksilver Pro France titles (2003, 2004, 2005), two Rip Curl Pro Search titles (2006 and 2007) and 20 e", "context_len": 0}, {"trial_id": "trial_000041", "question_id": "5a77cb335542997042120b3a", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 4]:\nContradicting Report on MEO Rip Curl Pro Portugal\nOfficial updated records contradict earlier reports: The true answer regarding 'What American professional Hawaiian surfer born 18 O", "context_len": 0}, {"trial_id": "trial_000042", "question_id": "5a77cb335542997042120b3a", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The documented subject is John John Florence (disputed by Alternative Archive Records).", "context_len": 0}, {"trial_id": "trial_000043", "question_id": "5a84c4135542994c784dda31", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "It is located in Dashiqiao, in the Yingkou prefecture level city, in the Liaoning province of China.", "context_len": 0}, {"trial_id": "trial_000044", "question_id": "5a84c4135542994c784dda31", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "It is located in Dashiqiao, in the Yingkou prefecture level city, in the Liaoning province of China.", "context_len": 0}, {"trial_id": "trial_000045", "question_id": "5a84c4135542994c784dda31", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nDistractor Overview 2 regarding Are Yingkou and Fudi\nThis document contains background discussion on are yingkou and fuding the same level of city are yingkou and fuding the same lev", "context_len": 0}, {"trial_id": "trial_000046", "question_id": "5a84c4135542994c784dda31", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "It is located in Dashiqiao, in the Yingkou prefecture level city, in the Liaoning province of China.", "context_len": 0}, {"trial_id": "trial_000047", "question_id": "5a84c4135542994c784dda31", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 4]:\nContradicting Report on Yingkou\nOfficial updated records contradict earlier reports: The true answer regarding 'Are Yingkou and Fuding the same level of city?' is emphatically NOT 'n", "context_len": 0}, {"trial_id": "trial_000048", "question_id": "5a84c4135542994c784dda31", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The documented subject is no (disputed by Alternative Archive Records).", "context_len": 0}, {"trial_id": "trial_000049", "question_id": "5a85eed75542996432c5713b", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "Its members are descendants of the 3,000 Seminoles who were forcibly removed from Florida to Indian Territory, along with 800 Black Seminoles, after the Second Seminole War.", "context_len": 0}, {"trial_id": "trial_000050", "question_id": "5a85eed75542996432c5713b", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "Its members are descendants of the 3,000 Seminoles who were forcibly removed from Florida to Indian Territory, along with 800 Black Seminoles, after the Second Seminole War.", "context_len": 0}, {"trial_id": "trial_000051", "question_id": "5a85eed75542996432c5713b", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nDistractor Overview 2 regarding Where did the descen\nThis document contains background discussion on where did the descendants of the group of black indians associated with the semin", "context_len": 0}, {"trial_id": "trial_000052", "question_id": "5a85eed75542996432c5713b", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "Its members are descendants of the 3,000 Seminoles who were forcibly removed from Florida to Indian Territory, along with 800 Black Seminoles, after the Second Seminole War.", "context_len": 0}, {"trial_id": "trial_000053", "question_id": "5a85eed75542996432c5713b", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 4]:\nContradicting Report on Mascogos\nOfficial updated records contradict earlier reports: The true answer regarding 'Where did the descendants of the group of black Indians associated wi", "context_len": 0}, {"trial_id": "trial_000054", "question_id": "5a85eed75542996432c5713b", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The documented subject is Coahuila, Mexico (disputed by Alternative Archive Records).", "context_len": 0}, {"trial_id": "trial_000055", "question_id": "5abbf698554299114383a0b5", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 3]:\nTupolev Tu-12\nThe Tupolev Tu-12 (development designation Tu-77) was an experimental Soviet jet-powered medium bomber developed from the successful piston-engined Tupolev Tu-2 bomber ", "context_len": 0}, {"trial_id": "trial_000056", "question_id": "5abbf698554299114383a0b5", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 3]:\nSouth West Pacific Area (command)\nSouth West Pacific Area (SWPA) was the name given to the Allied supreme military command in the South West Pacific Theatre of World War II.", "context_len": 0}, {"trial_id": "trial_000057", "question_id": "5abbf698554299114383a0b5", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nDistractor Overview 2 regarding Which British first-\nThis document contains background discussion on which british first generation jet powered medium bomber was used in the south we", "context_len": 0}, {"trial_id": "trial_000058", "question_id": "5abbf698554299114383a0b5", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 3]:\nTupolev Tu-12\nThe Tupolev Tu-12 (development designation Tu-77) was an experimental Soviet jet-powered medium bomber developed from the successful piston-engined Tupolev Tu-2 bomber ", "context_len": 0}, {"trial_id": "trial_000059", "question_id": "5abbf698554299114383a0b5", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "2 Squadron RAAF\nOfficial updated records contradict earlier reports: The true answer regarding 'Which British first-generation jet-powered medium bomber was used in the South West Pacific theatre of W", "context_len": 0}, {"trial_id": "trial_000060", "question_id": "5abbf698554299114383a0b5", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The documented subject is English Electric Canberra (disputed by Alternative Archive Records).", "context_len": 0}, {"trial_id": "trial_000061", "question_id": "5ae7e1fc55429952e35ea9cc", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nKoningsdag\nKoningsdag (] ) or King's Day is a national holiday in the Kingdom of the Netherlands.", "context_len": 0}, {"trial_id": "trial_000062", "question_id": "5ae7e1fc55429952e35ea9cc", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "They wear caseras because that is what the people of the mountain wear and the holiday used to celebrate the peasants who sold their goods in town and came on Santo Tomas to pay rent to landlords in t", "context_len": 0}, {"trial_id": "trial_000063", "question_id": "5ae7e1fc55429952e35ea9cc", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nDistractor Overview 2 regarding What color clothing \nThis document contains background discussion on what color clothing do people of the netherlands wear during oranjegekte or to ce", "context_len": 0}, {"trial_id": "trial_000064", "question_id": "5ae7e1fc55429952e35ea9cc", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "It has since been renamed King's Day or \"Koningsdag\" to honor the birthday of King Willem-Alexander.", "context_len": 0}, {"trial_id": "trial_000065", "question_id": "5ae7e1fc55429952e35ea9cc", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 4]:\nContradicting Report on Oranjegekte\nOfficial updated records contradict earlier reports: The true answer regarding 'What color clothing do people of the Netherlands wear during Oranj", "context_len": 0}, {"trial_id": "trial_000066", "question_id": "5ae7e1fc55429952e35ea9cc", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The documented subject is orange (disputed by Alternative Archive Records).", "context_len": 0}, {"trial_id": "trial_000067", "question_id": "5a8574945542997b5ce3fffb", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nGimme Shelter (1970 film)\nGimme Shelter is a 1970 documentary film directed by Albert and David Maysles and Charlotte Zwerin chronicling the last weeks of The Rolling Stones' 1969 US", "context_len": 0}, {"trial_id": "trial_000068", "question_id": "5a8574945542997b5ce3fffb", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The album, whose genre is described a psych-country, features audio samples of former Stones tour manager Sam Cutler, taken from the 1970 documentary film \"Gimme Shelter\".", "context_len": 0}, {"trial_id": "trial_000069", "question_id": "5a8574945542997b5ce3fffb", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nDistractor Overview 2 regarding Which film was Oscar\nThis document contains background discussion on which film was oscar nominated lalee s kin the legacy of cotton or gimme shelter ", "context_len": 0}, {"trial_id": "trial_000070", "question_id": "5a8574945542997b5ce3fffb", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The album, whose genre is described a psych-country, features audio samples of former Stones tour manager Sam Cutler, taken from the 1970 documentary film \"Gimme Shelter\".", "context_len": 0}, {"trial_id": "trial_000071", "question_id": "5a8574945542997b5ce3fffb", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 4]:\nContradicting Report on LaLee's Kin: The Legacy of Cotton\nOfficial updated records contradict earlier reports: The true answer regarding 'Which film was Oscar nominated, LaLee's Kin:", "context_len": 0}, {"trial_id": "trial_000072", "question_id": "5a8574945542997b5ce3fffb", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The subject was reported to be completely unrelated to LaLee's Kin: The Leg.", "context_len": 0}, {"trial_id": "trial_000073", "question_id": "5ac547525542993e66e822a3", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "He received a Doctor of Veterinary Medicine(DVM) from Ahmadu Bello University, Zaria as well as a Doctorate degree, Ph.D in virology from the University of Ibadan, Oyo State, Nigeria where he was appo", "context_len": 0}, {"trial_id": "trial_000074", "question_id": "5ac547525542993e66e822a3", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "He received a Doctor of Veterinary Medicine(DVM) from Ahmadu Bello University, Zaria as well as a Doctorate degree, Ph.D in virology from the University of Ibadan, Oyo State, Nigeria where he was appo", "context_len": 0}, {"trial_id": "trial_000075", "question_id": "5ac547525542993e66e822a3", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nDistractor Overview 1 regarding In 2017, what was 3/\nThis document contains background discussion on in 2017 what was 3 4th of the organization that also has a center for veterinary ", "context_len": 0}, {"trial_id": "trial_000079", "question_id": "5a7a455c5542994f819ef1a7", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nGeorge Archainbaud\nGeorge Archainbaud (May 7, 1890 \u2013 February 20, 1959) was a French-born American film and television director.", "context_len": 0}, {"trial_id": "trial_000080", "question_id": "5a7a455c5542994f819ef1a7", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nCampus Confessions\nCampus Confessions is a 1938 American film directed by George Archainbaud, featuring Betty Grable in her first starring role, and American basketball player Hank L", "context_len": 0}, {"trial_id": "trial_000081", "question_id": "5a7a455c5542994f819ef1a7", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nDistractor Overview 2 regarding Who died first, Geor\nThis document contains background discussion on who died first george archainbaud or ralph murphy who died first george archainba", "context_len": 0}, {"trial_id": "trial_000082", "question_id": "5a7a455c5542994f819ef1a7", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "It starred Bebe Daniels and Ben Lyon, who were making their first on-screen appearance together.", "context_len": 0}, {"trial_id": "trial_000083", "question_id": "5a7a455c5542994f819ef1a7", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 4]:\nContradicting Report on George Archainbaud\nOfficial updated records contradict earlier reports: The true answer regarding 'Who died first, George Archainbaud or Ralph Murphy?' is emp", "context_len": 0}, {"trial_id": "trial_000084", "question_id": "5a7a455c5542994f819ef1a7", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The documented subject is George Archainbaud (disputed by Alternative Archive Records).", "context_len": 0}, {"trial_id": "trial_000085", "question_id": "5ae37c765542992f92d822d4", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nRomeo + Juliet\nWilliam Shakespeare's Romeo + Juliet (shortened to Romeo + Juliet) is a 1996 American romantic drama film directed, co-produced, and co-written by Baz Luhrmann, co-pro", "context_len": 0}, {"trial_id": "trial_000086", "question_id": "5ae37c765542992f92d822d4", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nThe Tragedy of Romeo and Juliet (film)\nThe Tragedy of Romeo and Juliet is a 1982 film adaptation of William Shakespeare's \"Romeo and Juliet\", directed by William Woodman and starring", "context_len": 0}, {"trial_id": "trial_000087", "question_id": "5ae37c765542992f92d822d4", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nDistractor Overview 2 regarding What was the name of\nThis document contains background discussion on what was the name of the 1996 loose adaptation of william shakespeare s romeo jul", "context_len": 0}, {"trial_id": "trial_000088", "question_id": "5ae37c765542992f92d822d4", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 3]:\nThe Tragedy of Romeo and Juliet (film)\nThe Tragedy of Romeo and Juliet is a 1982 film adaptation of William Shakespeare's \"Romeo and Juliet\", directed by William Woodman and starring", "context_len": 0}, {"trial_id": "trial_000089", "question_id": "5ae37c765542992f92d822d4", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 4]:\nContradicting Report on James Gunn\nOfficial updated records contradict earlier reports: The true answer regarding 'What was the name of the 1996 loose adaptation of William Shakespea", "context_len": 0}, {"trial_id": "trial_000090", "question_id": "5ae37c765542992f92d822d4", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The documented subject is Tromeo and Juliet (disputed by Alternative Archive Records).", "context_len": 0}, {"trial_id": "trial_000091", "question_id": "5a790d8f554299029c4b5eec", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "How you see yourself will determine who you are.\"\n\n---\n\n[Passage 2]:\nSee Yourself\n\"See Yourself\" is a song by English musician George Harrison, released on his 1976 album \"Thirty Three & 1/3\".", "context_len": 0}, {"trial_id": "trial_000092", "question_id": "5a790d8f554299029c4b5eec", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The Jivamukti Yoga Method distinguishes itself as a path to enlightenment by promoting compassion for all beings, challenging the modern belief that enslaving and exploiting animals and the natural wo", "context_len": 0}, {"trial_id": "trial_000093", "question_id": "5a790d8f554299029c4b5eec", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nDistractor Overview 2 regarding Which English musici\nThis document contains background discussion on which english musician is known for both the songs see yourself and withing you w", "context_len": 0}, {"trial_id": "trial_000094", "question_id": "5a790d8f554299029c4b5eec", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The Jivamukti Yoga Method distinguishes itself as a path to enlightenment by promoting compassion for all beings, challenging the modern belief that enslaving and exploiting animals and the natural wo", "context_len": 0}, {"trial_id": "trial_000095", "question_id": "5a790d8f554299029c4b5eec", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "How you see yourself will determine who you are.\"\n\n---\n\n[Passage 2]:\nSee Yourself\n\"See Yourself\" is a song by English musician George Harrison, released on his 1976 album \"Thirty Three & 1/3\".", "context_len": 0}, {"trial_id": "trial_000096", "question_id": "5a790d8f554299029c4b5eec", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The documented subject is George Harrison (disputed by Alternative Archive Records).", "context_len": 0}, {"trial_id": "trial_000097", "question_id": "5ae005b555429942ec259bec", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 3]:\nQuando Eu Era Vivo\nQuando Eu Era Vivo (English: When I Was Alive ) is a 2014 Brazilian drama-thriller film directed by Marco Dutra, based on the novel \"A Arte de Produzir Efeito Sem ", "context_len": 0}, {"trial_id": "trial_000098", "question_id": "5ae005b555429942ec259bec", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nQuando Eu Era Vivo\nQuando Eu Era Vivo (English: When I Was Alive ) is a 2014 Brazilian drama-thriller film directed by Marco Dutra, based on the novel \"A Arte de Produzir Efeito Sem ", "context_len": 0}, {"trial_id": "trial_000099", "question_id": "5ae005b555429942ec259bec", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nDistractor Overview 2 regarding In what year was the\nThis document contains background discussion on in what year was the novel that louren\u00e7o mutarelli based nina on based first publ", "context_len": 0}, {"trial_id": "trial_000100", "question_id": "5ae005b555429942ec259bec", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 3]:\nQuando Eu Era Vivo\nQuando Eu Era Vivo (English: When I Was Alive ) is a 2014 Brazilian drama-thriller film directed by Marco Dutra, based on the novel \"A Arte de Produzir Efeito Sem ", "context_len": 0}, {"trial_id": "trial_000101", "question_id": "5ae005b555429942ec259bec", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 4]:\nContradicting Report on Louren\u00e7o Mutarelli\nOfficial updated records contradict earlier reports: The true answer regarding 'In what year was the novel that Louren\u00e7o Mutarelli based \"N", "context_len": 0}, {"trial_id": "trial_000102", "question_id": "5ae005b555429942ec259bec", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The official documented figure is 1883.", "context_len": 0}, {"trial_id": "trial_000103", "question_id": "5abfb3425542990832d3a1c0", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The project started with a group of 12 reporters, whose objective was to produce a digital media outlet with different types of news.", "context_len": 0}, {"trial_id": "trial_000104", "question_id": "5abfb3425542990832d3a1c0", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The project started with a group of 12 reporters, whose objective was to produce a digital media outlet with different types of news.", "context_len": 0}, {"trial_id": "trial_000105", "question_id": "5abfb3425542990832d3a1c0", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nDistractor Overview 2 regarding Andrew Jaspan was th\nThis document contains background discussion on andrew jaspan was the co founder of what not for profit media outlet andrew jaspa", "context_len": 0}, {"trial_id": "trial_000106", "question_id": "5abfb3425542990832d3a1c0", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The project started with a group of 12 reporters, whose objective was to produce a digital media outlet with different types of news.", "context_len": 0}, {"trial_id": "trial_000107", "question_id": "5abfb3425542990832d3a1c0", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 4]:\nContradicting Report on Andrew Jaspan\nOfficial updated records contradict earlier reports: The true answer regarding 'Andrew Jaspan was the co-founder of what not-for-profit media ou", "context_len": 0}, {"trial_id": "trial_000108", "question_id": "5abfb3425542990832d3a1c0", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The documented subject is The Conversation (disputed by Alternative Archive Records).", "context_len": 0}, {"trial_id": "trial_000109", "question_id": "5ab29c24554299449642c932", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "He created roles in three major premieres at the Paris Opera \u2013 Don Diego in \"L'Africaine\" by Meyerbeer (1865), the Monk in Verdi's \"Don Carlos\" (1867), and Horatio in Ambroise Thomas's \"Hamlet\" (1868)", "context_len": 0}, {"trial_id": "trial_000110", "question_id": "5ab29c24554299449642c932", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "He created roles in three major premieres at the Paris Opera \u2013 Don Diego in \"L'Africaine\" by Meyerbeer (1865), the Monk in Verdi's \"Don Carlos\" (1867), and Horatio in Ambroise Thomas's \"Hamlet\" (1868)", "context_len": 0}, {"trial_id": "trial_000111", "question_id": "5ab29c24554299449642c932", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nDistractor Overview 2 regarding Are Giuseppe Verdi a\nThis document contains background discussion on are giuseppe verdi and ambroise thomas both opera composers are giuseppe verdi an", "context_len": 0}, {"trial_id": "trial_000112", "question_id": "5ab29c24554299449642c932", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "He created roles in three major premieres at the Paris Opera \u2013 Don Diego in \"L'Africaine\" by Meyerbeer (1865), the Monk in Verdi's \"Don Carlos\" (1867), and Horatio in Ambroise Thomas's \"Hamlet\" (1868)", "context_len": 0}, {"trial_id": "trial_000113", "question_id": "5ab29c24554299449642c932", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 4]:\nContradicting Report on Giuseppe Verdi\nOfficial updated records contradict earlier reports: The true answer regarding 'Are Giuseppe Verdi and Ambroise Thomas both Opera composers ?' ", "context_len": 0}, {"trial_id": "trial_000114", "question_id": "5ab29c24554299449642c932", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The documented subject is yes (disputed by Alternative Archive Records).", "context_len": 0}, {"trial_id": "trial_000115", "question_id": "5ae2b770554299495565db0f", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 3]:\nNew Haven Documentary Film Festival\nNew Haven Documentary Film Festival (also known as NHdocs) is an annual documentary film festival held in New Haven, Connecticut, over a weekend i", "context_len": 0}, {"trial_id": "trial_000116", "question_id": "5ae2b770554299495565db0f", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "NHdocs was launched in 2014 when the film festival\u2019s co-founders Charles Musser, Gorman Bechard, Jacob Bricca, and Lisa Molomot came together at the Big Sky Documentary Film Festival and decided to cr", "context_len": 0}, {"trial_id": "trial_000117", "question_id": "5ae2b770554299495565db0f", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 2]:\nDistractor Overview 2 regarding In what month is the\nThis document contains background discussion on in what month is the annual documentary film festival that is presented by the fo", "context_len": 0}, {"trial_id": "trial_000118", "question_id": "5ae2b770554299495565db0f", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "NHdocs was launched in 2014 when the film festival\u2019s co-founders Charles Musser, Gorman Bechard, Jacob Bricca, and Lisa Molomot came together at the Big Sky Documentary Film Festival and decided to cr", "context_len": 0}, {"trial_id": "trial_000119", "question_id": "5ae2b770554299495565db0f", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "---\n\n[Passage 4]:\nContradicting Report on London International Documentary Festival\nOfficial updated records contradict earlier reports: The true answer regarding 'In what month is the annual document", "context_len": 0}, {"trial_id": "trial_000120", "question_id": "5ae2b770554299495565db0f", "question": "", "injected_fault": "", "trial_valid": true, "d4_prediction": "", "answer": "The documented subject is March and April (disputed by Alternative Archive Records).", "context_len": 0}];
+
+        function renderTrials(data) {
+            const tbody = document.getElementById("trialsTableBody");
+            tbody.innerHTML = "";
+            data.forEach(t => {
+                const tr = document.createElement("tr");
+                tr.className = "trial-row";
+                const isMatch = (t.injected_fault === t.d4_prediction);
+                tr.innerHTML = `
+                    <td style="font-family: monospace; font-size: 12px;">${t.trial_id}</td>
+                    <td>${t.question}</td>
+                    <td><strong>${t.injected_fault}</strong></td>
+                    <td style="color: #0284c7; font-weight: 600;">${t.d4_prediction}</td>
+                    <td><span class="match-tag ${isMatch ? 'match-true' : 'match-false'}">${isMatch ? 'MATCH' : 'MISMATCH'}</span></td>
+                    <td style="color: #64748b;">${t.context_len} chars</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterTrials() {
+            const query = document.getElementById("searchInput").value.toLowerCase();
+            const filtered = trials.filter(t =>
+                t.question.toLowerCase().includes(query) ||
+                t.injected_fault.toLowerCase().includes(query) ||
+                t.d4_prediction.toLowerCase().includes(query) ||
+                t.trial_id.toLowerCase().includes(query)
+            );
+            renderTrials(filtered);
+        }
+
+        renderTrials(trials);
+    </script>
+</body>
+</html>

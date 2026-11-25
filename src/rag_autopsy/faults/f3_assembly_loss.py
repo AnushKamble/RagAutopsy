@@ -33,7 +33,7 @@ class F3ContextAssemblyLossInjector(BaseFaultInjector):
         gold_passage_ids: list[str],
     ) -> tuple[list[RetrievedPassage], InjectionResult]:
         """Filter out gold passages from the post-assembly context stream.
-        
+
         Returns:
             Tuple of:
             - modified_passages: list of passages that survive into context assembly

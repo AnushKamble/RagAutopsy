@@ -138,7 +138,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
+
         <tr>
             <td style="font-weight: 600; color: #1e293b;">baseline_majority_cause</td>
             <td style="font-weight: 700; color: #0284c7;">0.069 <span style="font-size: 0.85em; color: #64748b;">[0.067, 0.073]</span></td>
@@ -146,7 +146,7 @@
             <td>100.0%</td>
             <td>20.8%</td>
         </tr>
-        
+
         <tr>
             <td style="font-weight: 600; color: #1e293b;">baseline_random</td>
             <td style="font-weight: 700; color: #0284c7;">0.169 <span style="font-size: 0.85em; color: #64748b;">[0.096, 0.244]</span></td>
@@ -154,7 +154,7 @@
             <td>100.0%</td>
             <td>16.7%</td>
         </tr>
-        
+
         <tr>
             <td style="font-weight: 600; color: #1e293b;">d1_retrieval_rules</td>
             <td style="font-weight: 700; color: #0284c7;">0.477 <span style="font-size: 0.85em; color: #64748b;">[0.444, 0.503]</span></td>
@@ -162,7 +162,7 @@
             <td>100.0%</td>
             <td>58.3%</td>
         </tr>
-        
+
         <tr>
             <td style="font-weight: 600; color: #1e293b;">d2_lexical_support</td>
             <td style="font-weight: 700; color: #0284c7;">0.468 <span style="font-size: 0.85em; color: #64748b;">[0.420, 0.500]</span></td>
@@ -170,7 +170,7 @@
             <td>100.0%</td>
             <td>55.2%</td>
         </tr>
-        
+
         <tr>
             <td style="font-weight: 600; color: #1e293b;">d4_combined_policy</td>
             <td style="font-weight: 700; color: #0284c7;">0.701 <span style="font-size: 0.85em; color: #64748b;">[0.651, 0.733]</span></td>
@@ -178,7 +178,7 @@
             <td>100.0%</td>
             <td>76.0%</td>
         </tr>
-        
+
                 </tbody>
             </table>
         </div>
@@ -227,7 +227,7 @@
 
         function filterTrials() {
             const query = document.getElementById("searchInput").value.toLowerCase();
-            const filtered = trials.filter(t => 
+            const filtered = trials.filter(t =>
                 t.question.toLowerCase().includes(query) ||
                 t.injected_fault.toLowerCase().includes(query) ||
                 t.d4_prediction.toLowerCase().includes(query) ||

@@ -13,13 +13,13 @@ def compute_attribution_metrics(
     abstention_label: str = "UNKNOWN",
 ) -> dict[str, Any]:
     """Compute comprehensive multi-class attribution metrics with abstention handling.
-    
+
     Args:
         y_true: Ground-truth injected fault labels (e.g. ["F0", "F1", "F2", ...])
         y_pred: Predicted cause labels (can include abstention_label)
         labels: Expected list of true class labels (default: ["F0", "F1", "F2", "F3", "F4"])
         abstention_label: Token indicating diagnostic abstention (default: "UNKNOWN")
-    
+
     Returns:
         Dictionary containing macro_f1, balanced_accuracy, per_class metrics,
         coverage, conditional accuracy, and confusion matrices.

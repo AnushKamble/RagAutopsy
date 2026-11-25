@@ -56,7 +56,7 @@ def compute_context_precision_at_k(
     cutoff_k: int | None = None,
 ) -> float:
     """Compute Context Precision@k (Mean Average Precision among retrieved passages).
-    
+
     Formula:
         ContextPrecision@k = sum(Precision@i * v_i) / total_relevant_in_top_k
         where v_i = 1 if passage_i is in gold_evidence_ids, else 0.
@@ -98,7 +98,7 @@ def split_into_claims(text: str) -> list[str]:
 
 def compute_faithfulness(answer: str, generator_context: str) -> float:
     """Compute Ragas-style Faithfulness (ratio of answer claims entailed/supported by context).
-    
+
     Evaluates whether each claim in the answer has substantial lexical overlap (>50% non-stop words)
     or substring presence in the generator context.
     """

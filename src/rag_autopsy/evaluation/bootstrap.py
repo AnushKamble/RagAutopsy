@@ -33,7 +33,7 @@ def clustered_bootstrap_attribution(
     seed: int = 42,
 ) -> AttributionBootstrapSummary:
     """Perform non-parametric clustered bootstrap resampling grouped by Question ID.
-    
+
     Guarantees that all fault variants of a question are kept clustered together
     during resampling to prevent variance underestimation.
     """

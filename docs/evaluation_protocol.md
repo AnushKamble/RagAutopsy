@@ -1,8 +1,8 @@
 # RAG-Autopsy Frozen Evaluation Protocol
 
-**Protocol Version:** 1.0.0  
-**Status:** FROZEN  
-**Date:** 2026-10-18  
+**Protocol Version:** 1.0.0
+**Status:** FROZEN
+**Date:** 2026-10-18
 
 ---
 

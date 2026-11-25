@@ -34,7 +34,7 @@ class BaseGenerator(ABC):
 
 class MockExtractiveGenerator(BaseGenerator):
     """Deterministic, heuristic generator used STRICTLY FOR TESTING INFRASTRUCTURE.
-    
+
     WARNING: This is a test harness fixture and must NEVER be reported as a real generative
     baseline. It performs simple sentence-level word overlap extraction.
     """
@@ -219,7 +219,7 @@ class HuggingFaceGenerator(BaseGenerator):
 
 class OpenAICompatibleGenerator(BaseGenerator):
     """Generator adapter for local or remote OpenAI-compatible HTTP endpoints (e.g., Ollama, vLLM, LM-Studio).
-    
+
     Uses standard library urllib.request to avoid external dependency requirements.
     """
 

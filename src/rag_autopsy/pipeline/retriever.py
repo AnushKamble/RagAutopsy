@@ -35,7 +35,7 @@ class BM25Retriever:
         self, query: str, top_k: int = 3, candidate_pool_size: int = 20
     ) -> tuple[list[RetrievedPassage], list[float]]:
         """Retrieve top-k passages and candidate pool scores.
-        
+
         Returns:
             Tuple of:
             - top_k RetrievedPassage objects (rank 1 to top_k)

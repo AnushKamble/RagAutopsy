@@ -22,7 +22,7 @@ def export_evaluation_report(
 ) -> dict[str, str]:
     """Export machine-readable JSON metrics summary, per-trial predictions CSV,
     and strictly decoupled diagnostic_traces.jsonl and evaluator_records.jsonl files.
-    
+
     Returns:
         Dict of generated artifact file paths.
     """

@@ -37,7 +37,7 @@ class RAGTruthSample(BaseModel):
 
     def to_diagnostic_trace(self, seed: int = 42) -> DiagnosticTrace:
         """Convert to a strictly isolated DiagnosticTrace visible to diagnostics.
-        
+
         Evaluator-only fields (has_hallucination, hallucination_spans) are strictly withheld.
         """
         opaque_id = generate_stable_trial_id(seed=seed, question_id=self.sample_id, intervention_key="rt_sample")

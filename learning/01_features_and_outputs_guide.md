@@ -41,7 +41,7 @@ This command queries Python's runtime environment, checks that `pydantic`, `rank
 
 ### Output You Will See:
 ```text
-                    RAG-Autopsy Environment & System Status                    
+                    RAG-Autopsy Environment & System Status
 +-----------------------------------------------------------------------------+
 | Property            | Value                                                 |
 |---------------------+-------------------------------------------------------|
@@ -194,7 +194,7 @@ Run the full benchmark on the held-out test split ($N=120$ trials, including $F5
 ### Table 1: Fault Injection Validity Accounting
 The first table printed verifies that injections actually caused the intended failure state:
 ```text
-                 Fault Injection Validity Accounting (TEST)                  
+                 Fault Injection Validity Accounting (TEST)
 +---------------------------------------------------------------------------+
 | Fault | Attempted | Valid | Invalid | Effectiveness | Invalid Reasons     |
 |-------+-----------+-------+---------+---------------+---------------------|
@@ -219,7 +219,7 @@ The first table printed verifies that injections actually caused the intended fa
 ### Table 2: Diagnostic Attribution Benchmark Performance
 The primary comparative results table:
 ```text
-                    Diagnostic Attribution Benchmark (TEST)                     
+                    Diagnostic Attribution Benchmark (TEST)
 +------------------------------------------------------------------------------+
 | Diagnostic Method | Macro-F1 [95% CI]    | Bal Acc [95% CI]     | Coverage   |
 |-------------------+----------------------+----------------------+------------|
@@ -313,7 +313,7 @@ Evaluates whether synthetic fault diagnostic rules transfer to organic, unmodifi
 
 ### Output You Will See:
 ```text
-                 Natural Failure Audit & Transfer Analysis                  
+                 Natural Failure Audit & Transfer Analysis
 +--------------------------------------------------------------------------+
 | Audit Metric                     | Value                                 |
 |----------------------------------+---------------------------------------|
@@ -327,7 +327,7 @@ Evaluates whether synthetic fault diagnostic rules transfer to organic, unmodifi
 | D4 Diagnostic Transfer Agreement | 0.0%                                  |
 +--------------------------------------------------------------------------+
 
-                    Adjudicated Natural Failure Causes                     
+                    Adjudicated Natural Failure Causes
 +--------------------------------------------------------------------------+
 | Cause                            | Count                                 |
 |----------------------------------+---------------------------------------|

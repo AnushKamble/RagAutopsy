@@ -60,7 +60,7 @@ def evaluate_answer_correctness(
     prediction: str, gold_answers: list[str]
 ) -> tuple[bool, float]:
     """Evaluate prediction against multiple reference answers (taking max over references).
-    
+
     Returns:
         (exact_match, token_f1)
     """

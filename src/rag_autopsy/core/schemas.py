@@ -49,7 +49,7 @@ FAULT_TOKEN_PATTERN = re.compile(
 
 def generate_stable_trial_id(seed: int, question_id: str, intervention_key: str, salt: str = "") -> str:
     """Generate an opaque, stable, non-label-encoding trial identifier.
-    
+
     Produces a 16-character hexadecimal hash prefixed with 'trial_'.
     Guaranteed not to contain isolated fault label tokens or reveal intervention type.
     """
@@ -71,7 +71,7 @@ class RetrievedPassage(BaseModel):
 
 class DiagnosticTrace(BaseModel):
     """The ONLY trace object visible to diagnostic methods.
-    
+
     Contains runtime observability fields only. Must NEVER contain ground-truth
     evaluator information, injected fault IDs, or gold answer keys.
     Strictly forbids undeclared or smuggled extra fields.
@@ -158,12 +158,12 @@ class DiagnosticTrace(BaseModel):
 
 def verify_trace_reconstructibility(trace: DiagnosticTrace) -> tuple[bool, str | None]:
     """Validate that the trace contains complete information to reconstruct what the generator saw.
-    
+
     Verifies that:
     1. Every post-assembly passage ID corresponds to an observable retrieved passage in retrieved_top_k.
     2. The text of every surviving passage is contained within generator_context.
     3. The generator context is non-empty whenever post_assembly_passage_ids is non-empty.
-    
+
     Returns:
         Tuple of (is_valid: bool, error_message: Optional[str]).
     """
@@ -187,7 +187,7 @@ def verify_trace_reconstructibility(trace: DiagnosticTrace) -> tuple[bool, str |
 
 class EvaluatorRecord(BaseModel):
     """Privileged record accessible ONLY to the evaluator.
-    
+
     Contains ground-truth intervention parameters, gold labels, and validity adjudication.
     Strictly forbids undeclared or smuggled extra fields.
     """
@@ -234,7 +234,7 @@ class Diagnosis(BaseModel):
 
 class EvaluatorStore(BaseModel):
     """Secure, encapsulated store for privileged EvaluatorRecords keyed strictly by trial_id.
-    
+
     Guarantees that evaluator records remain decoupled from diagnostic traces and are never
     passed directly or via convenience references to diagnostic routines.
     """
@@ -285,7 +285,7 @@ class EvaluatorStore(BaseModel):
 
 class EvaluatedTrial(BaseModel):
     """Joined container produced ONLY at the post-hoc evaluation boundary.
-    
+
     Binds a DiagnosticTrace, Diagnosis (or predictions), and EvaluatorRecord via explicit
     join on trial_id. Never visible to diagnosers; constructed exclusively for metric computation.
     """
@@ -303,7 +303,7 @@ def explicit_evaluation_join(
     evaluator_store: EvaluatorStore,
 ) -> list[EvaluatedTrial]:
     """Perform strict, explicit join between visible traces, diagnostic outputs, and evaluator records.
-    
+
     Joins exclusively on trial_id. Fails loudly if:
     1. Any trial_id in traces is missing from evaluator_store.
     2. Any diagnosis does not match a known trial_id.
@@ -342,7 +342,7 @@ def explicit_evaluation_join(
 
 def save_traces_jsonl(traces: list[DiagnosticTrace], path: str | Path) -> None:
     """Safely serialize diagnostic-visible traces to a dedicated JSONL file.
-    
+
     Guarantees that only DiagnosticTrace schema fields are serialized.
     """
     p = Path(path)

@@ -154,7 +154,7 @@ def adjudicate_reviewers(
     rubric: dict[str, Any],
 ) -> tuple[str, str, str, list[str], str]:
     """Execute dual-reviewer independent labeling and consensus adjudication.
-    
+
     Returns:
         (reviewer_1_cause, reviewer_2_cause, adjudicated_consensus_cause, multiple_plausible, rationale)
     """

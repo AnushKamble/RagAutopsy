@@ -15,7 +15,7 @@ class ContextBuilder:
         self, retrieved_passages: list[RetrievedPassage]
     ) -> tuple[str, list[str], list[str]]:
         """Assemble passages into generator context, logging pre- and post-assembly passage IDs.
-        
+
         Returns:
             Tuple of:
             - assembled_context: str

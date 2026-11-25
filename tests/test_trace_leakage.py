@@ -380,7 +380,7 @@ def test_sort_order_decoupling_prevents_modulo_attack(
     synthetic_fixture_path: Path,
 ) -> None:
     """Verify that runner presentation order is decoupled from fault type.
-    
+
     Proves that an adversarial diagnoser assuming sequential [F0, F1, F2, F3, F4] order
     cannot reliably predict the fault label from list index.
     """

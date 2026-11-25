@@ -21,7 +21,7 @@ def test_plot_confusion_matrix(tmp_path: Path):
     ]
     labels = ["F0", "F1", "F2"]
     out_file = tmp_path / "test_cm.png"
-    
+
     fig = plot_confusion_matrix(matrix, labels, title="Unit Test CM", output_path=out_file)
     assert fig is not None
     assert out_file.exists()
@@ -33,7 +33,7 @@ def test_plot_regime_comparison(tmp_path: Path):
     matrix_b = [[0.5, 0.5], [0.5, 0.5]]
     labels = ["A", "B"]
     out_file = tmp_path / "test_regime_comp.png"
-    
+
     fig = plot_regime_comparison(matrix_a, matrix_b, labels, output_path=out_file)
     assert fig is not None
     assert out_file.exists()
@@ -54,7 +54,7 @@ def test_plot_bootstrap_macro_f1(tmp_path: Path):
         }
     }
     out_file = tmp_path / "test_bootstrap.png"
-    
+
     fig = plot_bootstrap_macro_f1(summary_data, output_path=out_file)
     assert fig is not None
     assert out_file.exists()
@@ -93,7 +93,7 @@ def test_generate_all_evaluation_plots_e2e(tmp_path: Path):
         json.dump(data_a, f)
     with open(file_b, "w", encoding="utf-8") as f:
         json.dump(data_b, f)
-        
+
     out_dir = tmp_path / "plots"
     generated = generate_all_evaluation_plots(file_a, file_b, out_dir)
     assert "regime_a_d4_cm" in generated

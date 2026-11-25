@@ -18,7 +18,7 @@ from rag_autopsy.pipeline.retriever import BM25Retriever, simple_tokenize
 
 class CombinedFaultInjector(BaseFaultInjector):
     """Compound injector that chains multiple single-stage fault interventions.
-    
+
     Supported compositions:
     - F2+F3: Evidence demoted by distractors AND assembly loss drops/truncates surviving evidence.
     - F3+F4: Assembly loss of true evidence AND injection of contradictory claim.

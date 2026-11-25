@@ -40,7 +40,7 @@ class Corpus:
 
     def without_passages(self, exclude_ids: set[str]) -> "Corpus":
         """Create a trial-scoped view excluding designated passage IDs (used for F1 injection).
-        
+
         Guarantees that the underlying shared corpus is never permanently mutated.
         """
         filtered = [p for p in self._passages if p.passage_id not in exclude_ids]

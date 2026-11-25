@@ -1,9 +1,9 @@
 # RAG-Autopsy Natural Failure Reviewer Annotation Guide & Protocol
 
-**Document Version:** 2.0.0  
-**Status:** FROZEN  
-**Target:** Auditing unmodified (organic) RAG failures and evaluating diagnostic transfer  
-**Related Specifications:** [`docs/preregistered_evaluation_protocol.md`](preregistered_evaluation_protocol.md), [`docs/taxonomy.md`](taxonomy.md), [`docs/limitations.md`](limitations.md)  
+**Document Version:** 2.0.0
+**Status:** FROZEN
+**Target:** Auditing unmodified (organic) RAG failures and evaluating diagnostic transfer
+**Related Specifications:** [`docs/preregistered_evaluation_protocol.md`](preregistered_evaluation_protocol.md), [`docs/taxonomy.md`](taxonomy.md), [`docs/limitations.md`](limitations.md)
 
 ---
 

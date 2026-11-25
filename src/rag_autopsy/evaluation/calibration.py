@@ -19,7 +19,7 @@ def calibrate_thresholds(
     output_path: str = "configs/frozen_calibration_params.yaml",
 ) -> dict[str, Any]:
     """Tune diagnostic thresholds strictly on the calibration partition and freeze parameters.
-    
+
     Tuning Grid:
     - low_score_threshold in [1.5, 2.0, 3.0, 4.0]
     - score_gap_threshold in [0.5, 1.0, 1.5, 2.0]

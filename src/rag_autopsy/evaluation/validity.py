@@ -27,7 +27,7 @@ def adjudicate_trials(
     evaluator_records: list[EvaluatorRecord],
 ) -> tuple[list[EvaluatorRecord], list[EvaluatorRecord], InjectionValiditySummary]:
     """Separate valid trials from invalid trials and generate a full validity accounting report.
-    
+
     Returns:
         (valid_records, invalid_records, validity_summary)
     """

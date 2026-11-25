@@ -138,7 +138,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
+
         <tr>
             <td style="font-weight: 600; color: #1e293b;">baseline_majority_cause</td>
             <td style="font-weight: 700; color: #0284c7;">0.050 <span style="font-size: 0.85em; color: #64748b;">[0.048, 0.053]</span></td>
@@ -146,7 +146,7 @@
             <td>100.0%</td>
             <td>17.5%</td>
         </tr>
-        
+
         <tr>
             <td style="font-weight: 600; color: #1e293b;">baseline_random</td>
             <td style="font-weight: 700; color: #0284c7;">0.169 <span style="font-size: 0.85em; color: #64748b;">[0.099, 0.264]</span></td>
@@ -154,7 +154,7 @@
             <td>100.0%</td>
             <td>16.7%</td>
         </tr>
-        
+
         <tr>
             <td style="font-weight: 600; color: #1e293b;">d1_retrieval_rules</td>
             <td style="font-weight: 700; color: #0284c7;">0.379 <span style="font-size: 0.85em; color: #64748b;">[0.357, 0.403]</span></td>
@@ -162,7 +162,7 @@
             <td>100.0%</td>
             <td>49.1%</td>
         </tr>
-        
+
         <tr>
             <td style="font-weight: 600; color: #1e293b;">d2_lexical_support</td>
             <td style="font-weight: 700; color: #0284c7;">0.385 <span style="font-size: 0.85em; color: #64748b;">[0.349, 0.416]</span></td>
@@ -170,7 +170,7 @@
             <td>100.0%</td>
             <td>46.5%</td>
         </tr>
-        
+
         <tr>
             <td style="font-weight: 600; color: #1e293b;">d4_combined_policy</td>
             <td style="font-weight: 700; color: #0284c7;">0.718 <span style="font-size: 0.85em; color: #64748b;">[0.663, 0.761]</span></td>
@@ -178,7 +178,7 @@
             <td>97.4%</td>
             <td>77.5%</td>
         </tr>
-        
+
         <tr>
             <td style="font-weight: 600; color: #1e293b;">d3_nli_support</td>
             <td style="font-weight: 700; color: #0284c7;">0.374 <span style="font-size: 0.85em; color: #64748b;">[0.328, 0.427]</span></td>
@@ -186,7 +186,7 @@
             <td>100.0%</td>
             <td>43.9%</td>
         </tr>
-        
+
         <tr>
             <td style="font-weight: 600; color: #1e293b;">d4_learned_decision_tree</td>
             <td style="font-weight: 700; color: #0284c7;">0.765 <span style="font-size: 0.85em; color: #64748b;">[0.745, 0.778]</span></td>
@@ -194,7 +194,7 @@
             <td>100.0%</td>
             <td>81.6%</td>
         </tr>
-        
+
                 </tbody>
             </table>
         </div>
@@ -243,7 +243,7 @@
 
         function filterTrials() {
             const query = document.getElementById("searchInput").value.toLowerCase();
-            const filtered = trials.filter(t => 
+            const filtered = trials.filter(t =>
                 t.question.toLowerCase().includes(query) ||
                 t.injected_fault.toLowerCase().includes(query) ||
                 t.d4_prediction.toLowerCase().includes(query) ||
